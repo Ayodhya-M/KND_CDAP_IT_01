@@ -17,6 +17,7 @@ Foundation for the **HR Attrition and Economic Data Analysis Platform**. The pla
 frontend/       React application
 backend/        FastAPI application and tests
 supabase/       SQL schema and Module 1 integration migration
+pilot-data/     100-employee synthetic HR and six-month macroeconomic pilot data
 ```
 
 ## First-time setup
@@ -76,3 +77,5 @@ After applying the SQL schema, the next feature is the HR dataset upload workflo
 ## Module 1 database tables
 
 Run [module1_data_integration_migration.sql](supabase/module1_data_integration_migration.sql) after the initial schema. It adds the Module 1 tables for data-cleaning runs and issues, temporal-mapping previews, validation issues, and downloadable dataset exports. It does not add EESI, ML, or retention-recommendation tables; those belong to the other team modules.
+
+Run [module1_pilot_attributes_migration.sql](supabase/module1_pilot_attributes_migration.sql) after that migration to add the HR and macroeconomic attributes used by the 100-employee / six-month pilot dataset.
