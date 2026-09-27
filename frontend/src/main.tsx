@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useEffect, useState } from 'react'
-import { createTemporalMappingPreview, getMappingUploadChoices, uploadHrDataset, uploadMacroeconomicDataset, type HrUploadSummary, type MacroUploadSummary, type MappingUploadChoice, type TemporalMappingPreview, UploadRequestError } from './api'
+import { analyseMissingValues, createTemporalMappingPreview, getCleaningUploadChoices, getMappingUploadChoices, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type MacroUploadSummary, type MappingUploadChoice, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError } from './api'
 import './styles.css'
 
 const stats = [
@@ -16,7 +16,7 @@ function App() {
 }
 
 function Dashboard() {
-  const [view, setView] = useState<'dashboard' | 'hr-upload' | 'macro-upload' | 'temporal-mapping'>('dashboard')
+  const [view, setView] = useState<'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping'>('dashboard')
   const [totalEmployees, setTotalEmployees] = useState(0)
   const [hrUploads, setHrUploads] = useState(0)
   const [economicUploads, setEconomicUploads] = useState(0)
@@ -27,12 +27,12 @@ function Dashboard() {
   }
 
   return <main className="dashboard-layout">
-    <aside className="sidebar"><div><p className="eyebrow">KND CDAP</p><h2>Research Hub</h2></div><nav><button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>Dashboard</button><button className={view === 'hr-upload' ? 'active' : ''} onClick={() => setView('hr-upload')}>Upload HR data</button><button className={view === 'macro-upload' ? 'active' : ''} onClick={() => setView('macro-upload')}>Upload economic data</button><button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => setView('temporal-mapping')}>Temporal mapping</button><button disabled>Data validation</button><button disabled>Predictions</button></nav></aside>
+    <aside className="sidebar"><div><p className="eyebrow">KND CDAP</p><h2>Research Hub</h2></div><nav><button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>Dashboard</button><button className={view === 'hr-upload' ? 'active' : ''} onClick={() => setView('hr-upload')}>Upload HR data</button><button className={view === 'macro-upload' ? 'active' : ''} onClick={() => setView('macro-upload')}>Upload economic data</button><button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => setView('data-cleaning')}>Data cleaning</button><button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => setView('temporal-mapping')}>Temporal mapping</button><button disabled>Data validation</button><button disabled>Predictions</button></nav></aside>
     <section className="dashboard-content">
       {view === 'dashboard' ? <><header><div><p className="eyebrow">Overview</p><h1>HR & Economic Data Integration</h1><p className="muted">Your HR attrition analysis workspace is ready.</p></div><button className="primary-button compact" onClick={() => setView('hr-upload')}>Upload dataset</button></header>
       <div className="stats-grid">{stats.map(([label, value, detail]) => <article className="stat-card" key={label}><p>{label}</p><strong>{label === 'Total Employees' ? totalEmployees : label === 'HR Records Uploaded' ? hrUploads : label === 'Economic Records Uploaded' ? economicUploads : value}</strong><small>{detail}</small></article>)}</div>
       <section className="next-step"><div><p className="eyebrow">Get started</p><h2>Upload your HR dataset</h2><p>Use the Module 1 pilot CSV to validate employee records and their observation period.</p></div><button className="primary-button" onClick={() => setView('hr-upload')}>Upload HR dataset</button></section>
-      <section className="activity"><h2>Workflow progress</h2><div className="progress-steps"><span className="current">1<br /><small>Upload</small></span><span>2<br /><small>Clean</small></span><span>3<br /><small>Map</small></span><span>4<br /><small>Predict</small></span></div></section></> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => setEconomicUploads((uploads) => uploads + 1)} /> : <TemporalMappingView />}
+      <section className="activity"><h2>Workflow progress</h2><div className="progress-steps"><span className="current">1<br /><small>Upload</small></span><span>2<br /><small>Clean</small></span><span>3<br /><small>Map</small></span><span>4<br /><small>Predict</small></span></div></section></> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => setEconomicUploads((uploads) => uploads + 1)} /> : view === 'data-cleaning' ? <DataCleaningView /> : <TemporalMappingView />}
     </section>
   </main>
 }
@@ -60,7 +60,7 @@ function HrUploadView({ onSuccess }: { onSuccess: (summary: HrUploadSummary) => 
     } finally { setLoading(false) }
   }
 
-  return <section className="upload-view"><p className="eyebrow">Module 1 · Step 1</p><h1>Upload HR dataset</h1><p className="muted">Choose a CSV containing the required HR fields, including <code>ObservationDate</code>.</p>
+  return <section className="upload-view"><h1>Upload HR dataset</h1><p className="muted">Choose a CSV containing the required HR fields, including <code>ObservationDate</code>.</p>
     <label className="file-picker"><span>Select CSV file</span><input type="file" accept=".csv,text/csv" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setSummary(null); setError('') }} /></label>
     <p className="selected-file">{file ? `Selected: ${file.name}` : 'No file selected'}</p>
     <button className="primary-button" disabled={!file || loading} onClick={upload}>{loading ? 'Validating and saving…' : 'Upload dataset'}</button>
@@ -95,7 +95,7 @@ function MacroUploadView({ onSuccess }: { onSuccess: (summary: MacroUploadSummar
       else setError('Unable to upload the macroeconomic dataset. Confirm that the FastAPI backend is running.')
     } finally { setLoading(false) }
   }
-  return <section className="upload-view"><p className="eyebrow">Module 1 · Step 2</p><h1>Upload macroeconomic data</h1><p className="muted">Choose monthly Sri Lankan macroeconomic data from January to June 2023.</p>
+  return <section className="upload-view"><h1>Upload macroeconomic data</h1><p className="muted">Choose monthly Sri Lankan macroeconomic data from January to June 2023.</p>
     <label className="file-picker"><span>Select CSV file</span><input type="file" accept=".csv,text/csv" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setSummary(null); setError('') }} /></label>
     <p className="selected-file">{file ? `Selected: ${file.name}` : 'No file selected'}</p><button className="primary-button" disabled={!file || loading} onClick={upload}>{loading ? 'Validating and saving…' : 'Upload dataset'}</button>
     {error && <p className="upload-error" role="alert">{error}</p>}{summary && <MacroValidationSummary summary={summary} />}
@@ -105,6 +105,53 @@ function MacroUploadView({ onSuccess }: { onSuccess: (summary: MacroUploadSummar
 function MacroValidationSummary({ summary }: { summary: MacroUploadSummary }) {
   const missingValues = Object.entries(summary.missing_values ?? {}).filter(([, count]) => count > 0)
   return <section className={`validation-summary ${summary.status}`}><h2>{summary.status === 'success' ? 'Upload validated successfully' : 'Validation issues found'}</h2><div className="summary-grid"><span>Total Records<strong>{summary.total_records ?? 0}</strong></span><span>Valid Records<strong>{summary.valid_records ?? 0}</strong></span><span>Invalid Records<strong>{summary.invalid_records ?? 0}</strong></span><span>Duplicate Months<strong>{summary.duplicate_months ?? 0}</strong></span><span>Economic Period<strong>{summary.economic_period ? `${summary.economic_period.start} to ${summary.economic_period.end}` : '—'}</strong></span></div><p><strong>Missing Values:</strong> {missingValues.length ? missingValues.map(([column, count]) => `${column}: ${count}`).join(', ') : 'None'}</p>{!!summary.errors?.length && <ul>{summary.errors.map((item, index) => <li key={`${item.field}-${index}`}><strong>{item.field}:</strong> {item.message}{item.count ? ` (${item.count} record(s))` : ''}</li>)}</ul>}</section>
+}
+
+function DataCleaningView() {
+  const [uploads, setUploads] = useState<CleaningUploadChoice[]>([])
+  const [uploadId, setUploadId] = useState('')
+  const [analysis, setAnalysis] = useState<CleaningAnalysis | null>(null)
+  const [result, setResult] = useState<RemoveMissingResult | null>(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [cleaning, setCleaning] = useState(false)
+
+  useEffect(() => {
+    const loadUploads = async () => {
+      try {
+        const response = await getCleaningUploadChoices()
+        setUploads(response.uploads)
+        setUploadId((current) => current || response.uploads[0]?.id || '')
+      } catch (caughtError) {
+        setError(caughtError instanceof Error ? caughtError.message : 'Unable to load uploaded datasets.')
+      } finally { setLoading(false) }
+    }
+    void loadUploads()
+  }, [])
+
+  const analyse = async () => {
+    if (!uploadId) return
+    setCleaning(true); setError(''); setAnalysis(null); setResult(null)
+    try { setAnalysis(await analyseMissingValues(uploadId)) }
+    catch (caughtError) { setError(caughtError instanceof Error ? caughtError.message : 'Unable to analyse missing values.') }
+    finally { setCleaning(false) }
+  }
+
+  const removeMissing = async () => {
+    if (!uploadId) return
+    setCleaning(true); setError(''); setResult(null)
+    try { setResult(await removeMissingValues(uploadId)) }
+    catch (caughtError) { setError(caughtError instanceof Error ? caughtError.message : 'Unable to remove missing values.') }
+    finally { setCleaning(false) }
+  }
+
+  const missingEntries = Object.entries(analysis?.missing_values ?? {})
+  return <section className="upload-view"><h1>Data cleaning</h1><p className="muted">Analyse an uploaded dataset, then remove records with missing required values. The original uploaded dataset is never deleted.</p>
+    {loading ? <p className="muted">Loading uploaded datasets…</p> : <><div className="cleaning-controls"><label>Dataset to clean<select value={uploadId} onChange={(event) => { setUploadId(event.target.value); setAnalysis(null); setResult(null) }}><option value="">Select an upload</option>{uploads.map((upload) => <option key={upload.id} value={upload.id}>{upload.dataset_type === 'hr' ? 'HR' : 'Economic'} — {upload.original_filename} ({upload.record_count} records)</option>)}</select></label><div className="cleaning-buttons"><button className="secondary-button" disabled={!uploadId || cleaning} onClick={analyse}>{cleaning ? 'Working…' : 'Analyse missing values'}</button><button className="primary-button" disabled={!uploadId || cleaning} onClick={removeMissing}>{cleaning ? 'Working…' : 'Remove missing values'}</button></div></div></>}
+    {error && <p className="upload-error" role="alert">{error}</p>}
+    {analysis && <section className="validation-summary success"><h2>Missing-value analysis</h2><div className="summary-grid"><span>Total Records<strong>{analysis.total_records}</strong></span><span>Rows With Missing Values<strong>{analysis.rows_with_missing_values}</strong></span></div><p><strong>Missing Values:</strong> {missingEntries.length ? missingEntries.map(([field, count]) => `${field}: ${count}`).join(', ') : 'None'}</p>{analysis.sample_row_numbers.length > 0 && <p><strong>Sample source rows:</strong> {analysis.sample_row_numbers.join(', ')}</p>}</section>}
+    {result && <section className="validation-summary success"><h2>Cleaning completed</h2><div className="summary-grid"><span>Rows Before<strong>{result.rows_before}</strong></span><span>Rows After<strong>{result.rows_after}</strong></span><span>Removed Records<strong>{result.removed_records}</strong></span></div><p>{result.message}</p></section>}
+  </section>
 }
 
 function TemporalMappingView() {

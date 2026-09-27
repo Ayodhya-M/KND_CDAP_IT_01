@@ -58,6 +58,35 @@ export type TemporalMappingPreview = {
   mappings: TemporalMappingRow[]
 }
 
+export type CleaningUploadChoice = {
+  id: string
+  dataset_type: 'hr' | 'economic'
+  original_filename: string
+  record_count: number
+  uploaded_at: string
+}
+
+export type CleaningAnalysis = {
+  status: 'success'
+  cleaning_run_id: string
+  total_records: number
+  rows_with_missing_values: number
+  missing_values: Record<string, number>
+  sample_row_numbers: number[]
+}
+
+export type RemoveMissingResult = {
+  status: 'success'
+  cleaning_run_id: string
+  source_upload_id: string
+  cleaned_upload_id: string
+  rows_before: number
+  rows_after: number
+  removed_records: number
+  missing_values: Record<string, number>
+  message: string
+}
+
 type ApiErrorBody = HrUploadSummary & { detail?: string }
 
 export class UploadRequestError extends Error {
@@ -108,4 +137,27 @@ export async function createTemporalMappingPreview(hrUploadId: string, economicU
   const body = await response.json().catch(() => ({})) as ApiErrorBody
   if (!response.ok) throw new UploadRequestError(body)
   return body as unknown as TemporalMappingPreview
+}
+
+export async function getCleaningUploadChoices(): Promise<{ uploads: CleaningUploadChoice[] }> {
+  const response = await fetch(`${API_BASE_URL}/data-cleaning/uploads`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as { uploads: CleaningUploadChoice[] }
+}
+
+export async function analyseMissingValues(uploadId: string): Promise<CleaningAnalysis> {
+  const response = await fetch(`${API_BASE_URL}/data-cleaning/analyse/${uploadId}`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as CleaningAnalysis
+}
+
+export async function removeMissingValues(uploadId: string): Promise<RemoveMissingResult> {
+  const response = await fetch(`${API_BASE_URL}/data-cleaning/remove-missing`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ upload_id: uploadId }),
+  })
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as RemoveMissingResult
 }
