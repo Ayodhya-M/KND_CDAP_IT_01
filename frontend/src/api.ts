@@ -58,6 +58,42 @@ export type TemporalMappingPreview = {
   mappings: TemporalMappingRow[]
 }
 
+export type Module4RiskFactor = {
+  feature_name: string
+  feature_value: unknown
+  contribution: number
+}
+
+export type Module4Recommendation = {
+  recommendation_id: string
+  recommendation_type: string
+  title: string
+  category: string
+  related_factor: string
+  explanation: string
+  suggested_action: string
+  priority_score: number
+  priority_level: string
+}
+
+export type Module4Metadata = {
+  data_mode: string
+  module2_source: string
+  module3_source: string
+  disclaimer: string
+}
+
+export type Module4RecommendationResponse = {
+  employee_id: string
+  turnover_probability: number
+  risk_level: string
+  eesi_score: number
+  economic_pressure_level: string
+  important_risk_factors: Module4RiskFactor[]
+  recommendations: Module4Recommendation[]
+  metadata: Module4Metadata
+}
+
 type ApiErrorBody = HrUploadSummary & { detail?: string }
 
 export class UploadRequestError extends Error {
@@ -67,6 +103,13 @@ export class UploadRequestError extends Error {
 
   get validationSummary(): HrUploadSummary | null {
     return this.body.status === 'validation_failed' ? this.body : null
+  }
+}
+
+export class RetentionRequestError extends Error {
+  constructor(readonly status: number, message: string) {
+    super(message)
+    this.name = 'RetentionRequestError'
   }
 }
 
@@ -108,4 +151,29 @@ export async function createTemporalMappingPreview(hrUploadId: string, economicU
   const body = await response.json().catch(() => ({})) as ApiErrorBody
   if (!response.ok) throw new UploadRequestError(body)
   return body as unknown as TemporalMappingPreview
+}
+
+export async function getRetentionRecommendations(employeeId: string): Promise<Module4RecommendationResponse> {
+  let response: Response
+  try {
+    response = await fetch(`${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/recommendations`)
+  } catch {
+    throw new RetentionRequestError(0, 'Unable to reach the backend. Confirm that the FastAPI server is running and try again.')
+  }
+
+  const body = await response.json().catch(() => ({})) as { detail?: string }
+  if (!response.ok) {
+    const fallbackMessages: Record<number, string> = {
+      404: 'No employee was found with that employee ID.',
+      409: 'This employee ID exists in more than one upload and cannot be selected unambiguously.',
+      500: 'The backend encountered an unexpected error while preparing the employee analysis.',
+      502: 'Module 4 could not load valid integration data for this employee.',
+      503: 'A required Module 2 or Module 3 result is temporarily unavailable.',
+    }
+    throw new RetentionRequestError(
+      response.status,
+      body.detail ?? fallbackMessages[response.status] ?? 'The retention analysis request could not be completed.',
+    )
+  }
+  return body as Module4RecommendationResponse
 }
