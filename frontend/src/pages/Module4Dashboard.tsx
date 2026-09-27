@@ -39,8 +39,7 @@ export function Module4Dashboard() {
 
   return <section className="module4-dashboard">
     <header className="module4-header">
-      <div><p className="eyebrow">Module 4 · Proof of Concept</p><h1>Employee Retention Decision Support</h1><p className="muted">Personalized and explainable retention recommendations for HR decision support</p></div>
-      <span className="research-badge">Research Prototype</span>
+      <div><p className="eyebrow"></p><h1>Employee Retention Decision Support</h1><p className="muted">Personalized and explainable retention recommendations for HR decision support</p></div>
     </header>
 
     <EmployeeSearch
