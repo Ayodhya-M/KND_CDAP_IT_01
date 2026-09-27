@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     # Replace both values in backend/.env before using Supabase features.
     supabase_url: str = "https://your-project-ref.supabase.co"
     supabase_service_role_key: str = "your_supabase_service_role_key"
+    backend_port: int = 8000
     cors_origins: str = "http://localhost:5173"
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
