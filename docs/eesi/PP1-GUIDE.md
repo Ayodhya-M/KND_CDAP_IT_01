@@ -46,7 +46,17 @@ cd frontend
 npm.cmd run build
 ```
 
-## Demo sequence (approximately five minutes)
+## Recommended PP1 demo sequence (approximately five minutes)
+
+1. Open **Real Sri Lankan data** and explain the research question and three formula hypotheses.
+2. Show the 17,771 source respondents and 2,304 eligible monthly salaried employees. Explain that this is a selected survey cohort, not company HR records or a nationally representative stress estimate.
+3. Show the economic inputs and source links. Explain previous-month income alignment and quarterly unemployment repetition.
+4. Compare the three formulas using monthly or salary-group aggregates. Explain that a larger score or lower average does not establish a better formula.
+5. Run a controlled scenario for one official economic month with salaries 25,000, 50,000 and 100,000. Hold the month fixed to isolate the formula's salary behaviour.
+6. Switch to **Synthetic pilot / worked examples** for the midpoint calculation and contribution breakdown if time permits. State explicitly that its normalization differs.
+7. Show downloaded aggregate evidence and the test results. Finish with independent validation, sensitivity analysis and integration as the next milestones.
+
+## Optional synthetic worked-example sequence
 
 1. Explain the problem: economic conditions are shared, but salary may change employee exposure. This is the hypothesis being tested, not an established causal finding.
 2. Show 100 pilot employee calculations matched to six observation months. State that HR records are synthetic and economic values are supplied pilot data, not independently verified official data.
@@ -128,7 +138,7 @@ User: HR analyst/researcher exploring workforce economic exposure. This screen s
 | Narrow reference ranges and clipping | Implemented: visible bounds/warnings; planned: wider justified reference period |
 | Missing household context | Planned: assess debt, dependents, expenses and income measurement using survey design |
 | Outcome leakage and overfitting | Implemented: no Attrition input; planned: choose/tune using development data only |
-| Privacy and inappropriate HR use | Current demo uses synthetic HR data; planned: consent, minimization, access controls and reviewed use |
+| Privacy and inappropriate HR use | Real LFS microdata is excluded from Git and public API output; aggregate reporting only. Synthetic examples explain individual arithmetic. Further access controls and reviewed use remain planned. |
 
 After PP1: select an independent survey instrument and analysis protocol; collect appropriate data; compare candidates on held-out employees and preferably periods; assess correlation with stress or inverse well-being, uncertainty, subgroup behaviour, normalization/weight sensitivity and indicator ablation; select and version the formula based on that evidence. Coordinate HR-only versus HR+EESI prediction comparisons with Module 3. Do not manufacture survey labels from a candidate formula and then claim validation against them.
 
