@@ -124,6 +124,39 @@ export type IntegrationResult = {
   records: IntegratedRecordPreview[]
 }
 
+export type ValidationIntegrationRun = {
+  id: string
+  total_hr_records: number
+  mapped_record_count: number
+  mapping_accuracy: number
+  status: string
+  created_at: string
+}
+
+export type DatasetValidationReport = {
+  status: 'success'
+  integration_run_id: string
+  total_hr_records: number
+  economic_months: number
+  integrated_records: number
+  missing_values: Record<string, number>
+  missing_value_count: number
+  duplicate_records: number
+  invalid_values: { field: string; count: number; sample_employee_ids: string[] }[]
+  invalid_value_count: number
+  unmatched_records: number
+  mapping_rate: number
+  integration_rate: number
+  record_count_consistency: {
+    hr_records_equal_mapping_records: boolean
+    integrated_records_equal_mapped_records: boolean
+    expected_integrated_records: number
+    actual_integrated_records: number
+    is_consistent: boolean
+  }
+  validation_status: 'passed' | 'failed'
+}
+
 type ApiErrorBody = HrUploadSummary & { detail?: string }
 
 export class UploadRequestError extends Error {
@@ -213,4 +246,18 @@ export async function generateIntegratedDataset(mappingRunId: string): Promise<I
   const body = await response.json().catch(() => ({})) as ApiErrorBody
   if (!response.ok) throw new UploadRequestError(body)
   return body as unknown as IntegrationResult
+}
+
+export async function getValidationIntegrationRuns(): Promise<{ integration_runs: ValidationIntegrationRun[] }> {
+  const response = await fetch(`${API_BASE_URL}/dataset-validation/integration-runs`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as { integration_runs: ValidationIntegrationRun[] }
+}
+
+export async function validateIntegratedDataset(integrationRunId: string): Promise<DatasetValidationReport> {
+  const response = await fetch(`${API_BASE_URL}/dataset-validation/integration/${integrationRunId}`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as DatasetValidationReport
 }

@@ -28,8 +28,8 @@ def available_uploads() -> dict[str, list[dict[str, Any]]]:
     """List HR and macroeconomic uploads so one pair can be selected explicitly."""
     try:
         client = get_supabase_client()
-        hr = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "hr").execute().data
-        economic = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "economic").execute().data
+        hr = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "hr").order("uploaded_at", desc=True).execute().data
+        economic = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "economic").order("uploaded_at", desc=True).execute().data
         return {"hr_uploads": hr, "economic_uploads": economic}
     except Exception as error:
         logger.exception("Unable to list uploads for temporal mapping")
