@@ -1,5 +1,13 @@
 # KND CDAP IT 01
 
+## EESI progress presentation prototype
+
+The independent EESI proof of concept is available under **EESI prototype** in the frontend sidebar. It compares three exploratory formulas using the existing pilot data and provides employee breakdowns, salary/economic scenarios, and downloadable calculation evidence. It works without Supabase or completed Module 1 uploads. These scores have not been empirically validated.
+
+See [the PP1 demo and research evidence guide](docs/eesi/PP1-GUIDE.md) for setup, formulas, assessment mapping, tests, and remaining research. Reproduce pilot results with `python scripts/export_eesi_evidence.py`.
+
+The EESI screen also includes aggregate results for **2,304 real LFS 2024 monthly salaried employees**, matched to official NCPI/inflation and quarterly unemployment. See [real-data preparation and limitations](docs/eesi/REAL-DATA.md). Reproduce with `python scripts/prepare_lfs2024.py` using an authorized local dataset copy. Raw and prepared microdata are excluded from Git.
+
 Foundation for the **HR Attrition and Economic Data Analysis Platform**. The planned system will import HR and macroeconomic data, map economic indicators to employee events by month, validate the integrated data, and later train baseline attrition prediction models.
 
 ## Technology stack

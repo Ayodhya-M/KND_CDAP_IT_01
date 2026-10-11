@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { useEffect, useState } from 'react'
 import { analyseMissingValues, createTemporalMappingPreview, getCleaningUploadChoices, getMappingUploadChoices, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type MacroUploadSummary, type MappingUploadChoice, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError } from './api'
 import './styles.css'
+import EesiView from './EesiView'
 
 const stats = [
   ['Total Employees', '0', 'Employees will appear after HR upload.'],
@@ -16,7 +17,7 @@ function App() {
 }
 
 function Dashboard() {
-  const [view, setView] = useState<'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping'>('dashboard')
+  const [view, setView] = useState<'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'eesi'>('dashboard')
   const [totalEmployees, setTotalEmployees] = useState(0)
   const [hrUploads, setHrUploads] = useState(0)
   const [economicUploads, setEconomicUploads] = useState(0)
@@ -27,12 +28,12 @@ function Dashboard() {
   }
 
   return <main className="dashboard-layout">
-    <aside className="sidebar"><div><p className="eyebrow">KND CDAP</p><h2>Research Hub</h2></div><nav><button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>Dashboard</button><button className={view === 'hr-upload' ? 'active' : ''} onClick={() => setView('hr-upload')}>Upload HR data</button><button className={view === 'macro-upload' ? 'active' : ''} onClick={() => setView('macro-upload')}>Upload economic data</button><button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => setView('data-cleaning')}>Data cleaning</button><button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => setView('temporal-mapping')}>Temporal mapping</button><button disabled>Data validation</button><button disabled>Predictions</button></nav></aside>
+    <aside className="sidebar"><div><p className="eyebrow">KND CDAP</p><h2>Research Hub</h2></div><nav><button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>Dashboard</button><button className={view === 'hr-upload' ? 'active' : ''} onClick={() => setView('hr-upload')}>Upload HR data</button><button className={view === 'macro-upload' ? 'active' : ''} onClick={() => setView('macro-upload')}>Upload economic data</button><button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => setView('data-cleaning')}>Data cleaning</button><button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => setView('temporal-mapping')}>Temporal mapping</button><button className={view === 'eesi' ? 'active' : ''} onClick={() => setView('eesi')}>EESI prototype</button><button disabled>Data validation</button><button disabled>Predictions</button></nav></aside>
     <section className="dashboard-content">
       {view === 'dashboard' ? <><header><div><p className="eyebrow">Overview</p><h1>HR & Economic Data Integration</h1><p className="muted">Your HR attrition analysis workspace is ready.</p></div><button className="primary-button compact" onClick={() => setView('hr-upload')}>Upload dataset</button></header>
       <div className="stats-grid">{stats.map(([label, value, detail]) => <article className="stat-card" key={label}><p>{label}</p><strong>{label === 'Total Employees' ? totalEmployees : label === 'HR Records Uploaded' ? hrUploads : label === 'Economic Records Uploaded' ? economicUploads : value}</strong><small>{detail}</small></article>)}</div>
       <section className="next-step"><div><p className="eyebrow">Get started</p><h2>Upload your HR dataset</h2><p>Use the Module 1 pilot CSV to validate employee records and their observation period.</p></div><button className="primary-button" onClick={() => setView('hr-upload')}>Upload HR dataset</button></section>
-      <section className="activity"><h2>Workflow progress</h2><div className="progress-steps"><span className="current">1<br /><small>Upload</small></span><span>2<br /><small>Clean</small></span><span>3<br /><small>Map</small></span><span>4<br /><small>Predict</small></span></div></section></> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => setEconomicUploads((uploads) => uploads + 1)} /> : view === 'data-cleaning' ? <DataCleaningView /> : <TemporalMappingView />}
+      <section className="activity"><h2>Workflow progress</h2><div className="progress-steps"><span className="current">1<br /><small>Upload</small></span><span>2<br /><small>Clean</small></span><span>3<br /><small>Map</small></span><span>4<br /><small>Predict</small></span></div></section></> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => setEconomicUploads((uploads) => uploads + 1)} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'eesi' ? <EesiView /> : <TemporalMappingView />}
     </section>
   </main>
 }

@@ -1,4 +1,16 @@
 :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #18324a; background: #f6f8fb; font-synthesis: none; }
+.eesi-view { max-width: 1100px; } .eesi-view h1 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.8rem); letter-spacing: -.04em; }
+.eesi-source-switch { margin-bottom: 2rem; }
+.eesi-notice { background: #fff8e7; border: 1px solid #e9d69e; border-radius: .8rem; padding: 1rem 1.3rem; margin: 1.5rem 0; color: #73541d; } .eesi-notice p { line-height: 1.6; margin-bottom: 0; }
+.eesi-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.eesi-formulas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.eesi-formula { border: 1px solid #d8e0e8; border-radius: .8rem; padding: 1.2rem; background: white; text-align: left; color: #18324a; display: grid; gap: .9rem; } .eesi-formula.selected { border: 2px solid #0d776c; background: #effaf7; } .eesi-formula code { white-space: normal; line-height: 1.6; } .eesi-formula small { color: #62748a; }
+.eesi-field { display: grid; gap: .5rem; font-size: .87rem; font-weight: 700; text-transform: capitalize; } .eesi-field input, .eesi-field select { min-width: 0; width: 100%; padding: .75rem; border: 1px solid #d8e0e8; border-radius: .5rem; background: white; color: #18324a; font: inherit; } .eesi-field select { max-width: 550px; }
+.eesi-inputs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
+.eesi-score { font-size: 2.6rem; color: #0d776c; font-weight: 800; margin: 1.2rem 0; } .eesi-score small { font-size: 1rem; color: #62748a; }
+.eesi-contribution { display: grid; grid-template-columns: 150px 1fr 110px; gap: .8rem; align-items: center; margin: .9rem 0; text-transform: capitalize; font-size: .85rem; } .eesi-contribution progress { width: 100%; accent-color: #0d776c; } .eesi-warning { color: #73541d; }
+@media (max-width: 700px) { .eesi-formulas, .eesi-inputs { grid-template-columns: 1fr; } .eesi-contribution { grid-template-columns: 1fr; } }
+@media (max-width: 550px) { .sidebar nav { display: flex !important; } }
 * { box-sizing: border-box; } body { margin: 0; min-width: 320px; } button, input { font: inherit; } button { cursor: pointer; }
 .eyebrow { margin: 0 0 .45rem; color: #168173; font-size: .72rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }.muted { color: #62748a; line-height: 1.6; }
 .auth-layout { display: grid; min-height: 100vh; grid-template-columns: minmax(320px, 1.05fr) minmax(420px, .95fr); }.brand-panel { background: linear-gradient(145deg, #123c54, #0b746d); color: white; padding: clamp(3rem, 10vw, 9rem) clamp(2rem, 10vw, 10rem); display: flex; flex-direction: column; justify-content: center; }.brand-panel .eyebrow { color: #a8ece0; }.brand-panel h1 { font-size: clamp(2.8rem, 5vw, 5rem); line-height: 1.02; letter-spacing: -.06em; margin: 0 0 1.3rem; max-width: 600px; }.brand-panel > p:not(.eyebrow) { max-width: 500px; line-height: 1.7; color: #d5f5ee; font-size: 1.1rem; }.workflow-note { margin-top: 3rem; font-weight: 650; color: #d5f5ee; }.workflow-note span { display: inline-grid; place-items: center; width: 2.1rem; height: 2.1rem; border: 1px solid #a8ece0; border-radius: 50%; margin-right: .8rem; color: #fff; }
