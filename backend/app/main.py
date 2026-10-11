@@ -5,6 +5,7 @@ from app.config import get_settings
 from app.routers.auth import router as auth_router
 from app.routers.data_cleaning import router as data_cleaning_router
 from app.routers.hr import router as hr_router
+from app.routers.integration import router as integration_router
 from app.routers.macro import router as macro_router
 from app.routers.temporal_mapping import router as temporal_mapping_router
 from app.supabase_client import get_supabase_client
@@ -22,6 +23,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix=settings.api_v1_prefix)
 app.include_router(data_cleaning_router, prefix=settings.api_v1_prefix)
 app.include_router(hr_router, prefix=settings.api_v1_prefix)
+app.include_router(integration_router, prefix=settings.api_v1_prefix)
 app.include_router(macro_router, prefix=settings.api_v1_prefix)
 app.include_router(temporal_mapping_router, prefix=settings.api_v1_prefix)
 

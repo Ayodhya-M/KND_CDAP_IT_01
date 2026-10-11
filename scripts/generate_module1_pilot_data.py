@@ -54,6 +54,8 @@ def generate_hr_rows(count: int) -> list[dict[str, str | int]]:
             resignation_date = date(2023, random.randint(1, 6), random.randint(1, 28)).isoformat()
 
         monthly_income = int((16000 + job_level * 23000 + years_at_company * 1900) * random.uniform(0.82, 1.18))
+        overtime = random.choices(["Yes", "No"], weights=[28, 72])[0]
+        additional_income = 0 if overtime == "No" else int(monthly_income * random.uniform(0.05, 0.18))
         rows.append({
             "EmployeeID": f"PILOT-{number:04d}",
             "Age": age,
@@ -62,11 +64,12 @@ def generate_hr_rows(count: int) -> list[dict[str, str | int]]:
             "JobRole": job_role,
             "JobLevel": job_level,
             "MonthlyIncome": monthly_income,
+            "AdditionalIncome": additional_income,
             "BusinessTravel": random.choices(["Non-Travel", "Travel_Rarely", "Travel_Frequently"], weights=[12, 64, 24])[0],
             "DistanceFromHome": random.randint(1, 29),
             "EducationField": random.choice(education_fields),
             "MaritalStatus": random.choice(["Single", "Married", "Divorced"]),
-            "OverTime": random.choices(["Yes", "No"], weights=[28, 72])[0],
+            "OverTime": overtime,
             "JobSatisfaction": random.randint(1, 4),
             "EnvironmentSatisfaction": random.randint(1, 4),
             "WorkLifeBalance": random.choices([1, 2, 3, 4], weights=[7, 23, 55, 15])[0],

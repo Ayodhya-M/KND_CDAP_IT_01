@@ -87,6 +87,43 @@ export type RemoveMissingResult = {
   message: string
 }
 
+export type IntegrationMappingRun = {
+  id: string
+  total_employee_records: number
+  mapped_record_count: number
+  unmapped_record_count: number
+  mapping_accuracy: number
+  created_at: string
+}
+
+export type IntegratedRecordPreview = {
+  employee_id: string
+  salary: number
+  tenure_years: number
+  additional_income: number
+  overtime: boolean
+  job_satisfaction: number
+  observation_date: string
+  economic_month: string
+  inflation_rate: number
+  cpi_index: number
+  unemployment_rate: number
+  policy_interest_rate_percent: number
+  usd_lkr_exchange_rate: number
+  gdp_growth_rate_percent: number
+  attrition: boolean
+}
+
+export type IntegrationResult = {
+  status: 'success'
+  integration_run_id: string
+  total_hr_records: number
+  integrated_records: number
+  unmatched_records: number
+  integration_rate: number
+  records: IntegratedRecordPreview[]
+}
+
 type ApiErrorBody = HrUploadSummary & { detail?: string }
 
 export class UploadRequestError extends Error {
@@ -160,4 +197,20 @@ export async function removeMissingValues(uploadId: string): Promise<RemoveMissi
   const body = await response.json().catch(() => ({})) as ApiErrorBody
   if (!response.ok) throw new UploadRequestError(body)
   return body as unknown as RemoveMissingResult
+}
+
+export async function getIntegrationMappingRuns(): Promise<{ mapping_runs: IntegrationMappingRun[] }> {
+  const response = await fetch(`${API_BASE_URL}/integration/mapping-runs`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as { mapping_runs: IntegrationMappingRun[] }
+}
+
+export async function generateIntegratedDataset(mappingRunId: string): Promise<IntegrationResult> {
+  const response = await fetch(`${API_BASE_URL}/integration/generate`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ temporal_mapping_run_id: mappingRunId }),
+  })
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as IntegrationResult
 }
