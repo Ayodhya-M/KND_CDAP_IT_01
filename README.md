@@ -87,3 +87,102 @@ After applying the SQL schema, the next feature is the HR dataset upload workflo
 Run [module1_data_integration_migration.sql](supabase/module1_data_integration_migration.sql) after the initial schema. It adds the Module 1 tables for data-cleaning runs and issues, temporal-mapping previews, validation issues, and downloadable dataset exports. It does not add EESI, ML, or retention-recommendation tables; those belong to the other team modules.
 
 Run [module1_pilot_attributes_migration.sql](supabase/module1_pilot_attributes_migration.sql) after that migration to add the HR and macroeconomic attributes used by the 100-employee / six-month pilot dataset.
+# Module 3 — Employee Turnover Prediction & Wellbeing Risk Analysis
+
+This repository contains the Module 3 UI prototype and a separate, dataset-configurable Python baseline for employee turnover classification. Module 3 predicts a target class from approved HR features; it does not calculate EESI (Module 2) or generate retention recommendations (Module 4).
+
+## Current Status
+
+- **UI:** React/Vite prototype using clearly labelled mock values only. It is not connected to a model.
+- **Prediction pipeline:** Implemented and unit-tested, but no approved research dataset is stored in this repository.
+- **Evaluation:** Implemented for the held-out test split created by training. No research metrics are claimed until a real dataset run is completed.
+- **EESI:** Optional input contract only; no Module 2 interface or EESI output was present.
+- **Explainability:** The current SHAP visual in the UI is mock-only. No SHAP computation has been added because no trained research model or approved SHAP scope was present.
+
+## Repository Structure
+
+```text
+module3_ml/       Python data validation, training, prediction, evaluation CLI
+src/              React UI prototype
+tests/            Synthetic unit tests only; not research data
+docs/             PP1 evidence, demo script, and research mapping
+artifacts/        Local model/results output (ignored by Git)
+```
+
+## Setup
+
+### UI
+
+```powershell
+npm.cmd install
+npm.cmd run dev
+```
+
+### ML pipeline
+
+```powershell
+py -m pip install -r requirements-ml.txt
+```
+
+The pipeline needs a legitimate, approved CSV dataset. Do not commit confidential employee data or model artifacts.
+
+## Dataset Contract
+
+The training command requires you to explicitly provide:
+
+- `--data`: approved CSV path.
+- `--target`: the actual existing turnover target column.
+- `--features`: approved predictor columns, comma-separated.
+
+Feature selection is deliberately explicit to prevent accidental use of identifiers or target-leakage fields. The loader reports missing values, duplicates, types, and target-class distribution. Numeric features receive median imputation and scaling; categorical features receive most-frequent imputation and one-hot encoding. These transformations are fitted only on the training split.
+
+## Train
+
+```powershell
+py -m module3_ml.cli train --data path\to\approved_hr_data.csv --target <target_column> --features <feature_1>,<feature_2>,<feature_3>
+```
+
+This creates an ignored local artifact directory containing the trained pipeline, metadata, diagnostics, and a held-out test CSV. The baseline is Logistic Regression because it is transparent, produces class probabilities, and works well with mixed HR feature types after preprocessing.
+
+## Predict
+
+Create a local JSON file containing exactly the feature columns used during training. For example, if the features were `Age,OverTime`:
+
+```json
+{ "Age": 30, "OverTime": "Yes" }
+```
+
+Then run:
+
+```powershell
+py -m module3_ml.cli predict --record path\to\employee_record.json
+```
+
+The command returns the trained model's predicted class and probabilities. It rejects missing or unexpected fields and does not assign unsupported High/Medium/Low risk bands.
+
+## Evaluate
+
+```powershell
+py -m module3_ml.cli evaluate
+```
+
+Evaluation uses only the held-out split saved during training and writes JSON and Markdown reports. It reports accuracy, macro precision, macro recall, macro F1, class-specific results, a labelled confusion matrix, and ROC-AUC when the binary held-out set permits it. Macro averaging weights each class equally; this is useful when class sizes differ.
+
+## EESI Boundary
+
+Module 2 owns EESI calculation. Once an interface exists, supply its precomputed column through `--eesi-column <column_name>` and include the same name in `--features`. Module 3 validates the field but does not invent or calculate EESI values.
+
+## Tests
+
+```powershell
+py -m unittest discover -s tests -v
+npm.cmd run build
+```
+
+The Python tests use a tiny synthetic fixture strictly for input, artifact, and evaluation-interface behaviour. They are not a research experiment and their results must not be reported as model performance.
+
+## PP1 Documents
+
+- `docs/PP1_EVIDENCE.md`
+- `docs/PP1_DEMO_SCRIPT.md`
+- `docs/PP1_RESEARCH_MAPPING.md`
