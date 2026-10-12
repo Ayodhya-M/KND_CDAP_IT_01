@@ -1,0 +1,4506 @@
+{
+  "metadata": {
+    "version": "pp1-exploratory-v1",
+    "formulas": [
+      {
+        "id": "economic",
+        "name": "Economic baseline",
+        "expression": "100 \u00d7 (I + C + U) / 3",
+        "rationale": "Equal weights provide a transparent economic-only comparator; salary has no effect."
+      },
+      {
+        "id": "additive",
+        "name": "Additive salary exposure",
+        "expression": "100 \u00d7 (I + C + U + V) / 4",
+        "rationale": "Treat income exposure as a separate equally weighted component. This is a hypothesis, not a validated weighting."
+      },
+      {
+        "id": "interaction",
+        "name": "Salary interaction",
+        "expression": "100 \u00d7 ((I + C + U) / 3) \u00d7 V",
+        "rationale": "Test whether salary moderates economic pressure. It becomes zero when normalized economic pressure is zero, a limitation to evaluate."
+      }
+    ],
+    "bounds": {
+      "inflation": [
+        12.0,
+        53.2
+      ],
+      "cpi": [
+        100.0,
+        115.27
+      ],
+      "unemployment": [
+        4.6,
+        4.8
+      ]
+    },
+    "reference_salary": 50000,
+    "reference_period": "2023-01 to 2023-06",
+    "normalization": "clip((x - lower) / (upper - lower), 0, 1)",
+    "salary_exposure": "V = reference salary / (reference salary + employee salary)",
+    "validation_status": "Exploratory prototype; no empirical accuracy established",
+    "limitations": [
+      "Pilot reference ranges are not clinical or population thresholds.",
+      "CPI and inflation may overlap; indicator ablation is still required.",
+      "Positive unemployment direction is an assumed insecurity channel, not a turnover claim.",
+      "Salary is not disposable household income; debt, dependents and expenses are absent.",
+      "No formula has been selected as the final EESI."
+    ]
+  },
+  "rows": [
+    {
+      "employee_id": "PILOT-0001",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 111166.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3102391323231947
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 57.75597830807987,
+        "interaction": 20.68260882154631
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 7.755978308079868
+        },
+        "interaction": {
+          "inflation": 10.341304410773157,
+          "cpi": 0.0,
+          "unemployment": 10.341304410773157
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0002",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 125237.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.2853278702557108
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 62.464498693689706,
+        "interaction": 21.05008338699283
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 7.1331967563927705
+        },
+        "interaction": {
+          "inflation": 8.910724750704237,
+          "cpi": 2.628429627764898,
+          "unemployment": 9.510929008523695
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0003",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 51675.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.4917629702483403
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 74.59788876654353,
+        "interaction": 40.85161184187199
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 12.294074256208507
+        },
+        "interaction": {
+          "inflation": 15.238286214006012,
+          "cpi": 9.221226619587963,
+          "unemployment": 16.39209900827801
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0004",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 36788.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5761165138037517
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 60.266764804326066,
+        "interaction": 35.23056333381902
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 14.402912845093793
+        },
+        "interaction": {
+          "inflation": 10.813837475928027,
+          "cpi": 14.81478396116175,
+          "unemployment": 9.601941896729238
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0005",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 72430.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.40839663481172916
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 53.85321989302966,
+        "interaction": 23.76503799326768
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.20991587029323
+        },
+        "interaction": {
+          "inflation": 4.361517459154389,
+          "cpi": 12.596909953917773,
+          "unemployment": 6.806610580195517
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0006",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 50875.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.4956629491945477
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 37.391573729863694,
+        "interaction": 16.52209830648492
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 12.391573729863692
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 16.522098306484924,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0007",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 101066.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3309811605523414
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 58.27452901380854,
+        "interaction": 22.065410703489423
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 8.274529013808534
+        },
+        "interaction": {
+          "inflation": 11.032705351744712,
+          "cpi": 0.0,
+          "unemployment": 11.032705351744712
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0008",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 53477.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.48319916503184285
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 67.41128106309301,
+        "interaction": 35.64805186163556
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 12.079979125796072
+        },
+        "interaction": {
+          "inflation": 15.09020046135043,
+          "cpi": 4.4512125658903665,
+          "unemployment": 16.10663883439476
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0009",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 85407.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3692571285088659
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 71.53524272305667,
+        "interaction": 30.674836854980427
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 9.231428212721648
+        },
+        "interaction": {
+          "inflation": 11.44219095622133,
+          "cpi": 6.924074948463566,
+          "unemployment": 12.30857095029553
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0010",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 60651.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.45187119863354147
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 57.1606319250708,
+        "interaction": 27.632738345026116
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 11.296779965838537
+        },
+        "interaction": {
+          "inflation": 8.481724763995278,
+          "cpi": 11.619826937138441,
+          "unemployment": 7.531186643892391
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0011",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 85897.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.3679257084409516
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 52.84144673376022,
+        "interaction": 21.40999140169218
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 9.19814271102379
+        },
+        "interaction": {
+          "inflation": 3.9293036823790946,
+          "cpi": 11.34859257863053,
+          "unemployment": 6.132095140682554
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0012",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 73967.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.40333314511119894
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 35.08332862777998,
+        "interaction": 13.444438170373296
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 10.083328627779974
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 13.444438170373298,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0013",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 37028.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5745277381992003
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 64.36319345498,
+        "interaction": 38.301849213280015
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 14.363193454980008
+        },
+        "interaction": {
+          "inflation": 19.15092460664001,
+          "cpi": 0.0,
+          "unemployment": 19.15092460664001
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0014",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 91369.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.35368432966208996
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 64.1734101788492,
+        "interaction": 26.093085913364757
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 8.84210824155225
+        },
+        "interaction": {
+          "inflation": 11.045481492683392,
+          "cpi": 3.2581267652783663,
+          "unemployment": 11.789477655403
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0015",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 60756.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.45144281122467406
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 73.58988479095187,
+        "interaction": 37.502145563421706
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 11.286070280616851
+        },
+        "interaction": {
+          "inflation": 13.98888322807849,
+          "cpi": 8.465168627854077,
+          "unemployment": 15.048093707489135
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0016",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 53349.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.48379761778053004
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 57.95879240374552,
+        "interaction": 29.585096426820623
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 12.09494044451325
+        },
+        "interaction": {
+          "inflation": 9.08099088390639,
+          "cpi": 12.440811913238692,
+          "unemployment": 8.063293629675536
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0017",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 72118.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.40944004978791004
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 53.879305267434184,
+        "interaction": 23.82575542930413
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.236001244697752
+        },
+        "interaction": {
+          "inflation": 4.372660725890301,
+          "cpi": 12.629093873615298,
+          "unemployment": 6.824000829798531
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0018",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 80368.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.3835297005400098
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 34.58824251350025,
+        "interaction": 12.784323351333658
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 9.588242513500244
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 12.78432335133366,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0019",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 74465.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.40171935885590326
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 60.042983971397575,
+        "interaction": 26.781290590393546
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 10.042983971397582
+        },
+        "interaction": {
+          "inflation": 13.390645295196776,
+          "cpi": 0.0,
+          "unemployment": 13.390645295196776
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0020",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 114386.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3041621549280352
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 62.93535581049782,
+        "interaction": 22.43958404296268
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 7.604053873200881
+        },
+        "interaction": {
+          "inflation": 9.498915194354497,
+          "cpi": 2.801930351007005,
+          "unemployment": 10.138738497601175
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0021",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 70823.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.41382849291939455
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 72.64952683331988,
+        "interaction": 34.377458215921926
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 10.345712322984864
+        },
+        "interaction": {
+          "inflation": 12.823326277356642,
+          "cpi": 7.759848841252132,
+          "unemployment": 13.794283097313153
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0022",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 43650.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5339028296849974
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 59.21142270135721,
+        "interaction": 32.64912045505056
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 13.347570742124933
+        },
+        "interaction": {
+          "inflation": 10.021477062048495,
+          "cpi": 13.729262898252065,
+          "unemployment": 8.898380494749995
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0023",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 43183.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.536578560467038
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 57.05776803441238,
+        "interaction": 31.22408166206027
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 13.41446401167595
+        },
+        "interaction": {
+          "inflation": 5.730450645764484,
+          "cpi": 16.55065500851178,
+          "unemployment": 8.942976007784006
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0024",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 54389.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.47897767006102177
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 36.974441751525546,
+        "interaction": 15.96592233536739
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 11.974441751525545
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 15.965922335367393,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0025",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 43008.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5375881644589713
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 63.439704111474285,
+        "interaction": 35.839210963931414
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 13.439704111474281
+        },
+        "interaction": {
+          "inflation": 17.919605481965707,
+          "cpi": 0.0,
+          "unemployment": 17.919605481965707
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0026",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 133925.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.27184993883376374
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 62.12755040814103,
+        "interaction": 20.055748062995583
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 6.796248470844094
+        },
+        "interaction": {
+          "inflation": 8.4898120056499,
+          "cpi": 2.504271429553554,
+          "unemployment": 9.061664627792124
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0027",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 51405.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.49307233371135545
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 74.63062285311891,
+        "interaction": 40.9603829596404
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 12.326808342783886
+        },
+        "interaction": {
+          "inflation": 15.27885953167064,
+          "cpi": 9.24577897092457,
+          "unemployment": 16.435744457045182
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0028",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 53182.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.4845806439107596
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 57.97836805700126,
+        "interaction": 29.632979886176702
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 12.114516097768991
+        },
+        "interaction": {
+          "inflation": 9.09568846175536,
+          "cpi": 12.460947359241977,
+          "unemployment": 8.076344065179363
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0029",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 65637.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.43238755761564207
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 54.45299296312748,
+        "interaction": 25.16109551022391
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.809688940391052
+        },
+        "interaction": {
+          "inflation": 4.617731197836954,
+          "cpi": 13.336905018792889,
+          "unemployment": 7.206459293594066
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0030",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 109870.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.3127541127165822
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 32.818852817914554,
+        "interaction": 10.425137090552738
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 7.818852817914555
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 10.42513709055274,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0031",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 43389.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5353949608626284
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 63.38487402156571,
+        "interaction": 35.69299739084189
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 13.38487402156571
+        },
+        "interaction": {
+          "inflation": 17.846498695420944,
+          "cpi": 0.0,
+          "unemployment": 17.846498695420944
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0032",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 110591.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3113499511180577
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 63.11505071524838,
+        "interaction": 22.969864204634526
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 7.783748777951442
+        },
+        "interaction": {
+          "inflation": 9.723388441065554,
+          "cpi": 2.868144059633712,
+          "unemployment": 10.378331703935256
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0033",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 54685.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.4776233462291637
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 74.24439816606412,
+        "interaction": 39.67700849235645
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 11.940583655729093
+        },
+        "interaction": {
+          "inflation": 14.800140906615669,
+          "cpi": 8.956089378101984,
+          "unemployment": 15.92077820763879
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0034",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 64344.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.4372769887357448
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 56.79577667762589,
+        "interaction": 26.740276102073434
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.931924718393619
+        },
+        "interaction": {
+          "inflation": 8.207788138081941,
+          "cpi": 11.244538151729044,
+          "unemployment": 7.287949812262444
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0035",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 87805.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.3628315373172236
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 52.714092455667014,
+        "interaction": 21.113556122896572
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 9.070788432930591
+        },
+        "interaction": {
+          "inflation": 3.874899913096563,
+          "cpi": 11.191463921179588,
+          "unemployment": 6.04719228862042
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0036",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 93346.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.34880638455206286
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 33.72015961380157,
+        "interaction": 11.626879485068761
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 8.720159613801572
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 11.626879485068763,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0037",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 154283.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.24475849679121608
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 56.1189624197804,
+        "interaction": 16.317233119414404
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 6.118962419780402
+        },
+        "interaction": {
+          "inflation": 8.158616559707204,
+          "cpi": 0.0,
+          "unemployment": 8.158616559707204
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0038",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 46026.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5206923124986983
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 68.34860974976439,
+        "interaction": 38.41411141239313
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 13.017307812467457
+        },
+        "interaction": {
+          "inflation": 16.26110296314705,
+          "cpi": 4.796598032622804,
+          "unemployment": 17.356410416623277
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0039",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 60901.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.45085256219511094
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 73.5751285652128,
+        "interaction": 37.45311254201797
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 11.271314054877774
+        },
+        "interaction": {
+          "inflation": 13.97059314892617,
+          "cpi": 8.45410065325476,
+          "unemployment": 15.028418739837031
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0040",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 61678.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.4477157542219596
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 57.056745814781266,
+        "interaction": 27.378625428602632
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 11.19289385554899
+        },
+        "interaction": {
+          "inflation": 8.403726131027074,
+          "cpi": 11.512970060542862,
+          "unemployment": 7.461929237032693
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0041",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 105723.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.32108294856893327
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 51.67037773695976,
+        "interaction": 18.684160987880798
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 8.02707371422333
+        },
+        "interaction": {
+          "inflation": 3.4290411983089957,
+          "cpi": 9.903737313422893,
+          "unemployment": 5.351382476148911
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0042",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 57588.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.4647358441461873
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 36.61839610365468,
+        "interaction": 15.491194804872908
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 11.618396103654682
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 15.49119480487291,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0043",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 60764.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.45141020548192556
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 61.285255137048146,
+        "interaction": 30.094013698795035
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 11.28525513704814
+        },
+        "interaction": {
+          "inflation": 15.047006849397519,
+          "cpi": 0.0,
+          "unemployment": 15.047006849397519
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0044",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 34093.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5945798104479565
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 70.19579719849585,
+        "interaction": 43.86516669028889
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 14.864495261198913
+        },
+        "interaction": {
+          "inflation": 18.568592785834237,
+          "cpi": 5.47724688952276,
+          "unemployment": 19.819327014931883
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0045",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 43693.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5336577972740759
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 75.64525944218691,
+        "interaction": 44.331888551144
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 13.341444931851898
+        },
+        "interaction": {
+          "inflation": 16.53648352394588,
+          "cpi": 10.006811784728912,
+          "unemployment": 17.788593242469197
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0046",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 92917.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.34985341142061477
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 54.61018724474764,
+        "interaction": 21.394166758436608
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 8.74633528551537
+        },
+        "interaction": {
+          "inflation": 6.566827787183061,
+          "cpi": 8.996448780909938,
+          "unemployment": 5.830890190343605
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0047",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 155760.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.24300155520995334
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 49.71834290298526,
+        "interaction": 14.140521002701021
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 6.075038880248833
+        },
+        "interaction": {
+          "inflation": 2.5951622401062977,
+          "cpi": 7.495332842428816,
+          "unemployment": 4.050025920165907
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0048",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 136486.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.26811664146370234
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 31.70291603659256,
+        "interaction": 8.93722138212341
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 6.702916036592558
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 8.937221382123411,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0049",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 90720.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.35531552018192153
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 58.882888004548036,
+        "interaction": 23.68770134546143
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 8.882888004548038
+        },
+        "interaction": {
+          "inflation": 11.843850672730717,
+          "cpi": 0.0,
+          "unemployment": 11.843850672730717
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0050",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 88870.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.36004896665946573
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 64.33252610378358,
+        "interaction": 26.562637448595545
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 9.001224166486644
+        },
+        "interaction": {
+          "inflation": 11.244247664284282,
+          "cpi": 3.3167575623290664,
+          "unemployment": 12.001632221982192
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0051",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 77209.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3930539505852573
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 72.13016327496645,
+        "interaction": 32.65168057309101
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 9.826348764631431
+        },
+        "interaction": {
+          "inflation": 12.179584391112742,
+          "cpi": 7.370297829136351,
+          "unemployment": 13.101798352841909
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0052",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 79784.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.3852555014485607
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 55.49523949544629,
+        "interaction": 23.559068379888775
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 9.631387536214017
+        },
+        "interaction": {
+          "inflation": 7.231333036898551,
+          "cpi": 9.906810318847514,
+          "unemployment": 6.420925024142707
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0053",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 49442.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5028056555580137
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 56.21344541168677,
+        "interaction": 29.25880011982625
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 12.570141388950343
+        },
+        "interaction": {
+          "inflation": 5.369769137027331,
+          "cpi": 15.508936723498651,
+          "unemployment": 8.380094259300266
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0054",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 102045.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.3288500115097504
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 33.22125028774376,
+        "interaction": 10.961667050325012
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 8.22125028774376
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 10.961667050325014,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0055",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 37896.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.568854100300355
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 64.22135250750888,
+        "interaction": 37.92360668669033
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 14.221352507508875
+        },
+        "interaction": {
+          "inflation": 18.961803343345167,
+          "cpi": 0.0,
+          "unemployment": 18.961803343345167
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0056",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 47232.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5142339970380121
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 68.18715186324724,
+        "interaction": 37.93764874204441
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 12.855849925950302
+        },
+        "interaction": {
+          "inflation": 16.059411234358627,
+          "cpi": 4.737104273085377,
+          "unemployment": 17.141133234600403
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0057",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 64418.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.43699417923753253
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 73.22866899127334,
+        "interaction": 36.3018723804151
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 10.924854480938313
+        },
+        "interaction": {
+          "inflation": 13.54116267378438,
+          "cpi": 8.194237065379626,
+          "unemployment": 14.566472641251083
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0058",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 69833.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.4172473358757604
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 56.29503535612628,
+        "interaction": 25.515426723986586
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.43118339689401
+        },
+        "interaction": {
+          "inflation": 7.831827016438222,
+          "cpi": 10.729477442952323,
+          "unemployment": 6.954122264596037
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0059",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 91325.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.35379444542720684
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 52.4881651584166,
+        "interaction": 20.58767805778003
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 8.844861135680171
+        },
+        "interaction": {
+          "inflation": 3.7783872812614323,
+          "cpi": 10.912716686065123,
+          "unemployment": 5.896574090453473
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0060",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 51690.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.491690431704199
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 37.29226079260498,
+        "interaction": 16.38968105680663
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 12.292260792604976
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 16.389681056806634,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0061",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 119531.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.2949313104977851
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 57.373282762444624,
+        "interaction": 19.662087366519003
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 7.373282762444627
+        },
+        "interaction": {
+          "inflation": 9.831043683259503,
+          "cpi": 0.0,
+          "unemployment": 9.831043683259503
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0062",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 43054.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5373224149418617
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 68.76436231084348,
+        "interaction": 39.64099837176761
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 13.433060373546542
+        },
+        "interaction": {
+          "inflation": 16.78045729510992,
+          "cpi": 4.94979391192896,
+          "unemployment": 17.910747164728722
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0063",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 103914.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3248567381784633
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 70.4252329647966,
+        "interaction": 26.986418610537925
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 8.121418454461582
+        },
+        "interaction": {
+          "inflation": 10.06635361831322,
+          "cpi": 6.091507052942592,
+          "unemployment": 10.828557939282108
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0064",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 93948.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.34734765331925416
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 54.54754329221363,
+        "interaction": 21.240935133628007
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 8.683691332981354
+        },
+        "interaction": {
+          "inflation": 6.5197941399730555,
+          "cpi": 8.932013438334021,
+          "unemployment": 5.789127555320928
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0065",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 74267.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.40235943573112737
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 53.702289916014614,
+        "interaction": 23.41372690670703
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.058985893278184
+        },
+        "interaction": {
+          "inflation": 4.297042517516894,
+          "cpi": 12.410693793671314,
+          "unemployment": 6.705990595518819
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0066",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 52410.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.4882335709403378
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 37.205839273508445,
+        "interaction": 16.274452364677924
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 12.205839273508445
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 16.274452364677927,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0067",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 42797.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5388105218918715
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 63.4702630472968,
+        "interaction": 35.920701459458094
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 13.470263047296788
+        },
+        "interaction": {
+          "inflation": 17.96035072972905,
+          "cpi": 0.0,
+          "unemployment": 17.96035072972905
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0068",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 112053.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3085410328719616
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 63.04482775909598,
+        "interaction": 22.76263606651196
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 7.71352582179904
+        },
+        "interaction": {
+          "inflation": 9.635666560564495,
+          "cpi": 2.842268410215407,
+          "unemployment": 10.284701095732053
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0069",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 105994.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3205251484031437
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 70.31694322041362,
+        "interaction": 26.626585856009427
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 8.013128710078593
+        },
+        "interaction": {
+          "inflation": 9.932130407637866,
+          "cpi": 6.010283834933435,
+          "unemployment": 10.684171613438124
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0070",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 100708.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.33176739124664917
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 54.158036740398494,
+        "interaction": 20.288174022716014
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 8.29418478116623
+        },
+        "interaction": {
+          "inflation": 6.227349091361053,
+          "cpi": 8.531368410577446,
+          "unemployment": 5.529456520777511
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0071",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 40888.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5501276296100696
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 57.39649476298817,
+        "interaction": 32.01251652050614
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 13.753190740251739
+        },
+        "interaction": {
+          "inflation": 5.875149442437635,
+          "cpi": 16.96857325123397,
+          "unemployment": 9.168793826834532
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0072",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 77421.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.3923999968608
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 34.80999992152,
+        "interaction": 13.079999895359999
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 9.809999921520001
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 13.079999895360002,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0073",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 86729.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3656868696472584
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 59.14217174118146,
+        "interaction": 24.379124643150554
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 9.14217174118146
+        },
+        "interaction": {
+          "inflation": 12.18956232157528,
+          "cpi": 0.0,
+          "unemployment": 12.18956232157528
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0074",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 57761.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.46398975510620727
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 66.93104581495211,
+        "interaction": 34.23087631412536
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 11.599743877655182
+        },
+        "interaction": {
+          "inflation": 14.490294941019092,
+          "cpi": 4.274256202899355,
+          "unemployment": 15.46632517020691
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0075",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 99743.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3339054246275285
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 70.65145012602324,
+        "interaction": 27.73810885331758
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 8.347635615688212
+        },
+        "interaction": {
+          "inflation": 10.346745763134578,
+          "cpi": 6.261182269265382,
+          "unemployment": 11.130180820917616
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0076",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 74681.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.4010234117467778
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 55.88943725290172,
+        "interaction": 24.52330451805395
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.025585293669446
+        },
+        "interaction": {
+          "inflation": 7.527300285214601,
+          "cpi": 10.312280703726357,
+          "unemployment": 6.683723529112993
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0077",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 40582.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5519860457927623
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 57.44295516755549,
+        "interaction": 32.120659750455516
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 13.799651144819059
+        },
+        "interaction": {
+          "inflation": 5.894996605553772,
+          "cpi": 17.025895715022333,
+          "unemployment": 9.199767429879413
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0078",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 75942.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.3970081466071684
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 34.92520366517921,
+        "interaction": 13.23360488690561
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 9.92520366517921
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 13.233604886905612,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0079",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 46155.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5199937600748791
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 62.99984400187198,
+        "interaction": 34.6662506716586
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 12.999844001871978
+        },
+        "interaction": {
+          "inflation": 17.333125335829305,
+          "cpi": 0.0,
+          "unemployment": 17.333125335829305
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0080",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 125374.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.2851049756520351
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 62.45892632859782,
+        "interaction": 21.03363932217126
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 7.127624391300877
+        },
+        "interaction": {
+          "inflation": 8.903763802725367,
+          "cpi": 2.626376331044724,
+          "unemployment": 9.50349918840117
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0081",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 149454.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.2506843683255287
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 68.57092371847324,
+        "interaction": 20.824789846392324
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 6.267109208138217
+        },
+        "interaction": {
+          "inflation": 7.767970312999797,
+          "cpi": 4.7006739225415695,
+          "unemployment": 8.356145610850957
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0082",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 56213.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.47075216781373275
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 57.63265615457559,
+        "interaction": 28.787343645462276
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 11.768804195343318
+        },
+        "interaction": {
+          "inflation": 8.836124832749677,
+          "cpi": 12.105349349150345,
+          "unemployment": 7.845869463562248
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0083",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 40222.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5541885571146726
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 57.49801795060324,
+        "interaction": 32.24882624543638
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 13.854713927866817
+        },
+        "interaction": {
+          "inflation": 5.918518571127572,
+          "cpi": 17.093831722397564,
+          "unemployment": 9.23647595191125
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0084",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 107229.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.3180074922565176
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 32.950187306412936,
+        "interaction": 10.600249741883918
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 7.95018730641294
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 10.60024974188392,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0085",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 54806.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.47707192336316623
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 61.92679808407916,
+        "interaction": 31.804794890877744
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 11.926798084079156
+        },
+        "interaction": {
+          "inflation": 15.902397445438874,
+          "cpi": 0.0,
+          "unemployment": 15.902397445438874
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0086",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 68340.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.4225114078080108
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 65.8940871324972,
+        "interaction": 31.170808369836593
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 10.56278519520027
+        },
+        "interaction": {
+          "inflation": 13.194935551285772,
+          "cpi": 3.8921592249504595,
+          "unemployment": 14.08371359360036
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0087",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 96591.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.34108505979221093
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 70.83094100514029,
+        "interaction": 28.33453373005392
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 8.527126494805273
+        },
+        "interaction": {
+          "inflation": 10.569221512978702,
+          "cpi": 6.395810224001514,
+          "unemployment": 11.369501993073698
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0088",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 77191.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.3931095753630367
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 55.69159134330819,
+        "interaction": 24.0393591576093
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 9.827739384075917
+        },
+        "interaction": {
+          "inflation": 7.378755783513312,
+          "cpi": 10.108777118045348,
+          "unemployment": 6.551826256050641
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0089",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 80295.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.38374457960781305
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 53.23691851293175,
+        "interaction": 22.33050847320129
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 9.593614490195327
+        },
+        "interaction": {
+          "inflation": 4.098243083190236,
+          "cpi": 11.836522396547474,
+          "unemployment": 6.395742993463579
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0090",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 109950.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.31259768677711786
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 32.814942169427944,
+        "interaction": 10.419922892570593
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 7.814942169427947
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 10.419922892570595,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0091",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 38180.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5670220004536176
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 64.17555001134045,
+        "interaction": 37.80146669690784
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 14.175550011340441
+        },
+        "interaction": {
+          "inflation": 18.900733348453922,
+          "cpi": 0.0,
+          "unemployment": 18.900733348453922
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0092",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 48935.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5053823217263861
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 67.96585998045659,
+        "interaction": 37.28461578295308
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 12.634558043159652
+        },
+        "interaction": {
+          "inflation": 15.782975419610437,
+          "cpi": 4.655562972463107,
+          "unemployment": 16.846077390879536
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0093",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 39975.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5557099194220616
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 76.19656249588655,
+        "interaction": 46.16379698830046
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 13.89274798555154
+        },
+        "interaction": {
+          "inflation": 17.219813846169057,
+          "cpi": 10.42031916139601,
+          "unemployment": 18.52366398073539
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0094",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 65530.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.43278802042759457
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 56.68355246992214,
+        "interaction": 26.465767598160518
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 10.819700510689865
+        },
+        "interaction": {
+          "inflation": 8.123529186019576,
+          "cpi": 11.129104738347664,
+          "unemployment": 7.213133673793275
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0095",
+      "month": "2023-05",
+      "inputs": {
+        "salary": 55095.0,
+        "inflation": 25.2,
+        "cpi": 114.13,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.3203883495145631,
+        "cpi": 0.9253438113948919,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.4757600266425615
+      },
+      "scores": {
+        "economic": 58.19107203031524,
+        "additive": 55.53730468880047,
+        "interaction": 27.684985979501995
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 10.679611650485436,
+          "cpi": 30.84479371316306,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 8.009708737864077,
+          "cpi": 23.133595284872296,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 11.894000666064038
+        },
+        "interaction": {
+          "inflation": 5.080932323367161,
+          "cpi": 14.674719878758772,
+          "unemployment": 7.929333777376059
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0096",
+      "month": "2023-06",
+      "inputs": {
+        "salary": 50603.0,
+        "inflation": 12.0,
+        "cpi": 115.27,
+        "unemployment": 4.6,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.0,
+        "cpi": 1.0,
+        "unemployment": 0.0,
+        "salary_exposure": 0.49700307147898176
+      },
+      "scores": {
+        "economic": 33.33333333333333,
+        "additive": 37.42507678697454,
+        "interaction": 16.56676904929939
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 0.0,
+          "cpi": 33.333333333333336,
+          "unemployment": 0.0
+        },
+        "additive": {
+          "inflation": 0.0,
+          "cpi": 25.0,
+          "unemployment": 0.0,
+          "salary_exposure": 12.425076786974545
+        },
+        "interaction": {
+          "inflation": 0.0,
+          "cpi": 16.566769049299392,
+          "unemployment": 0.0
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0097",
+      "month": "2023-01",
+      "inputs": {
+        "salary": 48981.0,
+        "inflation": 53.2,
+        "cpi": 100.0,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 1.0,
+        "cpi": 0.0,
+        "unemployment": 1.0,
+        "salary_exposure": 0.5051474525413968
+      },
+      "scores": {
+        "economic": 66.66666666666666,
+        "additive": 62.62868631353492,
+        "interaction": 33.676496836093115
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 33.333333333333336,
+          "cpi": 0.0,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 25.0,
+          "cpi": 0.0,
+          "unemployment": 25.0,
+          "salary_exposure": 12.62868631353492
+        },
+        "interaction": {
+          "inflation": 16.83824841804656,
+          "cpi": 0.0,
+          "unemployment": 16.83824841804656
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0098",
+      "month": "2023-02",
+      "inputs": {
+        "salary": 78030.0,
+        "inflation": 50.6,
+        "cpi": 104.22,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9368932038834951,
+        "cpi": 0.27635887360838246,
+        "unemployment": 1.0,
+        "salary_exposure": 0.39053346871826916
+      },
+      "scores": {
+        "economic": 73.77506924972926,
+        "additive": 65.09463865525366,
+        "interaction": 28.811633699027283
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 31.229773462783168,
+          "cpi": 9.211962453612749,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.422330097087375,
+          "cpi": 6.908971840209562,
+          "unemployment": 25.0,
+          "salary_exposure": 9.76333671795673
+        },
+        "interaction": {
+          "inflation": 12.196271757706462,
+          "cpi": 3.5975796507118445,
+          "unemployment": 13.017782290608972
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0099",
+      "month": "2023-03",
+      "inputs": {
+        "salary": 84118.0,
+        "inflation": 50.3,
+        "cpi": 108.59,
+        "unemployment": 4.8,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.9296116504854368,
+        "cpi": 0.5625409299279637,
+        "unemployment": 1.0,
+        "salary_exposure": 0.3728060364753426
+      },
+      "scores": {
+        "economic": 83.07175268044669,
+        "additive": 71.62396542221859,
+        "interaction": 30.96965085985725
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 30.987055016181227,
+          "cpi": 18.751364330932123,
+          "unemployment": 33.333333333333336
+        },
+        "additive": {
+          "inflation": 23.24029126213592,
+          "cpi": 14.063523248199091,
+          "unemployment": 25.0,
+          "salary_exposure": 9.320150911883566
+        },
+        "interaction": {
+          "inflation": 11.552161162625906,
+          "cpi": 6.990621814719919,
+          "unemployment": 12.426867882511422
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "employee_id": "PILOT-0100",
+      "month": "2023-04",
+      "inputs": {
+        "salary": 139032.0,
+        "inflation": 35.2,
+        "cpi": 111.78,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5631067961165049,
+        "cpi": 0.7714472822527835,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.26450548055355705
+      },
+      "scores": {
+        "economic": 61.151802612309694,
+        "additive": 52.4764889730712,
+        "interaction": 16.17498693668524
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 18.770226537216832,
+          "cpi": 25.714909408426113,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 14.077669902912623,
+          "cpi": 19.286182056319586,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 6.612637013838926
+        },
+        "interaction": {
+          "inflation": 4.964827790325667,
+          "cpi": 6.801734470466935,
+          "unemployment": 4.408424675892637
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    }
+  ],
+  "rejected": [],
+  "summary": {
+    "economic": {
+      "mean": 63.03700436373966,
+      "min": 33.33333333333333,
+      "max": 83.07175268044669
+    },
+    "additive": {
+      "mean": 57.76528179699091,
+      "min": 31.70291603659256,
+      "max": 76.19656249588655
+    },
+    "interaction": {
+      "mean": 26.502373143897834,
+      "min": 8.93722138212341,
+      "max": 46.16379698830046
+    }
+  },
+  "months": [
+    {
+      "Date": "2023-01-01",
+      "Year": "2023",
+      "Month": "1",
+      "Inflation_Rate_Percent": "53.2",
+      "CPI_Index": "100.0",
+      "Unemployment_Rate_Percent": "4.8",
+      "Policy_Interest_Rate_Percent": "16.5",
+      "USD_LKR_Exchange_Rate": "365",
+      "GDP_Growth_Rate_Percent": "-11.5"
+    },
+    {
+      "Date": "2023-02-01",
+      "Year": "2023",
+      "Month": "2",
+      "Inflation_Rate_Percent": "50.6",
+      "CPI_Index": "104.22",
+      "Unemployment_Rate_Percent": "4.8",
+      "Policy_Interest_Rate_Percent": "16.5",
+      "USD_LKR_Exchange_Rate": "360",
+      "GDP_Growth_Rate_Percent": "-11.5"
+    },
+    {
+      "Date": "2023-03-01",
+      "Year": "2023",
+      "Month": "3",
+      "Inflation_Rate_Percent": "50.3",
+      "CPI_Index": "108.59",
+      "Unemployment_Rate_Percent": "4.8",
+      "Policy_Interest_Rate_Percent": "16.5",
+      "USD_LKR_Exchange_Rate": "355",
+      "GDP_Growth_Rate_Percent": "-10.0"
+    },
+    {
+      "Date": "2023-04-01",
+      "Year": "2023",
+      "Month": "4",
+      "Inflation_Rate_Percent": "35.2",
+      "CPI_Index": "111.78",
+      "Unemployment_Rate_Percent": "4.7",
+      "Policy_Interest_Rate_Percent": "16.5",
+      "USD_LKR_Exchange_Rate": "350",
+      "GDP_Growth_Rate_Percent": "-9.0"
+    },
+    {
+      "Date": "2023-05-01",
+      "Year": "2023",
+      "Month": "5",
+      "Inflation_Rate_Percent": "25.2",
+      "CPI_Index": "114.13",
+      "Unemployment_Rate_Percent": "4.7",
+      "Policy_Interest_Rate_Percent": "15.5",
+      "USD_LKR_Exchange_Rate": "345",
+      "GDP_Growth_Rate_Percent": "-7.5"
+    },
+    {
+      "Date": "2023-06-01",
+      "Year": "2023",
+      "Month": "6",
+      "Inflation_Rate_Percent": "12.0",
+      "CPI_Index": "115.27",
+      "Unemployment_Rate_Percent": "4.6",
+      "Policy_Interest_Rate_Percent": "14.5",
+      "USD_LKR_Exchange_Rate": "335",
+      "GDP_Growth_Rate_Percent": "-6.0"
+    }
+  ],
+  "data_note": "100 synthetic HR records; supplied economic pilot values have not been independently verified.",
+  "controlled_scenarios": [
+    {
+      "label": "hand-worked midpoint",
+      "inputs": {
+        "salary": 50000.0,
+        "inflation": 32.6,
+        "cpi": 107.635,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5,
+        "cpi": 0.5000000000000004,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5
+      },
+      "scores": {
+        "economic": 50.000000000000085,
+        "additive": 50.000000000000064,
+        "interaction": 25.000000000000043
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 16.666666666666668,
+          "cpi": 16.666666666666682,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 12.5,
+          "cpi": 12.50000000000001,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 12.5
+        },
+        "interaction": {
+          "inflation": 8.333333333333334,
+          "cpi": 8.333333333333341,
+          "unemployment": 8.33333333333337
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "label": "lower salary, same economy",
+      "inputs": {
+        "salary": 25000.0,
+        "inflation": 32.6,
+        "cpi": 107.635,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5,
+        "cpi": 0.5000000000000004,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.6666666666666666
+      },
+      "scores": {
+        "economic": 50.000000000000085,
+        "additive": 54.16666666666673,
+        "interaction": 33.333333333333385
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 16.666666666666668,
+          "cpi": 16.666666666666682,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 12.5,
+          "cpi": 12.50000000000001,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 16.666666666666664
+        },
+        "interaction": {
+          "inflation": 11.111111111111109,
+          "cpi": 11.11111111111112,
+          "unemployment": 11.111111111111159
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "label": "higher salary, same economy",
+      "inputs": {
+        "salary": 100000.0,
+        "inflation": 32.6,
+        "cpi": 107.635,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.5,
+        "cpi": 0.5000000000000004,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.3333333333333333
+      },
+      "scores": {
+        "economic": 50.000000000000085,
+        "additive": 45.8333333333334,
+        "interaction": 16.666666666666693
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 16.666666666666668,
+          "cpi": 16.666666666666682,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 12.5,
+          "cpi": 12.50000000000001,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 8.333333333333332
+        },
+        "interaction": {
+          "inflation": 5.5555555555555545,
+          "cpi": 5.55555555555556,
+          "unemployment": 5.555555555555579
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    },
+    {
+      "label": "higher inflation, same salary",
+      "inputs": {
+        "salary": 50000.0,
+        "inflation": 40.0,
+        "cpi": 107.635,
+        "unemployment": 4.7,
+        "reference_salary": 50000.0
+      },
+      "components": {
+        "inflation": 0.6796116504854368,
+        "cpi": 0.5000000000000004,
+        "unemployment": 0.5000000000000022,
+        "salary_exposure": 0.5
+      },
+      "scores": {
+        "economic": 55.98705501618132,
+        "additive": 54.49029126213599,
+        "interaction": 27.99352750809066
+      },
+      "contributions": {
+        "economic": {
+          "inflation": 22.65372168284789,
+          "cpi": 16.666666666666682,
+          "unemployment": 16.66666666666674
+        },
+        "additive": {
+          "inflation": 16.99029126213592,
+          "cpi": 12.50000000000001,
+          "unemployment": 12.500000000000055,
+          "salary_exposure": 12.5
+        },
+        "interaction": {
+          "inflation": 11.326860841423946,
+          "cpi": 8.333333333333341,
+          "unemployment": 8.33333333333337
+        }
+      },
+      "warnings": [],
+      "version": "pp1-exploratory-v1"
+    }
+  ]
+}
