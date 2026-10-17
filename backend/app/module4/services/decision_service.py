@@ -20,6 +20,22 @@ MOCK_DISCLAIMER = (
 )
 
 
+def provider_disclaimer(module2_is_mock: bool, module3_is_mock: bool) -> str:
+    if module2_is_mock and module3_is_mock:
+        return MOCK_DISCLAIMER
+    mocked = []
+    if module2_is_mock:
+        mocked.append("Module 2")
+    if module3_is_mock:
+        mocked.append("Module 3")
+    if mocked:
+        return (
+            f"{' and '.join(mocked)} values are deterministic development fixtures, not "
+            "validated research findings, production predictions, or SHAP explanations."
+        )
+    return "Decision-support output; final HR decisions remain with authorized staff."
+
+
 class RetentionDecisionService:
     """Run the proof-of-concept pipeline without depending on mock classes."""
 
@@ -45,7 +61,7 @@ class RetentionDecisionService:
         employee = self.employee_repository.get_employee_context(employee_id)
         economic_context = self.employee_repository.get_employee_economic_context(employee.id)
         eesi_result = self.module2_provider.get_eesi_result(employee, economic_context)
-        prediction_result = self.module3_provider.get_prediction(employee)
+        prediction_result = self.module3_provider.get_prediction(employee, eesi_result)
         analysis_input = Module4AnalysisInput(
             employee=employee,
             economic_context=economic_context,
@@ -91,6 +107,9 @@ class RetentionDecisionService:
                 data_mode=data_mode,
                 module2_source=self.module2_provider.metadata.source,
                 module3_source=self.module3_provider.metadata.source,
-                disclaimer=MOCK_DISCLAIMER if is_mock else "Decision-support output; final HR decisions remain with authorized staff.",
+                disclaimer=provider_disclaimer(
+                    self.module2_provider.metadata.is_mock,
+                    self.module3_provider.metadata.is_mock,
+                ),
             ),
         )

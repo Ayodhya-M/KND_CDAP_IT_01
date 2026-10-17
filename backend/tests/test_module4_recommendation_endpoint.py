@@ -49,14 +49,16 @@ class UnavailableModule2Provider:
 class UnavailableModule3Provider:
     metadata = ProviderMetadata("mock", "mock_integration", True)
 
-    def get_prediction(self, employee):
+    def get_prediction(self, employee, eesi_result):
+        del employee, eesi_result
         raise ProviderResultUnavailableError("Module 3 result is unavailable")
 
 
 class MismatchingModule3Provider:
     metadata = ProviderMetadata("mock", "mock_integration", True)
 
-    def get_prediction(self, employee):
+    def get_prediction(self, employee, eesi_result):
+        del employee, eesi_result
         return Module3PredictionResult(
             employee_id="DIFFERENT", turnover_probability=0.8, risk_level="High",
         )

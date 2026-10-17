@@ -41,4 +41,8 @@ class Module3Provider(Protocol):
 
     metadata: ProviderMetadata
 
-    def get_prediction(self, employee: Module1EmployeeContext) -> Module3PredictionResult: ...
+    def get_prediction(
+        self,
+        employee: Module1EmployeeContext,
+        eesi_result: Module2EESIResult,
+    ) -> Module3PredictionResult: ...

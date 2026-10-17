@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -14,6 +15,13 @@ class Settings(BaseSettings):
     supabase_service_role_key: str = "your_supabase_service_role_key"
     backend_port: int = 8000
     cors_origins: str = "http://localhost:5173"
+    module2_provider: Literal["mock", "real"] = "mock"
+    module3_provider: Literal["mock", "real"] = "mock"
+    # Research selections intentionally have no defaults. Real providers fail
+    # clearly until the responsible module owners approve these contracts.
+    module2_eesi_formula: str | None = None
+    module2_reference_profile: Literal["pilot", "lfs2024"] = "pilot"
+    module3_positive_class_label: str | None = None
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
 

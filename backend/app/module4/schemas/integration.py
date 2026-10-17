@@ -79,6 +79,10 @@ class Module2EESIResult(IntegrationModel):
     mapping_id: UUID | None = None
     eesi_score: float = Field(allow_inf_nan=False)
     economic_pressure_level: str = Field(min_length=1)
+    score_scale: Literal["0-1", "0-100"] | None = None
+    formula_identifier: str | None = None
+    formula_version: str | None = None
+    reference_profile: str | None = None
 
     @model_validator(mode="after")
     def require_link_identifier(self) -> "Module2EESIResult":
@@ -106,6 +110,12 @@ class Module3PredictionResult(IntegrationModel):
     turnover_probability: float = Field(ge=0, le=1, allow_inf_nan=False)
     risk_level: str = Field(min_length=1)
     risk_factors: list[Module3RiskFactor] = Field(default_factory=list)
+    model_name: str | None = None
+    model_version: str | None = None
+    model_dataset_kind: str | None = None
+    positive_class_label: str | None = None
+    eesi_formula_identifier: str | None = None
+    eesi_formula_version: str | None = None
 
 
 class Module4AnalysisInput(IntegrationModel):
