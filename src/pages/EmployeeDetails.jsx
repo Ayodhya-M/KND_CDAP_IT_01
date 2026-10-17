@@ -1,0 +1,6 @@
+import Bar from '../components/Bar'
+import RiskBadge from '../components/RiskBadge'
+
+export default function EmployeeDetails({ employee, openExplanation }) {
+  return <section className="details"><div className="details-heading"><div><p className="section-label">EMPLOYEE PROFILE</p><h2>{employee.name}</h2><span>{employee.id} · {employee.department}</span></div><RiskBadge risk={employee.risk} /></div><div className="details-grid"><article className="card profile-card"><h3>Employee information</h3><dl><dt>Job role</dt><dd>{employee.role}</dd><dt>Years at company</dt><dd>{employee.years}</dd><dt>Monthly income</dt><dd>{employee.income}</dd><dt>Overtime</dt><dd>{employee.overtime}</dd><dt>Job satisfaction</dt><dd>{employee.satisfaction}</dd></dl></article><article className="card prediction-card"><p className="section-label">TURNOVER PREDICTION</p><h3>Likely to leave</h3><div className="score"><strong>{employee.probability}%</strong><span>turnover probability</span></div><Bar value={employee.probability / 100} /><p>This prototype result is driven primarily by overtime, monthly income, and job satisfaction.</p><button className="primary" onClick={openExplanation}>View explanation <span>→</span></button></article></div></section>
+}
