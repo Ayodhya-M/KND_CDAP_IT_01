@@ -161,3 +161,60 @@ export async function removeMissingValues(uploadId: string): Promise<RemoveMissi
   if (!response.ok) throw new UploadRequestError(body)
   return body as unknown as RemoveMissingResult
 }
+
+export type Module3Contract = {
+  contract_version: string
+  dataset_kind: string
+  purpose: string
+  feature_columns: string[]
+  eesi: { column: string; formula_id_column: string; formula_version_column: string; supported_formula_ids: string[] }
+}
+
+export type Module3ModelStatus = {
+  model_available: boolean
+  dataset_kind: string
+  message: string
+  model_name?: string
+  classes?: string[]
+  feature_columns?: string[]
+  eesi_integration?: { enabled?: boolean; column?: string; formula_id?: string | null; formula_version?: string | null }
+}
+
+export type Module3Prediction = {
+  predicted_class: string
+  class_probabilities: Record<string, number>
+  interpretation: string
+}
+
+export type Module3Evaluation = {
+  metrics: Record<string, number | null>
+  confusion_matrix: number[][]
+  confusion_matrix_labels: string[]
+  dataset_split: { method: string; train_rows: number; heldout_rows: number }
+  limitations: string[]
+}
+
+async function module3Request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}/module3/${path}`, init)
+  const body = await response.json().catch(() => ({})) as { detail?: string }
+  if (!response.ok) throw new Error(body.detail ?? 'Module 3 request failed.')
+  return body as T
+}
+
+export function getModule3Contract(): Promise<Module3Contract> {
+  return module3Request<Module3Contract>('integration-contract')
+}
+
+export function getModule3ModelStatus(): Promise<Module3ModelStatus> {
+  return module3Request<Module3ModelStatus>('prediction-status')
+}
+
+export function predictModule3(record: Record<string, string | number>): Promise<Module3Prediction> {
+  return module3Request<Module3Prediction>('predict', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ record }),
+  })
+}
+
+export function getModule3Evaluation(): Promise<Module3Evaluation> {
+  return module3Request<Module3Evaluation>('evaluation')
+}
