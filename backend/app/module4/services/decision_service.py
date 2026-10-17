@@ -58,12 +58,18 @@ class RetentionDecisionService:
         self.priority_engine = priority_engine or PriorityEngine()
         self.explanation_engine = explanation_engine or ExplanationEngine()
 
-    def recommendations_for_employee(self, employee_id: str) -> Module4RecommendationResponse:
-        return self.recommendations_for_analysis_input(self.analysis_input_for_employee(employee_id))
+    def recommendations_for_employee(
+        self, employee_id: str, *, upload_id: str | None = None,
+    ) -> Module4RecommendationResponse:
+        return self.recommendations_for_analysis_input(
+            self.analysis_input_for_employee(employee_id, upload_id=upload_id),
+        )
 
-    def analysis_input_for_employee(self, employee_id: str) -> Module4AnalysisInput:
+    def analysis_input_for_employee(
+        self, employee_id: str, *, upload_id: str | None = None,
+    ) -> Module4AnalysisInput:
         """Load and validate the replaceable Module 1/2/3 integration boundary."""
-        employee = self.employee_repository.get_employee_context(employee_id)
+        employee = self.employee_repository.get_employee_context(employee_id, upload_id=upload_id)
         economic_context = self.employee_repository.get_employee_economic_context(employee.id)
         eesi_result = self.module2_provider.get_eesi_result(employee, economic_context)
         prediction_result = self.module3_provider.get_prediction(employee, eesi_result)

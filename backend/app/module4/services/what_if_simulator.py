@@ -25,8 +25,10 @@ class WhatIfSimulator:
     def __init__(self, decision_service: RetentionDecisionService) -> None:
         self.decision_service = decision_service
 
-    def simulate(self, employee_id: str, changes: WhatIfChanges) -> WhatIfSimulationResponse:
-        original_input = self.decision_service.analysis_input_for_employee(employee_id)
+    def simulate(
+        self, employee_id: str, changes: WhatIfChanges, *, upload_id: str | None = None,
+    ) -> WhatIfSimulationResponse:
+        original_input = self.decision_service.analysis_input_for_employee(employee_id, upload_id=upload_id)
         original = self.decision_service.recommendations_for_analysis_input(original_input)
         updates = changes.model_dump(exclude_none=True)
         employee_data = original_input.employee.model_dump()

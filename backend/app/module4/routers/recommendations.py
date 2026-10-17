@@ -2,6 +2,7 @@
 
 import logging
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import ValidationError
@@ -65,10 +66,13 @@ def get_decision_service() -> RetentionDecisionService:
 def employee_recommendations(
     employee_id: str,
     service: Annotated[RetentionDecisionService, Depends(get_decision_service)],
+    upload_id: UUID | None = None,
 ) -> Module4RecommendationResponse:
     """Use real Module 1 data with explicit upstream-provider provenance."""
     try:
-        return service.recommendations_for_employee(employee_id)
+        return service.recommendations_for_employee(
+            employee_id, upload_id=str(upload_id) if upload_id is not None else None,
+        )
     except EmployeeNotFoundError as error:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error)) from error
     except AmbiguousEmployeeError as error:
@@ -97,10 +101,13 @@ def simulate_employee_scenario(
     employee_id: str,
     changes: WhatIfChanges,
     service: Annotated[RetentionDecisionService, Depends(get_decision_service)],
+    upload_id: UUID | None = None,
 ) -> WhatIfSimulationResponse:
     """Evaluate in-memory recommendation changes without forecasting or persistence."""
     try:
-        return WhatIfSimulator(service).simulate(employee_id, changes)
+        return WhatIfSimulator(service).simulate(
+            employee_id, changes, upload_id=str(upload_id) if upload_id is not None else None,
+        )
     except EmployeeNotFoundError as error:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error)) from error
     except AmbiguousEmployeeError as error:
