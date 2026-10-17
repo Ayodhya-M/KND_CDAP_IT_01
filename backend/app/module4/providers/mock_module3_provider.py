@@ -9,6 +9,7 @@ from app.module4.providers.base import ProviderMetadata
 from app.module4.providers.mock_scenarios import MockScenario, scenario_for_employee
 from app.module4.schemas.integration import (
     Module1EmployeeContext,
+    Module2EESIResult,
     Module3PredictionResult,
     Module3RiskFactor,
 )
@@ -19,7 +20,12 @@ class MockModule3Provider:
 
     metadata = ProviderMetadata(source="mock", data_mode="mock_integration", is_mock=True)
 
-    def get_prediction(self, employee: Module1EmployeeContext) -> Module3PredictionResult:
+    def get_prediction(
+        self,
+        employee: Module1EmployeeContext,
+        eesi_result: Module2EESIResult | None = None,
+    ) -> Module3PredictionResult:
+        del eesi_result  # Mock scenarios remain independent deterministic fixtures.
         scenario = scenario_for_employee(employee.employee_id)
         if scenario is MockScenario.HIGH:
             return Module3PredictionResult(

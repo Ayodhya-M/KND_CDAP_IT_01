@@ -6,6 +6,7 @@ import { IntegrationStatus } from '../components/IntegrationStatus'
 import { RecommendationCard } from '../components/RecommendationCard'
 import { RiskFactorsList } from '../components/RiskFactorsList'
 import { RiskSummaryCard } from '../components/RiskSummaryCard'
+import { WhatIfSimulator } from '../components/WhatIfSimulator'
 
 export function Module4Dashboard() {
   const [employeeId, setEmployeeId] = useState('')
@@ -60,6 +61,14 @@ export function Module4Dashboard() {
           <RiskSummaryCard label="Predicted Turnover Risk" value={`${Math.round(result.turnover_probability * 100)}%`} level={result.risk_level} description="Current model-based risk estimate" />
           <RiskSummaryCard label="Economic Pressure" value={result.eesi_score.toFixed(2)} level={result.economic_pressure_level} description="Current EESI integration result" />
         </div>
+        <dl className="employee-profile-grid">
+          <div><dt>Department</dt><dd>{result.employee_profile.department ?? 'Not available'}</dd></div>
+          <div><dt>Job role</dt><dd>{result.employee_profile.job_role ?? 'Not available'}</dd></div>
+          <div><dt>Job level</dt><dd>{result.employee_profile.job_level ?? 'Not available'}</dd></div>
+          <div><dt>Years at company</dt><dd>{result.employee_profile.years_at_company ?? 'Not available'}</dd></div>
+          <div><dt>Overtime</dt><dd>{result.employee_profile.overtime === null ? 'Not available' : result.employee_profile.overtime ? 'Yes' : 'No'}</dd></div>
+          <div><dt>Job satisfaction</dt><dd>{result.employee_profile.job_satisfaction ?? 'Not available'}</dd></div>
+        </dl>
       </section>
 
       <RiskFactorsList factors={result.important_risk_factors} />
@@ -70,6 +79,8 @@ export function Module4Dashboard() {
           ? <EmptyRecommendations />
           : <div className="recommendation-list">{result.recommendations.map((recommendation, index) => <RecommendationCard key={recommendation.recommendation_id} recommendation={recommendation} rank={index + 1} />)}</div>}
       </section>
+
+      <WhatIfSimulator key={result.employee_id} analysis={result} />
 
       <IntegrationStatus metadata={result.metadata} />
     </div>}

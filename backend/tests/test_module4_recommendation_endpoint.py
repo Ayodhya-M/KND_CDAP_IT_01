@@ -49,14 +49,16 @@ class UnavailableModule2Provider:
 class UnavailableModule3Provider:
     metadata = ProviderMetadata("mock", "mock_integration", True)
 
-    def get_prediction(self, employee):
+    def get_prediction(self, employee, eesi_result):
+        del employee, eesi_result
         raise ProviderResultUnavailableError("Module 3 result is unavailable")
 
 
 class MismatchingModule3Provider:
     metadata = ProviderMetadata("mock", "mock_integration", True)
 
-    def get_prediction(self, employee):
+    def get_prediction(self, employee, eesi_result):
+        del employee, eesi_result
         return Module3PredictionResult(
             employee_id="DIFFERENT", turnover_probability=0.8, risk_level="High",
         )
@@ -85,6 +87,7 @@ def test_recommendation_endpoint_returns_mock_metadata_and_ranked_output() -> No
     assert response.status_code == 200
     body = response.json()
     assert body["employee_id"] == "EMP002"
+    assert body["employee_profile"]["overtime"] is True
     assert body["risk_level"] == "High"
     assert body["economic_pressure_level"] == "High"
     assert body["metadata"]["data_mode"] == "mock_integration"

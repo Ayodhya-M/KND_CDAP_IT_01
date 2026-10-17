@@ -7,6 +7,19 @@ from pydantic import Field
 from app.module4.schemas.integration import IntegrationModel, Module3RiskFactor
 
 
+class EmployeeProfileSummary(IntegrationModel):
+    """Non-sensitive Module 1 fields useful to an HR reviewer."""
+
+    department: str | None = None
+    job_role: str | None = None
+    job_level: int | None = None
+    salary: float | None = None
+    overtime: bool | None = None
+    job_satisfaction: int | None = None
+    work_life_balance: int | None = None
+    years_at_company: int | None = None
+
+
 class RiskAnalysis(IntegrationModel):
     employee_id: str = Field(min_length=1)
     turnover_probability: float = Field(ge=0, le=1)
@@ -49,6 +62,7 @@ class DevelopmentMetadata(IntegrationModel):
 
 class Module4RecommendationResponse(IntegrationModel):
     employee_id: str
+    employee_profile: EmployeeProfileSummary
     turnover_probability: float = Field(ge=0, le=1)
     risk_level: str
     eesi_score: float

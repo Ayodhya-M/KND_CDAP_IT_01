@@ -85,6 +85,16 @@ export type Module4Metadata = {
 
 export type Module4RecommendationResponse = {
   employee_id: string
+  employee_profile: {
+    department: string | null
+    job_role: string | null
+    job_level: number | null
+    salary: number | null
+    overtime: boolean | null
+    job_satisfaction: number | null
+    work_life_balance: number | null
+    years_at_company: number | null
+  }
   turnover_probability: number
   risk_level: string
   eesi_score: number
@@ -92,6 +102,66 @@ export type Module4RecommendationResponse = {
   important_risk_factors: Module4RiskFactor[]
   recommendations: Module4Recommendation[]
   metadata: Module4Metadata
+}
+
+export type WhatIfChanges = {
+  salary?: number
+  overtime?: boolean
+  job_satisfaction?: number
+  work_life_balance?: number
+}
+
+export type ScenarioValues = {
+  salary: number | null
+  overtime: boolean | null
+  job_satisfaction: number | null
+  work_life_balance: number | null
+}
+
+export type WhatIfSimulationResponse = {
+  employee_id: string
+  label: string
+  original_values: ScenarioValues
+  simulated_values: ScenarioValues
+  original_turnover_probability: number
+  simulated_turnover_probability: number
+  probability_difference: number
+  original_recommendations: Module4Recommendation[]
+  simulated_recommendations: Module4Recommendation[]
+  removed_risk_factors: string[]
+  retained_risk_factors: string[]
+  assumptions: string[]
+  disclaimer: string
+  metadata: Module4Metadata
+}
+
+export type CleaningUploadChoice = {
+  id: string
+  dataset_type: 'hr' | 'economic'
+  original_filename: string
+  record_count: number
+  uploaded_at: string
+}
+
+export type CleaningAnalysis = {
+  status: 'success'
+  cleaning_run_id: string
+  total_records: number
+  rows_with_missing_values: number
+  missing_values: Record<string, number>
+  sample_row_numbers: number[]
+}
+
+export type RemoveMissingResult = {
+  status: 'success'
+  cleaning_run_id: string
+  source_upload_id: string
+  cleaned_upload_id: string
+  rows_before: number
+  rows_after: number
+  removed_records: number
+  missing_values: Record<string, number>
+  message: string
 }
 
 type ApiErrorBody = HrUploadSummary & { detail?: string }
@@ -176,4 +246,106 @@ export async function getRetentionRecommendations(employeeId: string): Promise<M
     )
   }
   return body as Module4RecommendationResponse
+}
+
+export async function simulateRetentionScenario(
+  employeeId: string,
+  changes: WhatIfChanges,
+): Promise<WhatIfSimulationResponse> {
+  let response: Response
+  try {
+    response = await fetch(`${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/simulation`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(changes),
+    })
+  } catch {
+    throw new RetentionRequestError(0, 'Unable to reach the backend. Confirm that the FastAPI server is running and try again.')
+  }
+  const body = await response.json().catch(() => ({})) as { detail?: string | Array<{ msg?: string }> }
+  if (!response.ok) {
+    const detail = Array.isArray(body.detail) ? body.detail[0]?.msg : body.detail
+    throw new RetentionRequestError(response.status, detail ?? 'The illustrative scenario could not be evaluated.')
+  }
+  return body as WhatIfSimulationResponse
+}
+
+export async function getCleaningUploadChoices(): Promise<{ uploads: CleaningUploadChoice[] }> {
+  const response = await fetch(`${API_BASE_URL}/data-cleaning/uploads`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as { uploads: CleaningUploadChoice[] }
+}
+
+export async function analyseMissingValues(uploadId: string): Promise<CleaningAnalysis> {
+  const response = await fetch(`${API_BASE_URL}/data-cleaning/analyse/${uploadId}`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as CleaningAnalysis
+}
+
+export async function removeMissingValues(uploadId: string): Promise<RemoveMissingResult> {
+  const response = await fetch(`${API_BASE_URL}/data-cleaning/remove-missing`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ upload_id: uploadId }),
+  })
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as RemoveMissingResult
+}
+
+export type Module3Contract = {
+  contract_version: string
+  dataset_kind: string
+  purpose: string
+  feature_columns: string[]
+  eesi: { column: string; formula_id_column: string; formula_version_column: string; supported_formula_ids: string[] }
+}
+
+export type Module3ModelStatus = {
+  model_available: boolean
+  dataset_kind: string
+  message: string
+  model_name?: string
+  classes?: string[]
+  feature_columns?: string[]
+  eesi_integration?: { enabled?: boolean; column?: string; formula_id?: string | null; formula_version?: string | null }
+}
+
+export type Module3Prediction = {
+  predicted_class: string
+  class_probabilities: Record<string, number>
+  interpretation: string
+}
+
+export type Module3Evaluation = {
+  metrics: Record<string, number | null>
+  confusion_matrix: number[][]
+  confusion_matrix_labels: string[]
+  dataset_split: { method: string; train_rows: number; heldout_rows: number }
+  limitations: string[]
+}
+
+async function module3Request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}/module3/${path}`, init)
+  const body = await response.json().catch(() => ({})) as { detail?: string }
+  if (!response.ok) throw new Error(body.detail ?? 'Module 3 request failed.')
+  return body as T
+}
+
+export function getModule3Contract(): Promise<Module3Contract> {
+  return module3Request<Module3Contract>('integration-contract')
+}
+
+export function getModule3ModelStatus(): Promise<Module3ModelStatus> {
+  return module3Request<Module3ModelStatus>('prediction-status')
+}
+
+export function predictModule3(record: Record<string, string | number>): Promise<Module3Prediction> {
+  return module3Request<Module3Prediction>('predict', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ record }),
+  })
+}
+
+export function getModule3Evaluation(): Promise<Module3Evaluation> {
+  return module3Request<Module3Evaluation>('evaluation')
 }
