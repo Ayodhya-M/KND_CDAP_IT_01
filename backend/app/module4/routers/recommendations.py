@@ -19,7 +19,9 @@ from app.module4.repositories.employee_repository import (
     EmployeeRepositoryError,
 )
 from app.module4.schemas.decision_support import Module4RecommendationResponse
+from app.module4.schemas.simulation import WhatIfChanges, WhatIfSimulationResponse
 from app.module4.services.decision_service import RetentionDecisionService
+from app.module4.services.what_if_simulator import WhatIfSimulator
 
 
 router = APIRouter(prefix="/module4", tags=["Module 4 - Retention decision support"])
@@ -81,6 +83,38 @@ def employee_recommendations(
         ) from error
     except EmployeeRepositoryError as error:
         logger.exception("Module 4 could not read Module 1 data")
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error)) from error
+
+
+@router.post(
+    "/employees/{employee_id}/simulation",
+    response_model=WhatIfSimulationResponse,
+    summary="Compare illustrative retention-rule scenarios",
+)
+def simulate_employee_scenario(
+    employee_id: str,
+    changes: WhatIfChanges,
+    service: Annotated[RetentionDecisionService, Depends(get_decision_service)],
+) -> WhatIfSimulationResponse:
+    """Evaluate in-memory recommendation changes without forecasting or persistence."""
+    try:
+        return WhatIfSimulator(service).simulate(employee_id, changes)
+    except EmployeeNotFoundError as error:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error)) from error
+    except AmbiguousEmployeeError as error:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(error)) from error
+    except ProviderResultUnavailableError as error:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(error)) from error
+    except ValidationError as error:
+        logger.exception("Module 4 received invalid integration data during simulation")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="An upstream Module 2 or Module 3 result did not match the employee context",
+        ) from error
+    except EmployeeRepositoryError as error:
+        logger.exception("Module 4 could not read Module 1 data during simulation")
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=str(error)) from error
     except ValueError as error:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error)) from error

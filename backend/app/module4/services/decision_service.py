@@ -4,6 +4,7 @@ from app.module4.providers.base import Module2Provider, Module3Provider
 from app.module4.repositories.employee_repository import EmployeeRepository
 from app.module4.schemas.decision_support import (
     DevelopmentMetadata,
+    EmployeeProfileSummary,
     Module4RecommendationResponse,
     PrioritizedRecommendation,
 )
@@ -58,16 +59,25 @@ class RetentionDecisionService:
         self.explanation_engine = explanation_engine or ExplanationEngine()
 
     def recommendations_for_employee(self, employee_id: str) -> Module4RecommendationResponse:
+        return self.recommendations_for_analysis_input(self.analysis_input_for_employee(employee_id))
+
+    def analysis_input_for_employee(self, employee_id: str) -> Module4AnalysisInput:
+        """Load and validate the replaceable Module 1/2/3 integration boundary."""
         employee = self.employee_repository.get_employee_context(employee_id)
         economic_context = self.employee_repository.get_employee_economic_context(employee.id)
         eesi_result = self.module2_provider.get_eesi_result(employee, economic_context)
         prediction_result = self.module3_provider.get_prediction(employee, eesi_result)
-        analysis_input = Module4AnalysisInput(
+        return Module4AnalysisInput(
             employee=employee,
             economic_context=economic_context,
             eesi_result=eesi_result,
             prediction_result=prediction_result,
         )
+
+    def recommendations_for_analysis_input(
+        self, analysis_input: Module4AnalysisInput,
+    ) -> Module4RecommendationResponse:
+        """Apply unchanged Module 4 logic to a validated integration input."""
         analysis = self.risk_analyzer.analyze(analysis_input)
         candidates = self.recommendation_engine.generate(analysis)
         is_mock = self.module2_provider.metadata.is_mock or self.module3_provider.metadata.is_mock
@@ -97,6 +107,16 @@ class RetentionDecisionService:
         data_mode = modes.pop() if len(modes) == 1 else "mixed_integration"
         return Module4RecommendationResponse(
             employee_id=analysis.employee_id,
+            employee_profile=EmployeeProfileSummary(
+                department=analysis_input.employee.department,
+                job_role=analysis_input.employee.job_role,
+                job_level=analysis_input.employee.job_level,
+                salary=float(analysis_input.employee.salary) if analysis_input.employee.salary is not None else None,
+                overtime=analysis_input.employee.overtime,
+                job_satisfaction=analysis_input.employee.job_satisfaction,
+                work_life_balance=analysis_input.employee.work_life_balance,
+                years_at_company=analysis_input.employee.years_at_company,
+            ),
             turnover_probability=analysis.turnover_probability,
             risk_level=analysis.risk_level,
             eesi_score=analysis.eesi_score,

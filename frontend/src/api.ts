@@ -85,12 +85,53 @@ export type Module4Metadata = {
 
 export type Module4RecommendationResponse = {
   employee_id: string
+  employee_profile: {
+    department: string | null
+    job_role: string | null
+    job_level: number | null
+    salary: number | null
+    overtime: boolean | null
+    job_satisfaction: number | null
+    work_life_balance: number | null
+    years_at_company: number | null
+  }
   turnover_probability: number
   risk_level: string
   eesi_score: number
   economic_pressure_level: string
   important_risk_factors: Module4RiskFactor[]
   recommendations: Module4Recommendation[]
+  metadata: Module4Metadata
+}
+
+export type WhatIfChanges = {
+  salary?: number
+  overtime?: boolean
+  job_satisfaction?: number
+  work_life_balance?: number
+}
+
+export type ScenarioValues = {
+  salary: number | null
+  overtime: boolean | null
+  job_satisfaction: number | null
+  work_life_balance: number | null
+}
+
+export type WhatIfSimulationResponse = {
+  employee_id: string
+  label: string
+  original_values: ScenarioValues
+  simulated_values: ScenarioValues
+  original_turnover_probability: number
+  simulated_turnover_probability: number
+  probability_difference: number
+  original_recommendations: Module4Recommendation[]
+  simulated_recommendations: Module4Recommendation[]
+  removed_risk_factors: string[]
+  retained_risk_factors: string[]
+  assumptions: string[]
+  disclaimer: string
   metadata: Module4Metadata
 }
 
@@ -205,6 +246,28 @@ export async function getRetentionRecommendations(employeeId: string): Promise<M
     )
   }
   return body as Module4RecommendationResponse
+}
+
+export async function simulateRetentionScenario(
+  employeeId: string,
+  changes: WhatIfChanges,
+): Promise<WhatIfSimulationResponse> {
+  let response: Response
+  try {
+    response = await fetch(`${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/simulation`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(changes),
+    })
+  } catch {
+    throw new RetentionRequestError(0, 'Unable to reach the backend. Confirm that the FastAPI server is running and try again.')
+  }
+  const body = await response.json().catch(() => ({})) as { detail?: string | Array<{ msg?: string }> }
+  if (!response.ok) {
+    const detail = Array.isArray(body.detail) ? body.detail[0]?.msg : body.detail
+    throw new RetentionRequestError(response.status, detail ?? 'The illustrative scenario could not be evaluated.')
+  }
+  return body as WhatIfSimulationResponse
 }
 
 export async function getCleaningUploadChoices(): Promise<{ uploads: CleaningUploadChoice[] }> {

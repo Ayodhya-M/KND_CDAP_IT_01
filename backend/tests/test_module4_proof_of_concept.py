@@ -152,6 +152,24 @@ def test_unsupported_and_non_positive_factors_do_not_generate_recommendations() 
     assert RecommendationEngine().generate(result) == []
 
 
+def test_all_verified_actionable_factors_remain_traceable_to_rules() -> None:
+    supported = [
+        "overtime", "job_satisfaction", "work_life_balance", "environment_satisfaction",
+        "business_travel", "distance_from_home", "salary",
+    ]
+    result = analysis(factors=[
+        Module3RiskFactor(feature_name=name, feature_value="illustrative", contribution=0.2)
+        for name in supported
+    ])
+
+    recommendations = RecommendationEngine().generate(result)
+
+    assert {item.related_factor for item in recommendations} == set(supported)
+    assert all(item.related_factor in supported for item in recommendations)
+    assert "compensation_review" in {item.recommendation_id for item in recommendations}
+    assert "overtime_review" in {item.recommendation_id for item in recommendations}
+
+
 def test_priority_engine_uses_documented_prototype_formula() -> None:
     result = PriorityEngine().score(
         turnover_probability=0.82,

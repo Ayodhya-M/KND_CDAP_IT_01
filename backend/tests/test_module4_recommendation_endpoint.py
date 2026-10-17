@@ -87,6 +87,7 @@ def test_recommendation_endpoint_returns_mock_metadata_and_ranked_output() -> No
     assert response.status_code == 200
     body = response.json()
     assert body["employee_id"] == "EMP002"
+    assert body["employee_profile"]["overtime"] is True
     assert body["risk_level"] == "High"
     assert body["economic_pressure_level"] == "High"
     assert body["metadata"]["data_mode"] == "mock_integration"
