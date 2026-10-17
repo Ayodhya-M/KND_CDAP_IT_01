@@ -93,7 +93,7 @@ This repository contains the Module 3 UI prototype and a separate, dataset-confi
 
 ## Current Status
 
-- **UI:** React/Vite prototype using clearly labelled mock values only. It is not connected to a model.
+- **UI:** Module 3 is available in the unified `frontend/` application under **Turnover prediction**. It calls the FastAPI backend and displays saved-model results when a local artifact is available.
 - **Prediction pipeline:** Implemented and unit-tested, but no approved research dataset is stored in this repository.
 - **Evaluation:** Implemented for the held-out test split created by training. No research metrics are claimed until a real dataset run is completed.
 - **EESI:** Optional input contract only; no Module 2 interface or EESI output was present.
@@ -102,18 +102,20 @@ This repository contains the Module 3 UI prototype and a separate, dataset-confi
 ## Repository Structure
 
 ```text
+frontend/         Unified React application for Modules 1, 2, and 3
+backend/          Unified FastAPI application, including Module 3 prediction routes
 module3_ml/       Python data validation, training, prediction, evaluation CLI
-src/              React UI prototype
 tests/            Synthetic unit tests only; not research data
-docs/             PP1 evidence, demo script, and research mapping
+docs/             PP1 evidence, demo script, research mapping, and integration contract
 artifacts/        Local model/results output (ignored by Git)
 ```
 
 ## Setup
 
-### UI
+### Unified frontend
 
 ```powershell
+cd frontend
 npm.cmd install
 npm.cmd run dev
 ```
@@ -176,6 +178,7 @@ Module 2 owns EESI calculation. Once an interface exists, supply its precomputed
 
 ```powershell
 py -m unittest discover -s tests -v
+cd frontend
 npm.cmd run build
 ```
 
@@ -186,3 +189,5 @@ The Python tests use a tiny synthetic fixture strictly for input, artifact, and 
 - `docs/PP1_EVIDENCE.md`
 - `docs/PP1_DEMO_SCRIPT.md`
 - `docs/PP1_RESEARCH_MAPPING.md`
+- `docs/MODULE2_MODULE3_CONTRACT.md`
+- `docs/PP1_PROJECT_EVIDENCE.md`
