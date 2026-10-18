@@ -58,7 +58,10 @@ function Dashboard() {
 
   return <main className="dashboard-layout">
     <aside className={`sidebar ${mobileNavOpen ? 'open' : ''}`}>
-      <div className="app-brand"><span className="brand-mark" aria-hidden="true">RI</span><div><h2>Retention Intelligence</h2><p>Workforce Analytics &amp; Decision Support</p></div></div>
+      <div className="app-brand">
+        <img className="app-brand-icon" src="/retention-intelligence-favicon.svg" alt="Retention Intelligence" />
+        <div><h2>Retention Intelligence</h2><p>Workforce Analytics &amp; Decision Support</p></div>
+      </div>
       <nav aria-label="Research modules">
         <button className={view === 'dashboard' ? 'active' : ''} onClick={() => navigate('dashboard')}><Icon name="overview" /><span>Overview</span></button>
         <p className="nav-label">Research workspaces</p>
@@ -75,7 +78,7 @@ function Dashboard() {
       <div className="sidebar-footer"><span className="system-dot" aria-hidden="true" /><div><strong>Research environment</strong><small>Decision support prototype</small></div></div>
     </aside>
     <section className="dashboard-content">
-      <div className="topbar"><button className="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded={mobileNavOpen} onClick={() => setMobileNavOpen(value => !value)}><Icon name="menu" /></button><div><p className="breadcrumb">Retention Intelligence <span>/</span> {current.section}</p><h1>{current.title}</h1></div><span className="topbar-context">Research prototype</span></div>
+      <div className="topbar"><button className="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded={mobileNavOpen} onClick={() => setMobileNavOpen(value => !value)}><Icon name="menu" /></button><img className="topbar-brand-icon" src="/retention-intelligence-favicon.svg" alt="" aria-hidden="true" /><div><p className="breadcrumb">Retention Intelligence <span>/</span> {current.section}</p><h1>{current.title}</h1></div><span className="topbar-context">Research prototype</span></div>
       <div className="page-content">
       {view === 'dashboard' ? <OverviewDashboard hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
       </div>
@@ -93,7 +96,7 @@ function OverviewDashboard({ hrUploads, economicUploads, modelStatus, loading, e
     { view: 'module4', icon: 'retention', title: 'Retention Strategies', detail: 'Generate explainable, prioritized HR decision support.', status: 'Prototype available' },
   ]
   return <section className="overview-dashboard">
-    <header className="page-intro"><div><p className="eyebrow">Executive workspace</p><h2>Workforce intelligence overview</h2><p>Monitor data readiness and move between the four connected research modules.</p></div><button className="secondary-button" onClick={onRefresh}>Refresh status</button></header>
+    <header className="overview-brand-header"><div className="overview-brand-copy"><img className="overview-full-logo" src="/retention-intelligence-logo.png" alt="Retention Intelligence" /><p>Monitor workforce data readiness and move between the four connected research modules.</p></div><button className="secondary-button" onClick={onRefresh}>Refresh status</button></header>
     {error && <div className="inline-alert" role="alert"><span>{error}</span><button className="text-button" onClick={onRefresh}>Retry</button></div>}
     {loading && <div className="overview-skeleton" role="status" aria-label="Loading workspace status">{[1,2,3,4].map(item => <span key={item} />)}</div>}
     {!loading && <>
