@@ -1,0 +1,46 @@
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+
+from app.services.eesi import calculate, metadata, pilot_preview
+from app.services.eesi_real import REAL_BOUNDS, REAL_VERSION, load_real_summary
+from typing import Literal
+
+router = APIRouter(prefix="/eesi", tags=["EESI proof of concept"])
+
+
+class ScenarioRequest(BaseModel):
+    salary: float = Field(gt=0, allow_inf_nan=False)
+    inflation: float = Field(allow_inf_nan=False)
+    cpi: float = Field(gt=0, allow_inf_nan=False)
+    unemployment: float = Field(ge=0, le=100, allow_inf_nan=False)
+    reference_salary: float = Field(default=50000, gt=0, allow_inf_nan=False)
+    reference_profile: Literal["pilot", "lfs2024"] = "pilot"
+
+
+@router.get("/metadata")
+def get_metadata():
+    return metadata()
+
+
+@router.get("/pilot")
+def get_pilot():
+    try:
+        return pilot_preview()
+    except (OSError, ValueError) as error:
+        raise HTTPException(status_code=503, detail="EESI pilot data is unavailable") from error
+
+
+@router.post("/scenario")
+def scenario(payload: ScenarioRequest):
+    values = payload.model_dump(exclude={"reference_profile"})
+    if payload.reference_profile == "lfs2024":
+        return calculate(**values, bounds=REAL_BOUNDS, version=REAL_VERSION)
+    return calculate(**values)
+
+
+@router.get("/real-data")
+def get_real_data():
+    try:
+        return load_real_summary()
+    except (OSError, ValueError) as error:
+        raise HTTPException(status_code=503, detail="Prepare the LFS 2024 aggregate using scripts/prepare_lfs2024.py") from error

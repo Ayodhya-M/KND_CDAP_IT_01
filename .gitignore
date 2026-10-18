@@ -1,0 +1,31 @@
+node_modules/
+dist/
+# Environment and secrets
+.env
+data/private/
+data/reference/eesi/*.pdf
+**/LFS-2024-25-Percent-Data-*.csv
+.env.*
+!.env.example
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/**/*.py[cod]
+.pytest_cache/
+
+# Editors and operating system files
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+.venv/
+artifacts/
+data/private/
