@@ -167,7 +167,7 @@ export type RemoveMissingResult = {
 type ApiErrorBody = HrUploadSummary & { detail?: string }
 
 export class UploadRequestError extends Error {
-  constructor(readonly body: ApiErrorBody) {
+  constructor(readonly body: ApiErrorBody, readonly status = 0) {
     super(body.detail ?? body.errors?.[0]?.message ?? 'HR upload validation failed')
   }
 
@@ -189,7 +189,7 @@ export async function uploadHrDataset(file: File): Promise<HrUploadSummary> {
 
   const response = await fetch(`${API_BASE_URL}/hr/upload`, { method: 'POST', body: formData })
   const body = await response.json().catch(() => ({})) as ApiErrorBody
-  if (!response.ok) throw new UploadRequestError(body)
+  if (!response.ok) throw new UploadRequestError(body, response.status)
   return body
 }
 
@@ -198,7 +198,7 @@ export async function uploadMacroeconomicDataset(file: File): Promise<MacroUploa
   formData.append('file', file)
   const response = await fetch(`${API_BASE_URL}/macroeconomic/upload`, { method: 'POST', body: formData })
   const body = await response.json().catch(() => ({})) as ApiErrorBody
-  if (!response.ok) throw new UploadRequestError(body)
+  if (!response.ok) throw new UploadRequestError(body, response.status)
   return body as MacroUploadSummary
 }
 
@@ -223,15 +223,26 @@ export async function createTemporalMappingPreview(hrUploadId: string, economicU
   return body as unknown as TemporalMappingPreview
 }
 
-export async function getRetentionRecommendations(employeeId: string): Promise<Module4RecommendationResponse> {
+function module4Url(employeeId: string, action: 'recommendations' | 'simulation', uploadId?: string): string {
+  const url = `${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/${action}`
+  return uploadId ? `${url}?${new URLSearchParams({ upload_id: uploadId }).toString()}` : url
+}
+
+function safeErrorDetail(detail: unknown): string | undefined {
+  if (typeof detail === 'string') return detail
+  if (Array.isArray(detail) && typeof detail[0]?.msg === 'string') return detail[0].msg
+  return undefined
+}
+
+export async function getRetentionRecommendations(employeeId: string, uploadId?: string): Promise<Module4RecommendationResponse> {
   let response: Response
   try {
-    response = await fetch(`${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/recommendations`)
+    response = await fetch(module4Url(employeeId, 'recommendations', uploadId))
   } catch {
     throw new RetentionRequestError(0, 'Unable to reach the backend. Confirm that the FastAPI server is running and try again.')
   }
 
-  const body = await response.json().catch(() => ({})) as { detail?: string }
+  const body = await response.json().catch(() => ({})) as { detail?: unknown }
   if (!response.ok) {
     const fallbackMessages: Record<number, string> = {
       404: 'No employee was found with that employee ID.',
@@ -242,7 +253,7 @@ export async function getRetentionRecommendations(employeeId: string): Promise<M
     }
     throw new RetentionRequestError(
       response.status,
-      body.detail ?? fallbackMessages[response.status] ?? 'The retention analysis request could not be completed.',
+      safeErrorDetail(body.detail) ?? fallbackMessages[response.status] ?? 'The retention analysis request could not be completed.',
     )
   }
   return body as Module4RecommendationResponse
@@ -251,10 +262,11 @@ export async function getRetentionRecommendations(employeeId: string): Promise<M
 export async function simulateRetentionScenario(
   employeeId: string,
   changes: WhatIfChanges,
+  uploadId?: string,
 ): Promise<WhatIfSimulationResponse> {
   let response: Response
   try {
-    response = await fetch(`${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/simulation`, {
+    response = await fetch(module4Url(employeeId, 'simulation', uploadId), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
@@ -262,9 +274,9 @@ export async function simulateRetentionScenario(
   } catch {
     throw new RetentionRequestError(0, 'Unable to reach the backend. Confirm that the FastAPI server is running and try again.')
   }
-  const body = await response.json().catch(() => ({})) as { detail?: string | Array<{ msg?: string }> }
+  const body = await response.json().catch(() => ({})) as { detail?: unknown }
   if (!response.ok) {
-    const detail = Array.isArray(body.detail) ? body.detail[0]?.msg : body.detail
+    const detail = safeErrorDetail(body.detail)
     throw new RetentionRequestError(response.status, detail ?? 'The illustrative scenario could not be evaluated.')
   }
   return body as WhatIfSimulationResponse
@@ -280,16 +292,18 @@ export async function getCleaningUploadChoices(): Promise<{ uploads: CleaningUpl
 export async function analyseMissingValues(uploadId: string): Promise<CleaningAnalysis> {
   const response = await fetch(`${API_BASE_URL}/data-cleaning/analyse/${uploadId}`)
   const body = await response.json().catch(() => ({})) as ApiErrorBody
-  if (!response.ok) throw new UploadRequestError(body)
+  if (!response.ok) throw new UploadRequestError(body, response.status)
   return body as unknown as CleaningAnalysis
 }
 
 export async function removeMissingValues(uploadId: string): Promise<RemoveMissingResult> {
   const response = await fetch(`${API_BASE_URL}/data-cleaning/remove-missing`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ upload_id: uploadId }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ upload_id: uploadId }),
   })
   const body = await response.json().catch(() => ({})) as ApiErrorBody
-  if (!response.ok) throw new UploadRequestError(body)
+  if (!response.ok) throw new UploadRequestError(body, response.status)
   return body as unknown as RemoveMissingResult
 }
 

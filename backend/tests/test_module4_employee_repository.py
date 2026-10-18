@@ -36,7 +36,10 @@ class FakeQuery:
         return self
 
     def execute(self) -> FakeResponse:
-        return FakeResponse(self.data)
+        rows = self.data
+        for column, value in self.filters:
+            rows = [row for row in rows if column not in row or str(row[column]) == str(value)]
+        return FakeResponse(rows)
 
 
 class FakeSupabaseClient:
@@ -122,6 +125,19 @@ def test_duplicate_external_id_requires_upload_id() -> None:
 
     with pytest.raises(AmbiguousEmployeeError, match="provide upload_id"):
         repository.get_employee_by_employee_id("EMP001")
+
+
+def test_explicit_upload_id_selects_one_duplicate_employee() -> None:
+    selected = employee_row()
+    other = {**employee_row(), "upload_id": str(uuid4())}
+    repository = EmployeeRepository(
+        client=FakeSupabaseClient({"employee_records": [selected, other]})  # type: ignore[arg-type]
+    )
+
+    result = repository.get_employee_by_employee_id("EMP001", upload_id=str(selected["upload_id"]))
+
+    assert result is not None
+    assert str(result.upload_id) == selected["upload_id"]
 
 
 def test_economic_context_uses_temporal_mapping_not_integrated_records() -> None:

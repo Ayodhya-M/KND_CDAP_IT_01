@@ -8,7 +8,7 @@ from app.main import app
 from app.module4.providers.base import ProviderMetadata, ProviderResultUnavailableError
 from app.module4.providers.mock_module2_provider import MockModule2Provider
 from app.module4.providers.mock_module3_provider import MockModule3Provider
-from app.module4.repositories.employee_repository import EmployeeNotFoundError
+from app.module4.repositories.employee_repository import AmbiguousEmployeeError, EmployeeNotFoundError
 from app.module4.routers.recommendations import get_decision_service
 from app.module4.schemas.integration import (
     Module1EmployeeContext,
@@ -29,14 +29,26 @@ def employee(employee_id: str = "EMP002") -> Module1EmployeeContext:
 class FakeEmployeeRepository:
     def __init__(self, person: Module1EmployeeContext | None = None) -> None:
         self.person = person
+        self.requested_upload_id = None
 
-    def get_employee_context(self, employee_id: str) -> Module1EmployeeContext:
+    def get_employee_context(self, employee_id: str, *, upload_id=None) -> Module1EmployeeContext:
+        self.requested_upload_id = upload_id
         if self.person is None:
             raise EmployeeNotFoundError(f"Employee ID '{employee_id}' was not found")
         return self.person
 
     def get_employee_economic_context(self, employee_record_id):
         return None
+
+
+class DuplicateEmployeeRepository(FakeEmployeeRepository):
+    def get_employee_context(self, employee_id: str, *, upload_id=None) -> Module1EmployeeContext:
+        self.requested_upload_id = upload_id
+        if upload_id is None:
+            raise AmbiguousEmployeeError(
+                f"Employee ID '{employee_id}' occurs in multiple uploads; provide upload_id"
+            )
+        return super().get_employee_context(employee_id, upload_id=upload_id)
 
 
 class UnavailableModule2Provider:
@@ -76,13 +88,18 @@ def client_for(service: RetentionDecisionService) -> TestClient:
 
 
 def test_recommendation_endpoint_returns_mock_metadata_and_ranked_output() -> None:
+    repository = FakeEmployeeRepository(employee())
     service = RetentionDecisionService(
-        FakeEmployeeRepository(employee()),  # type: ignore[arg-type]
+        repository,  # type: ignore[arg-type]
         MockModule2Provider(),
         MockModule3Provider(),
     )
 
-    response = client_for(service).get("/api/v1/module4/employees/EMP002/recommendations")
+    selected_upload = str(repository.person.upload_id)  # type: ignore[union-attr]
+    response = client_for(service).get(
+        "/api/v1/module4/employees/EMP002/recommendations",
+        params={"upload_id": selected_upload},
+    )
 
     assert response.status_code == 200
     body = response.json()
@@ -95,6 +112,34 @@ def test_recommendation_endpoint_returns_mock_metadata_and_ranked_output() -> No
     assert body["metadata"]["module3_source"] == "mock"
     assert "not calculated EESI" in body["metadata"]["disclaimer"]
     assert body["recommendations"][0]["priority_score"] >= body["recommendations"][-1]["priority_score"]
+    assert repository.requested_upload_id == selected_upload
+
+
+def test_invalid_upload_id_is_rejected_before_employee_lookup() -> None:
+    repository = FakeEmployeeRepository(employee())
+    service = RetentionDecisionService(
+        repository, MockModule2Provider(), MockModule3Provider(),  # type: ignore[arg-type]
+    )
+
+    response = client_for(service).get(
+        "/api/v1/module4/employees/EMP002/recommendations",
+        params={"upload_id": "not-a-uuid"},
+    )
+
+    assert response.status_code == 422
+    assert repository.requested_upload_id is None
+
+
+def test_duplicate_employee_without_upload_id_returns_409() -> None:
+    repository = DuplicateEmployeeRepository(employee())
+    service = RetentionDecisionService(
+        repository, MockModule2Provider(), MockModule3Provider(),  # type: ignore[arg-type]
+    )
+
+    response = client_for(service).get("/api/v1/module4/employees/EMP002/recommendations")
+
+    assert response.status_code == 409
+    assert "provide upload_id" in response.json()["detail"]
 
 
 def test_unknown_employee_returns_404() -> None:
