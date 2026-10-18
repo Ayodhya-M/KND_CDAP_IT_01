@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { getRetentionRecommendations, RetentionRequestError, type Module4RecommendationResponse } from '../api'
+import { useEffect, useState } from 'react'
+import { getMappingUploadChoices, getRetentionRecommendations, RetentionRequestError, type MappingUploadChoice, type Module4RecommendationResponse } from '../api'
 import { EmployeeSearch } from '../components/EmployeeSearch'
 import { EmptyRecommendations } from '../components/EmptyRecommendations'
 import { IntegrationStatus } from '../components/IntegrationStatus'
@@ -14,6 +14,28 @@ export function Module4Dashboard() {
   const [validationError, setValidationError] = useState('')
   const [requestError, setRequestError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [uploads, setUploads] = useState<MappingUploadChoice[]>([])
+  const [uploadId, setUploadId] = useState('')
+  const [uploadsLoading, setUploadsLoading] = useState(true)
+  const [uploadsError, setUploadsError] = useState('')
+
+  const loadUploads = async () => {
+    setUploadsLoading(true)
+    setUploadsError('')
+    try {
+      const response = await getMappingUploadChoices()
+      setUploads(response.hr_uploads)
+      setUploadId((current) => response.hr_uploads.some((upload) => upload.id === current) ? current : '')
+    } catch {
+      setUploads([])
+      setUploadId('')
+      setUploadsError('HR dataset uploads could not be loaded. Confirm that the backend is available, then retry.')
+    } finally {
+      setUploadsLoading(false)
+    }
+  }
+
+  useEffect(() => { void loadUploads() }, [])
 
   const analyzeEmployee = async () => {
     const normalizedId = employeeId.trim()
@@ -24,10 +46,14 @@ export function Module4Dashboard() {
       setValidationError('Enter an employee ID before starting the analysis.')
       return
     }
+    if (!uploadId) {
+      setValidationError('Select an HR dataset before starting the analysis.')
+      return
+    }
 
     setLoading(true)
     try {
-      setResult(await getRetentionRecommendations(normalizedId))
+      setResult(await getRetentionRecommendations(normalizedId, uploadId))
       setEmployeeId(normalizedId)
     } catch (error) {
       setRequestError(error instanceof RetentionRequestError
@@ -39,9 +65,15 @@ export function Module4Dashboard() {
   }
 
   return <section className="module4-dashboard">
-    <header className="module4-header">
-      <div><p className="eyebrow"></p><h1>Employee Retention Decision Support</h1><p className="muted">Personalized and explainable retention recommendations for HR decision support</p></div>
+    <header className="module4-header page-intro">
+      <div><p className="eyebrow">Module 4 · Decision intelligence</p><h1>Retention Strategies</h1><p className="muted">Personalized, explainable retention actions that support informed HR review.</p></div>
     </header>
+
+    <div className="analysis-controls">
+    <section className="module4-dataset-picker" aria-labelledby="module4-dataset-heading">
+      <label id="module4-dataset-heading" htmlFor="module4-upload">HR dataset</label>
+      {uploadsLoading ? <p className="muted" role="status">Loading HR datasets…</p> : uploadsError ? <div className="dataset-load-error" role="alert"><span>{uploadsError}</span><button className="secondary-button" type="button" onClick={() => void loadUploads()}>Retry</button></div> : uploads.length === 0 ? <p className="muted">No HR dataset uploads are available. Upload an HR dataset through Module 1 first.</p> : <><select id="module4-upload" value={uploadId} onChange={(event) => { setUploadId(event.target.value); setResult(null); setRequestError(''); setValidationError('') }}><option value="">Select an HR dataset</option>{uploads.map((upload) => <option key={upload.id} value={upload.id}>{upload.original_filename} — {upload.record_count} records — {new Date(upload.uploaded_at).toLocaleString()}</option>)}</select><p className="field-help">The selected upload scopes employee lookup and prevents ambiguity across repeated employee IDs.</p></>}
+    </section>
 
     <EmployeeSearch
       employeeId={employeeId}
@@ -50,6 +82,7 @@ export function Module4Dashboard() {
       onEmployeeIdChange={(value) => { setEmployeeId(value); setValidationError('') }}
       onSubmit={() => void analyzeEmployee()}
     />
+    </div>
 
     {loading && <div className="analysis-loading" role="status"><span className="loading-indicator" aria-hidden="true" /><div><strong>Preparing retention analysis</strong><p>Loading employee context and decision-support results…</p></div></div>}
     {requestError && <div className="retention-error" role="alert"><strong>Analysis could not be completed</strong><p>{requestError}</p><small>Check the employee ID or backend connection, then try again.</small></div>}
@@ -71,16 +104,17 @@ export function Module4Dashboard() {
         </dl>
       </section>
 
+      <div className="retention-workspace-grid">
       <RiskFactorsList factors={result.important_risk_factors} />
-
       <section className="retention-section" aria-labelledby="recommendations-heading">
         <div className="section-heading"><div><p className="eyebrow">Decision support</p><h2 id="recommendations-heading">Recommended Retention Actions</h2></div><span className="item-count">{result.recommendations.length} action{result.recommendations.length === 1 ? '' : 's'}</span></div>
         {result.recommendations.length === 0
           ? <EmptyRecommendations />
           : <div className="recommendation-list">{result.recommendations.map((recommendation, index) => <RecommendationCard key={recommendation.recommendation_id} recommendation={recommendation} rank={index + 1} />)}</div>}
       </section>
+      </div>
 
-      <WhatIfSimulator key={result.employee_id} analysis={result} />
+      <WhatIfSimulator key={`${uploadId}:${result.employee_id}`} analysis={result} uploadId={uploadId} />
 
       <IntegrationStatus metadata={result.metadata} />
     </div>}
