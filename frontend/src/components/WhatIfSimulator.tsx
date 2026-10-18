@@ -11,9 +11,10 @@ const displayName = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g,
 
 type Props = {
   analysis: Module4RecommendationResponse
+  uploadId: string
 }
 
-export function WhatIfSimulator({ analysis }: Props) {
+export function WhatIfSimulator({ analysis, uploadId }: Props) {
   const profile = analysis.employee_profile
   const [salary, setSalary] = useState(profile.salary?.toString() ?? '')
   const [overtime, setOvertime] = useState(profile.overtime === null ? '' : String(profile.overtime))
@@ -36,7 +37,7 @@ export function WhatIfSimulator({ analysis }: Props) {
     }
     setLoading(true); setError(''); setResult(null)
     try {
-      setResult(await simulateRetentionScenario(analysis.employee_id, changes))
+      setResult(await simulateRetentionScenario(analysis.employee_id, changes, uploadId))
     } catch (requestError) {
       setError(requestError instanceof RetentionRequestError ? requestError.message : 'The scenario could not be evaluated.')
     } finally {

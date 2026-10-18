@@ -25,9 +25,11 @@ class ReadOnlyRepository:
         )
         self.read_count = 0
         self.write_count = 0
+        self.requested_upload_id = None
 
-    def get_employee_context(self, employee_id: str):
+    def get_employee_context(self, employee_id: str, *, upload_id=None):
         self.read_count += 1
+        self.requested_upload_id = upload_id
         return self.employee
 
     def get_employee_economic_context(self, employee_record_id):
@@ -99,12 +101,13 @@ def test_low_scenario_remains_without_unnecessary_recommendations() -> None:
 
 
 def test_simulation_endpoint_is_compatible_and_explicitly_illustrative() -> None:
-    simulator, _ = build_simulator()
+    simulator, repository = build_simulator()
     service = simulator.decision_service
     app.dependency_overrides[get_decision_service] = lambda: service
     try:
         response = TestClient(app).post(
             "/api/v1/module4/employees/EMP002/simulation",
+            params={"upload_id": str(repository.employee.upload_id)},
             json={"overtime": False},
         )
     finally:
@@ -115,3 +118,20 @@ def test_simulation_endpoint_is_compatible_and_explicitly_illustrative() -> None
     assert body["label"] == SIMULATION_LABEL
     assert body["metadata"]["data_mode"] == "mock_integration"
     assert body["probability_difference"] == 0
+    assert repository.requested_upload_id == str(repository.employee.upload_id)
+
+
+def test_simulation_endpoint_rejects_invalid_upload_id() -> None:
+    simulator, repository = build_simulator()
+    app.dependency_overrides[get_decision_service] = lambda: simulator.decision_service
+    try:
+        response = TestClient(app).post(
+            "/api/v1/module4/employees/EMP002/simulation",
+            params={"upload_id": "not-a-uuid"},
+            json={"overtime": False},
+        )
+    finally:
+        app.dependency_overrides.pop(get_decision_service, None)
+
+    assert response.status_code == 422
+    assert repository.requested_upload_id is None
