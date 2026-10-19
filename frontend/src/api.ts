@@ -1,5 +1,29 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1'
 
+export type HiesRecord = {
+  sample_id: string; survey_month: string; economic_month: string
+  salary: number; extra_pay: number | null; bonus_monthly: number | null
+  household_expenditure: number; household_debt_payments: number | null
+  scores: Record<string, number>
+}
+export type HiesDataset = {
+  record_count: number; prepared_available: boolean; imported_at: string | null
+  records: HiesRecord[]; complete_income_count: number; debt_payment_count: number; note: string
+}
+export async function getHiesDataset(importPrepared = false): Promise<HiesDataset> {
+  const response = await fetch(`${API_BASE_URL}/eesi/hies${importPrepared ? '/import-prepared' : ''}`, { method: importPrepared ? 'POST' : 'GET' })
+  const body = await response.json()
+  if (!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : 'Unable to load HIES data.')
+  return body as HiesDataset
+}
+
+export async function getDatabaseStatus(): Promise<string> {
+  const response = await fetch(`${API_BASE_URL}/supabase/status`)
+  const body = await response.json()
+  if (!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : 'HR database unavailable.')
+  return body.status as string
+}
+
 export type HrUploadError = {
   field: string
   message: string

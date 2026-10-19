@@ -4,8 +4,30 @@ from pydantic import BaseModel, Field
 from app.services.eesi import calculate, metadata, pilot_preview
 from app.services.eesi_real import REAL_BOUNDS, REAL_VERSION, load_real_summary
 from typing import Literal
+import sqlite3
+from app.services.hies_data import get_dataset, import_prepared
 
 router = APIRouter(prefix="/eesi", tags=["EESI proof of concept"])
+
+
+@router.get('/hies')
+def hies_dataset():
+    try:
+        return get_dataset()
+    except (OSError, ValueError, sqlite3.Error) as error:
+        raise HTTPException(status_code=503, detail='The local HIES dataset could not be read.') from error
+
+
+@router.post('/hies/import-prepared')
+def import_hies_dataset():
+    try:
+        return import_prepared()
+    except FileNotFoundError as error:
+        raise HTTPException(status_code=404, detail='Prepare the HIES sample with scripts/clean_hies2019_eesi.py first.') from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except (OSError, sqlite3.Error) as error:
+        raise HTTPException(status_code=503, detail='The private HIES dataset could not be stored.') from error
 
 
 class ScenarioRequest(BaseModel):

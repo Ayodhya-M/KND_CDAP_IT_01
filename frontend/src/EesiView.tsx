@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import RealEesiView from './RealEesiView'
+import HiesEesiView from './HiesEesiView'
 
 const API = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1'
 type Formula = { id: string; name: string; expression: string; rationale: string }
@@ -73,6 +74,6 @@ function SyntheticEesiView() {
 }
 
 export default function EesiView() {
-  const [source, setSource] = useState<'real' | 'synthetic'>('real')
-  return <><div className="cleaning-buttons eesi-source-switch"><button className={source === 'real' ? 'primary-button' : 'secondary-button'} aria-pressed={source === 'real'} onClick={() => setSource('real')}>Real Sri Lankan data</button><button className={source === 'synthetic' ? 'primary-button' : 'secondary-button'} aria-pressed={source === 'synthetic'} onClick={() => setSource('synthetic')}>Synthetic pilot / worked examples</button></div>{source === 'real' ? <RealEesiView /> : <SyntheticEesiView />}</>
+  const [source, setSource] = useState<'hies' | 'real' | 'synthetic'>('hies')
+  return <><div className="cleaning-buttons eesi-source-switch"><button className={source === 'hies' ? 'primary-button' : 'secondary-button'} aria-pressed={source === 'hies'} onClick={() => setSource('hies')}>HIES 2019 · 100-person sample</button><button className={source === 'real' ? 'primary-button' : 'secondary-button'} aria-pressed={source === 'real'} onClick={() => setSource('real')}>LFS 2024 data</button><button className={source === 'synthetic' ? 'primary-button' : 'secondary-button'} aria-pressed={source === 'synthetic'} onClick={() => setSource('synthetic')}>Synthetic pilot / worked examples</button></div>{source === 'hies' ? <HiesEesiView /> : source === 'real' ? <RealEesiView /> : <SyntheticEesiView />}</>
 }

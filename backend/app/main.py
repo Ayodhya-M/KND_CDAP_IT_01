@@ -46,6 +46,9 @@ def api_status() -> dict[str, str]:
 @app.get(f"{settings.api_v1_prefix}/supabase/status", tags=["status"])
 def supabase_status() -> dict[str, str]:
     """Confirm that server-side Supabase credentials can access the project."""
+    if ('your-project' in settings.supabase_url or
+            settings.supabase_service_role_key == 'your_supabase_service_role_key'):
+        raise HTTPException(status_code=503, detail='Supabase is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in backend/.env, then restart the backend.')
     try:
         # This is a supported server-side call. It verifies both the project URL
         # and the service-role key without creating or changing any user data.

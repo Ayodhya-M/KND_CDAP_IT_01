@@ -41,10 +41,9 @@ Tenure, performance, job satisfaction, promotions and attrition are not supplied
 by this extraction and have not been invented. Do not join these respondents to
 the synthetic PILOT employees by row order or generated sample ID.
 
-The existing HR pilot, upload validation, database and running app are unchanged.
-These CSVs are not directly compatible with the current Module 1 HR upload
-contract. A separate financial-data import and verified field definitions are
-needed before application integration.
+The existing HR pilot, HR upload validation and Supabase records are unchanged.
+These CSVs are not compatible with the organizational HR upload contract.
+The app now provides a separate private local HIES import as described below.
 
 ## Cleaned PP1 files
 
@@ -145,3 +144,25 @@ The ZIP is read in place; the full archive is not extracted. Original join keys
 are used only in memory, and no identifying crosswalk is written.
 
 Source dictionary: https://nada.statistics.gov.lk/index.php/catalog/476/data-dictionary
+
+## App import and display
+
+The backend stores the imported prepared sample in the Git-ignored local
+`data/private/hies2019_app.sqlite3` database. The overview shows a separate
+**HIES wage earners** count. **Economic Intelligence > HIES 2019** displays the
+financial records and candidate calculations. Use **Import prepared 100-person
+sample** or **Reimport prepared sample** to import the fixed prepared CSV.
+Reimport replaces this local sample atomically instead of duplicating records.
+
+API routes: `GET /api/v1/eesi/hies` and
+`POST /api/v1/eesi/hies/import-prepared`. Validation requires exactly 100 unique
+sample IDs, finite amounts and matching historical months. Missing financial
+values stay null and are displayed as **Not reported**. Candidate calculations
+reuse the same formulas and historical bounds documented above.
+
+This import does not create organizational HR records, change Supabase, train
+Module 3 or enable real Module 4 recommendations. Database connection failures
+are displayed as **Unavailable**, rather than an empty HR record count.
+Configure real `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` values in
+`backend/.env` and restart the backend to enable the organizational HR workflow.
+Keep credentials on the backend; do not add service-role keys to frontend files.
