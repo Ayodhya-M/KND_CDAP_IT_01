@@ -45,6 +45,8 @@ def get_model_status() -> dict[str, Any]:
         "classes": metadata.get("classes", []),
         "feature_columns": metadata.get("feature_columns", []),
         "eesi_integration": metadata.get("eesi_integration", {}),
+        'source_rows': metadata.get('source_rows'),
+        'split': metadata.get('split'),
         "message": "Local synthetic-pilot model available. Outputs are technical evidence only.",
     }
 
@@ -59,7 +61,29 @@ def _prediction_function():
 
 
 def predict_saved_model(record: dict[str, Any]) -> dict[str, Any]:
+    validate_pilot_record(record)
     return _prediction_function()(record, artifact_directory())
+
+
+def validate_pilot_record(record):
+    """Reject invalid domain inputs before sklearn can impute or coerce them."""
+    import math
+    limits = {'Age': (14, 100), 'MonthlyIncome': (0, None), 'JobSatisfaction': (1, 4),
+              'JobLevel': (1, 5), 'YearsAtCompany': (0, 100), 'EESI': (0, 100)}
+    for field, (low, high) in limits.items():
+        if field not in record:
+            continue  # Saved feature contract handles absent/extra fields.
+        value = record[field]
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise ValueError(f'{field} must be a finite number.')
+        if value < low or high is not None and value > high:
+            raise ValueError(f'{field} is outside its valid range.')
+        if field in ('Age', 'JobSatisfaction', 'JobLevel', 'YearsAtCompany') and int(value) != value:
+            raise ValueError(f'{field} must be a whole number.')
+    if 'OverTime' in record and record['OverTime'] not in ('Yes', 'No'):
+        raise ValueError('OverTime must be Yes or No.')
+    if 'Department' in record and (not isinstance(record['Department'], str) or not record['Department'].strip()):
+        raise ValueError('Department is required.')
 
 
 def load_evaluation_report() -> dict[str, Any]:
