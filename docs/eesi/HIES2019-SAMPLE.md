@@ -147,6 +147,21 @@ Source dictionary: https://nada.statistics.gov.lk/index.php/catalog/476/data-dic
 
 ## App import and display
 
+The Module 2 HIES workspace now includes formula comparison, employee selection,
+per-component score contributions, financial-input completeness, sample-ID
+search, a what-if calculator and a JSON evidence download. All three existing
+candidate scores use the HIES 2019 reference profile, not the 2023 pilot ranges.
+Scenario results show changes from the selected employee's original score.
+Inputs outside the frozen bounds produce visible clipping warnings.
+`POST /api/v1/eesi/hies/scenario` calculates scenarios in memory and does not
+update saved employee financial data. Evidence downloads contain private sample
+records and the selected scenario; keep them local with the other microdata.
+
+The financial-input section displays available household expenditure and debt
+payments and explicitly separates them from the wage-and-economy candidate
+calculations. A formula incorporating individual expenses and loans has not been
+finalized or validated. No low/medium/high stress bands are asserted.
+
 The backend stores the imported prepared sample in the Git-ignored local
 `data/private/hies2019_app.sqlite3` database. The overview shows a separate
 **HIES wage earners** count. **Economic Intelligence > HIES 2019** displays the

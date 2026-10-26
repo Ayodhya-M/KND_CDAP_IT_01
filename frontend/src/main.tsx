@@ -36,6 +36,7 @@ function Dashboard() {
   const [overviewLoading, setOverviewLoading] = useState(true)
   const [hies, setHies] = useState<HiesDataset | null>(null)
   const [hrAvailable, setHrAvailable] = useState(false)
+  const [uniqueEmployees, setUniqueEmployees] = useState(0)
 
   const refreshOverview = async () => {
     setOverviewLoading(true)
@@ -44,6 +45,7 @@ function Dashboard() {
     setHrAvailable(uploadsResult.status === 'fulfilled')
     if (uploadsResult.status === 'fulfilled') {
       setHrUploads(uploadsResult.value.hr_uploads)
+      setUniqueEmployees(uploadsResult.value.unique_employee_count)
       setEconomicUploads(uploadsResult.value.economic_uploads)
     } else {
       setHrUploads([])
@@ -94,13 +96,13 @@ function Dashboard() {
     <section className="dashboard-content">
       <div className="topbar"><button className="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded={mobileNavOpen} onClick={() => setMobileNavOpen(value => !value)}><Icon name="menu" /></button><img className="topbar-brand-icon" src="/retention-intelligence-favicon.svg" alt="" aria-hidden="true" /><div><p className="breadcrumb">Retention Intelligence <span>/</span> {current.section}</p><h1>{current.title}</h1></div><span className="topbar-context">Research prototype</span></div>
       <div className="page-content">
-      {view === 'dashboard' ? <OverviewDashboard hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} hies={hies} hrAvailable={hrAvailable} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
+      {view === 'dashboard' ? <OverviewDashboard uniqueEmployees={uniqueEmployees} hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} hies={hies} hrAvailable={hrAvailable} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
       </div>
     </section>
   </main>
 }
 
-function OverviewDashboard({ hrUploads, economicUploads, modelStatus, hies, hrAvailable, loading, error, onNavigate, onRefresh }: { hrUploads: MappingUploadChoice[]; economicUploads: MappingUploadChoice[]; modelStatus: Module3ModelStatus | null; hies: HiesDataset | null; hrAvailable: boolean; loading: boolean; error: string; onNavigate: (view: View) => void; onRefresh: () => void }) {
+function OverviewDashboard({ uniqueEmployees, hrUploads, economicUploads, modelStatus, hies, hrAvailable, loading, error, onNavigate, onRefresh }: { uniqueEmployees: number; hrUploads: MappingUploadChoice[]; economicUploads: MappingUploadChoice[]; modelStatus: Module3ModelStatus | null; hies: HiesDataset | null; hrAvailable: boolean; loading: boolean; error: string; onNavigate: (view: View) => void; onRefresh: () => void }) {
   const hrRecords = hrUploads.reduce((total, upload) => total + upload.record_count, 0)
   const recent = [...hrUploads.map(item => ({ ...item, type: 'HR dataset' })), ...economicUploads.map(item => ({ ...item, type: 'Economic dataset' }))].sort((a, b) => Date.parse(b.uploaded_at) - Date.parse(a.uploaded_at)).slice(0, 5)
   const workspaces: Array<{ view: View; icon: IconName; title: string; detail: string; status: string }> = [
@@ -115,7 +117,7 @@ function OverviewDashboard({ hrUploads, economicUploads, modelStatus, hies, hrAv
     {loading && <div className="overview-skeleton" role="status" aria-label="Loading workspace status">{[1,2,3,4].map(item => <span key={item} />)}</div>}
     {!loading && <>
     <div className="executive-metrics">
-      <article><span>Organizational HR records</span><strong className={hrAvailable ? '' : 'metric-text'}>{hrAvailable ? hrRecords.toLocaleString() : 'Unavailable'}</strong><small>{hrAvailable ? `Across ${hrUploads.length} uploaded datasets; duplicates are not deduplicated.` : 'Connect Supabase to load organizational HR records.'}</small></article>
+      <article><span>Unique HR employee IDs</span><strong className={hrAvailable ? '' : 'metric-text'}>{hrAvailable ? uniqueEmployees.toLocaleString() : 'Unavailable'}</strong><small>{hrAvailable ? `Across ${hrUploads.length} dataset versions (${hrRecords} stored rows). IDs are counted once across versions.` : 'Connect Supabase to load organizational HR records.'}</small></article>
       <article><span>Supabase dataset inventory</span><strong className={hrAvailable ? '' : 'metric-text'}>{hrAvailable ? hrUploads.length + economicUploads.length : 'Unavailable'}</strong><small>{hrAvailable ? `${hrUploads.length} HR · ${economicUploads.length} economic` : 'Database inventory could not be loaded.'}</small></article>
       <article><span>Turnover model</span><strong className="metric-text">{modelStatus?.model_available ? 'Available' : 'Unavailable'}</strong><small>{modelStatus?.message ?? 'Status has not been loaded.'}</small></article>
       <article><span>HIES wage earners</span><strong>{hies ? hies.record_count.toLocaleString() : 'Unavailable'}</strong><small>Private local EESI sample · separate from organizational HR.</small><button className="text-button" onClick={() => onNavigate('eesi')}>View financial data</button></article>
@@ -163,6 +165,7 @@ function HrUploadView({ onSuccess }: { onSuccess: (summary: HrUploadSummary) => 
 function ValidationSummary({ summary }: { summary: HrUploadSummary }) {
   const missingValues = Object.entries(summary.missing_values ?? {}).filter(([, count]) => count > 0)
   return <section className={`validation-summary ${summary.status}`}><h2>{summary.status === 'success' ? 'Upload validated successfully' : 'Validation issues found'}</h2><div className="summary-grid"><span>Total Records<strong>{summary.total_records ?? 0}</strong></span><span>Valid Records<strong>{summary.valid_records ?? 0}</strong></span><span>Invalid Records<strong>{summary.invalid_records ?? 0}</strong></span><span>Duplicate Employee IDs<strong>{summary.duplicate_employee_ids ?? 0}</strong></span><span>Observation Period<strong>{summary.observation_period ? `${summary.observation_period.start} to ${summary.observation_period.end}` : '—'}</strong></span></div>
+    {summary.duplicate_upload && <p role="status">{summary.message}</p>}
     <p><strong>Missing Values:</strong> {missingValues.length ? missingValues.map(([column, count]) => `${column}: ${count}`).join(', ') : 'None'}</p>
     {!!summary.errors?.length && <ul>{summary.errors.map((item, index) => <li key={`${item.field}-${index}`}><strong>{item.field}:</strong> {item.message}{item.count ? ` (${item.count} record(s))` : ''}</li>)}</ul>}
   </section>

@@ -1,0 +1,301 @@
+EmployeeID,Age,Gender,Department,JobRole,JobLevel,MonthlyIncome,BusinessTravel,DistanceFromHome,EducationField,MaritalStatus,OverTime,JobSatisfaction,EnvironmentSatisfaction,WorkLifeBalance,TotalWorkingYears,YearsAtCompany,JoinDate,ResignationDate,ObservationDate,Attrition
+PILOT-0001,58,Male,Research & Development,Healthcare Representative,3,111166,Travel_Rarely,15,Technical Degree,Married,No,2,4,3,6,6,2022-03-17,,2023-01-04,No
+PILOT-0002,43,Female,Sales,Sales Executive,4,125237,Travel_Rarely,25,Marketing,Single,No,4,1,3,13,6,2013-08-06,,2023-02-14,No
+PILOT-0003,22,Female,Sales,Sales Executive,2,51675,Non-Travel,6,Human Resources,Single,Yes,4,3,4,2,0,2021-03-06,,2023-03-06,No
+PILOT-0004,30,Female,Research & Development,Manager,1,36788,Travel_Rarely,3,Marketing,Divorced,No,3,4,4,7,1,2018-08-25,,2023-04-08,No
+PILOT-0005,22,Female,Research & Development,Laboratory Technician,2,72430,Travel_Frequently,17,Marketing,Divorced,Yes,1,1,3,4,3,2019-02-17,,2023-05-04,No
+PILOT-0006,54,Male,Human Resources,Manager,1,50875,Travel_Rarely,16,Technical Degree,Married,No,2,1,3,22,6,2019-07-16,,2023-06-28,No
+PILOT-0007,45,Male,Research & Development,Manager,4,101066,Travel_Rarely,3,Medical,Single,No,4,3,2,1,1,2019-12-02,,2023-01-24,No
+PILOT-0008,45,Male,Sales,Sales Representative,1,53477,Travel_Rarely,11,Marketing,Married,No,1,1,3,15,7,2015-03-02,,2023-02-05,No
+PILOT-0009,51,Male,Research & Development,Laboratory Technician,2,85407,Travel_Rarely,14,Life Sciences,Divorced,No,4,1,4,14,7,2013-09-22,,2023-03-06,No
+PILOT-0010,24,Male,Human Resources,Manager,2,60651,Travel_Rarely,29,Human Resources,Single,Yes,2,3,4,2,2,2018-11-12,,2023-04-17,No
+PILOT-0011,51,Male,Sales,Sales Executive,2,85897,Travel_Rarely,8,Life Sciences,Single,Yes,1,2,4,20,7,2017-10-04,,2023-05-28,No
+PILOT-0012,25,Female,Sales,Sales Executive,2,73967,Travel_Rarely,26,Human Resources,Single,No,2,2,2,1,1,2022-11-27,,2023-06-22,No
+PILOT-0013,40,Female,Sales,Sales Executive,1,37028,Travel_Rarely,4,Life Sciences,Married,No,1,1,3,8,0,2020-05-26,,2023-01-02,No
+PILOT-0014,58,Male,Research & Development,Laboratory Technician,2,91369,Travel_Rarely,8,Medical,Married,No,3,2,2,15,15,2019-02-08,,2023-02-10,No
+PILOT-0015,53,Female,Sales,Sales Representative,1,60756,Travel_Rarely,22,Life Sciences,Married,No,4,4,2,25,11,2016-09-13,2023-01-19,2023-03-28,Yes
+PILOT-0016,46,Male,Sales,Sales Executive,1,53349,Travel_Rarely,8,Marketing,Single,No,3,2,3,24,11,2017-10-23,,2023-04-18,No
+PILOT-0017,59,Female,Research & Development,Laboratory Technician,3,72118,Travel_Rarely,11,Human Resources,Married,Yes,2,3,3,9,0,2020-06-08,,2023-05-21,No
+PILOT-0018,28,Male,Sales,Sales Representative,2,80368,Travel_Rarely,22,Marketing,Single,No,1,2,2,7,5,2013-02-06,,2023-06-07,No
+PILOT-0019,49,Male,Sales,Sales Representative,2,74465,Travel_Rarely,17,Medical,Divorced,No,3,1,3,8,8,2021-11-03,2023-03-05,2023-01-19,Yes
+PILOT-0020,51,Female,Sales,Sales Representative,4,114386,Travel_Rarely,13,Human Resources,Divorced,Yes,3,1,2,3,0,2014-02-06,2023-01-27,2023-02-25,Yes
+PILOT-0021,25,Female,Sales,Sales Representative,2,70823,Non-Travel,17,Marketing,Married,No,3,2,4,7,6,2013-09-20,,2023-03-25,No
+PILOT-0022,40,Male,Research & Development,Healthcare Representative,1,43650,Travel_Rarely,26,Human Resources,Single,No,4,3,3,17,5,2018-03-11,,2023-04-22,No
+PILOT-0023,59,Male,Sales,Sales Executive,1,43183,Travel_Frequently,3,Technical Degree,Single,No,4,3,3,35,0,2015-09-11,,2023-05-14,No
+PILOT-0024,49,Male,Research & Development,Research Scientist,1,54389,Non-Travel,24,Human Resources,Single,No,2,4,3,31,8,2018-12-14,,2023-06-06,No
+PILOT-0025,34,Female,Research & Development,Healthcare Representative,1,43008,Travel_Rarely,29,Medical,Divorced,Yes,1,1,3,4,0,2021-08-04,,2023-01-09,No
+PILOT-0026,47,Male,Sales,Sales Executive,4,133925,Travel_Frequently,6,Life Sciences,Married,No,2,2,2,12,5,2018-04-09,,2023-02-16,No
+PILOT-0027,31,Female,Research & Development,Healthcare Representative,1,51405,Travel_Rarely,1,Marketing,Single,No,2,3,3,10,5,2021-03-20,,2023-03-24,No
+PILOT-0028,55,Male,Research & Development,Manager,1,53182,Travel_Rarely,18,Technical Degree,Single,No,4,1,2,24,5,2016-11-19,,2023-04-08,No
+PILOT-0029,28,Female,Sales,Sales Representative,2,65637,Travel_Frequently,28,Technical Degree,Single,No,1,1,4,6,5,2018-07-17,2023-05-25,2023-05-21,Yes
+PILOT-0030,32,Female,Research & Development,Manager,3,109870,Travel_Rarely,19,Life Sciences,Single,No,3,1,3,14,11,2022-04-25,2023-01-04,2023-06-19,Yes
+PILOT-0031,29,Female,Research & Development,Manager,1,43389,Non-Travel,16,Technical Degree,Married,No,3,4,3,3,2,2014-02-12,,2023-01-05,No
+PILOT-0032,31,Male,Sales,Sales Executive,4,110591,Travel_Rarely,9,Technical Degree,Divorced,Yes,4,4,3,12,0,2022-11-10,,2023-02-11,No
+PILOT-0033,34,Female,Sales,Sales Representative,2,54685,Travel_Rarely,15,Marketing,Married,No,3,4,1,2,0,2016-03-01,,2023-03-21,No
+PILOT-0034,50,Male,Research & Development,Laboratory Technician,1,64344,Non-Travel,23,Technical Degree,Married,Yes,3,3,2,14,14,2021-11-27,,2023-04-01,No
+PILOT-0035,39,Female,Sales,Sales Representative,3,87805,Travel_Rarely,1,Human Resources,Single,No,2,1,2,12,9,2017-02-21,,2023-05-07,No
+PILOT-0036,25,Female,Research & Development,Research Scientist,3,93346,Travel_Rarely,7,Human Resources,Single,No,4,1,3,7,3,2020-09-08,,2023-06-20,No
+PILOT-0037,59,Female,Sales,Sales Representative,4,154283,Travel_Frequently,24,Medical,Divorced,No,2,4,3,35,15,2020-06-16,,2023-01-14,No
+PILOT-0038,31,Female,Sales,Sales Representative,1,46026,Travel_Rarely,4,Life Sciences,Married,Yes,3,4,2,2,1,2022-01-25,,2023-02-05,No
+PILOT-0039,37,Male,Sales,Sales Executive,2,60901,Non-Travel,2,Technical Degree,Single,No,2,4,3,3,2,2020-02-11,2023-03-21,2023-03-25,Yes
+PILOT-0040,51,Male,Sales,Sales Executive,2,61678,Travel_Rarely,3,Marketing,Divorced,No,2,1,3,17,4,2021-08-20,,2023-04-15,No
+PILOT-0041,51,Female,Research & Development,Research Scientist,3,105723,Travel_Rarely,6,Medical,Single,No,3,1,3,22,6,2021-11-11,,2023-05-08,No
+PILOT-0042,49,Male,Sales,Sales Representative,1,57588,Travel_Frequently,19,Life Sciences,Divorced,No,1,2,3,9,6,2016-07-11,2023-01-11,2023-06-26,Yes
+PILOT-0043,52,Male,Sales,Sales Executive,1,60764,Travel_Rarely,24,Technical Degree,Divorced,No,3,3,2,33,13,2019-02-27,,2023-01-04,No
+PILOT-0044,22,Female,Research & Development,Research Scientist,1,34093,Travel_Rarely,13,Medical,Single,No,1,1,2,1,0,2017-08-27,,2023-02-26,No
+PILOT-0045,45,Female,Research & Development,Manager,1,43693,Travel_Rarely,4,Life Sciences,Married,No,3,1,2,16,4,2015-07-09,2023-05-03,2023-03-24,Yes
+PILOT-0046,58,Female,Sales,Sales Representative,4,92917,Travel_Rarely,27,Technical Degree,Married,No,3,1,3,32,1,2015-05-07,2023-01-28,2023-04-13,Yes
+PILOT-0047,48,Female,Human Resources,Human Resources,5,155760,Travel_Rarely,19,Marketing,Single,No,4,2,3,14,2,2014-08-16,,2023-05-05,No
+PILOT-0048,29,Female,Research & Development,Manager,4,136486,Travel_Frequently,27,Medical,Single,Yes,3,4,3,5,5,2021-05-20,,2023-06-18,No
+PILOT-0049,26,Male,Sales,Sales Executive,3,90720,Travel_Rarely,2,Marketing,Married,No,1,2,3,3,1,2020-04-22,,2023-01-20,No
+PILOT-0050,42,Female,Research & Development,Manager,3,88870,Travel_Rarely,1,Life Sciences,Single,Yes,1,1,2,1,0,2016-06-28,,2023-02-02,No
+PILOT-0051,24,Male,Sales,Sales Executive,2,77209,Travel_Rarely,23,Technical Degree,Divorced,No,4,3,4,5,2,2015-06-14,,2023-03-05,No
+PILOT-0052,29,Female,Sales,Sales Executive,2,79784,Travel_Rarely,8,Marketing,Divorced,No,2,4,2,10,6,2019-09-06,,2023-04-18,No
+PILOT-0053,23,Male,Research & Development,Research Scientist,1,49442,Travel_Frequently,5,Technical Degree,Single,Yes,1,4,4,3,3,2016-08-18,,2023-05-02,No
+PILOT-0054,30,Female,Sales,Sales Executive,3,102045,Travel_Rarely,21,Marketing,Single,No,2,1,3,8,8,2016-06-04,2023-06-24,2023-06-10,Yes
+PILOT-0055,59,Female,Sales,Sales Representative,1,37896,Travel_Rarely,15,Technical Degree,Divorced,No,2,3,4,18,1,2022-11-19,2023-03-13,2023-01-01,Yes
+PILOT-0056,38,Female,Research & Development,Healthcare Representative,1,47232,Travel_Rarely,22,Technical Degree,Married,No,1,4,3,3,2,2021-09-05,,2023-02-26,No
+PILOT-0057,29,Male,Sales,Sales Representative,2,64418,Travel_Rarely,8,Technical Degree,Divorced,No,1,3,2,2,2,2017-05-24,,2023-03-07,No
+PILOT-0058,46,Female,Sales,Sales Executive,2,69833,Travel_Frequently,26,Marketing,Single,No,1,3,4,3,2,2013-02-20,,2023-04-18,No
+PILOT-0059,26,Male,Research & Development,Laboratory Technician,3,91325,Travel_Frequently,26,Medical,Married,No,4,2,4,1,1,2019-06-04,,2023-05-16,No
+PILOT-0060,51,Female,Research & Development,Research Scientist,1,51690,Travel_Rarely,25,Technical Degree,Divorced,Yes,2,3,4,19,9,2013-02-18,,2023-06-12,No
+PILOT-0061,35,Female,Sales,Sales Executive,3,119531,Travel_Rarely,23,Human Resources,Married,Yes,2,1,3,16,9,2018-02-04,,2023-01-09,No
+PILOT-0062,24,Male,Sales,Sales Representative,1,43054,Non-Travel,21,Medical,Divorced,No,1,2,3,3,2,2021-05-21,,2023-02-01,No
+PILOT-0063,33,Female,Research & Development,Research Scientist,3,103914,Travel_Rarely,25,Medical,Single,Yes,3,3,3,13,4,2019-05-09,,2023-03-20,No
+PILOT-0064,47,Female,Sales,Sales Representative,3,93948,Travel_Frequently,6,Medical,Single,No,3,4,3,28,5,2021-05-05,,2023-04-25,No
+PILOT-0065,59,Male,Sales,Sales Executive,1,74267,Travel_Rarely,18,Marketing,Married,Yes,4,4,4,16,14,2014-07-23,,2023-05-13,No
+PILOT-0066,59,Male,Sales,Sales Executive,2,52410,Travel_Rarely,10,Medical,Single,Yes,4,1,1,15,0,2019-12-03,,2023-06-21,No
+PILOT-0067,41,Female,Human Resources,Human Resources,1,42797,Travel_Rarely,21,Technical Degree,Married,No,2,3,3,15,0,2014-06-19,,2023-01-12,No
+PILOT-0068,32,Male,Research & Development,Research Scientist,3,112053,Travel_Rarely,10,Human Resources,Single,Yes,2,4,3,14,10,2017-11-23,2023-01-10,2023-02-02,Yes
+PILOT-0069,47,Male,Sales,Sales Executive,3,105994,Travel_Frequently,20,Medical,Single,Yes,2,2,2,5,4,2014-07-11,,2023-03-22,No
+PILOT-0070,38,Male,Sales,Sales Representative,3,100708,Travel_Frequently,29,Marketing,Married,No,3,2,2,7,1,2014-05-26,,2023-04-15,No
+PILOT-0071,28,Male,Research & Development,Research Scientist,1,40888,Non-Travel,1,Human Resources,Married,No,2,4,2,3,1,2018-12-15,2023-05-21,2023-05-08,Yes
+PILOT-0072,38,Male,Research & Development,Research Scientist,2,77421,Travel_Rarely,13,Marketing,Married,No,2,2,3,12,10,2022-11-07,,2023-06-28,No
+PILOT-0073,54,Female,Sales,Sales Executive,3,86729,Travel_Rarely,25,Medical,Single,No,1,2,3,17,8,2018-07-15,,2023-01-22,No
+PILOT-0074,42,Male,Human Resources,Manager,1,57761,Travel_Rarely,26,Human Resources,Married,No,2,4,3,15,8,2019-10-06,,2023-02-15,No
+PILOT-0075,37,Male,Sales,Sales Executive,2,99743,Travel_Rarely,15,Human Resources,Married,No,4,2,3,19,15,2016-08-15,,2023-03-22,No
+PILOT-0076,37,Male,Sales,Sales Executive,1,74681,Travel_Rarely,6,Life Sciences,Single,No,3,4,2,16,14,2020-11-07,,2023-04-16,No
+PILOT-0077,26,Male,Sales,Sales Representative,1,40582,Travel_Rarely,21,Marketing,Single,No,4,4,2,6,0,2014-11-09,,2023-05-18,No
+PILOT-0078,39,Female,Sales,Sales Representative,3,75942,Travel_Rarely,28,Human Resources,Married,Yes,3,3,4,3,2,2016-06-08,,2023-06-19,No
+PILOT-0079,53,Female,Sales,Sales Executive,1,46155,Travel_Rarely,17,Technical Degree,Married,No,4,1,4,2,1,2020-10-02,2023-04-23,2023-01-27,Yes
+PILOT-0080,45,Female,Sales,Sales Representative,4,125374,Travel_Rarely,29,Life Sciences,Divorced,Yes,4,4,2,4,1,2020-03-04,,2023-02-01,No
+PILOT-0081,53,Female,Sales,Sales Representative,5,149454,Non-Travel,25,Human Resources,Single,No,3,2,4,11,3,2014-12-27,,2023-03-15,No
+PILOT-0082,29,Female,Sales,Sales Representative,1,56213,Travel_Rarely,13,Human Resources,Married,No,2,3,4,9,5,2018-03-18,,2023-04-19,No
+PILOT-0083,51,Female,Research & Development,Healthcare Representative,1,40222,Travel_Rarely,22,Technical Degree,Married,No,2,3,2,17,3,2022-09-03,,2023-05-21,No
+PILOT-0084,56,Male,Research & Development,Research Scientist,4,107229,Travel_Rarely,5,Technical Degree,Divorced,Yes,3,3,1,32,1,2017-04-15,2023-04-27,2023-06-08,Yes
+PILOT-0085,31,Male,Research & Development,Laboratory Technician,1,54806,Travel_Rarely,14,Medical,Single,No,1,4,3,12,6,2014-07-03,,2023-01-09,No
+PILOT-0086,27,Female,Sales,Sales Executive,2,68340,Travel_Rarely,28,Marketing,Divorced,No,1,4,2,3,0,2021-10-15,,2023-02-23,No
+PILOT-0087,47,Male,Sales,Sales Representative,2,96591,Travel_Rarely,4,Technical Degree,Single,No,3,1,2,15,11,2018-07-24,2023-03-26,2023-03-07,Yes
+PILOT-0088,51,Male,Human Resources,Human Resources,1,77191,Travel_Frequently,17,Technical Degree,Divorced,Yes,3,3,3,28,14,2018-06-20,,2023-04-06,No
+PILOT-0089,49,Female,Sales,Sales Executive,3,80295,Travel_Rarely,23,Technical Degree,Single,Yes,1,2,3,19,6,2018-07-16,,2023-05-27,No
+PILOT-0090,41,Female,Sales,Sales Executive,3,109950,Travel_Frequently,29,Life Sciences,Divorced,No,4,2,3,15,11,2019-02-04,,2023-06-06,No
+PILOT-0091,55,Female,Sales,Sales Representative,1,38180,Travel_Rarely,13,Life Sciences,Married,No,2,4,2,22,2,2019-04-16,,2023-01-11,No
+PILOT-0092,27,Female,Human Resources,Manager,1,48935,Non-Travel,22,Human Resources,Married,No,2,3,3,4,2,2015-04-02,,2023-02-23,No
+PILOT-0093,33,Male,Research & Development,Manager,1,39975,Travel_Rarely,8,Human Resources,Divorced,No,4,1,3,15,3,2014-07-26,,2023-03-20,No
+PILOT-0094,42,Female,Sales,Sales Executive,2,65530,Travel_Rarely,13,Technical Degree,Divorced,No,2,1,4,12,4,2016-10-26,,2023-04-16,No
+PILOT-0095,25,Female,Research & Development,Manager,2,55095,Travel_Frequently,28,Marketing,Married,No,4,1,3,4,0,2015-08-18,2023-06-11,2023-05-05,Yes
+PILOT-0096,31,Male,Sales,Sales Representative,1,50603,Travel_Rarely,12,Life Sciences,Married,No,3,4,2,8,8,2014-08-03,,2023-06-02,No
+PILOT-0097,39,Female,Sales,Sales Representative,1,48981,Travel_Rarely,26,Technical Degree,Divorced,No,3,2,3,12,3,2015-08-05,,2023-01-07,No
+PILOT-0098,28,Male,Sales,Sales Executive,2,78030,Travel_Rarely,26,Life Sciences,Divorced,Yes,3,2,1,9,8,2022-10-06,2023-03-12,2023-02-09,Yes
+PILOT-0099,57,Male,Sales,Sales Representative,2,84118,Travel_Rarely,24,Life Sciences,Single,No,4,1,2,13,7,2014-10-11,,2023-03-16,No
+PILOT-0100,27,Female,Research & Development,Healthcare Representative,5,139032,Travel_Frequently,14,Medical,Single,Yes,2,3,3,4,0,2017-10-15,,2023-04-25,No
+PILOT-0101,40,Male,Research & Development,Manager,3,96923,Non-Travel,24,Medical,Married,Yes,4,1,3,10,3,2020-05-21,,2023-05-21,No
+PILOT-0102,40,Male,Research & Development,Manager,3,107291,Travel_Rarely,1,Medical,Married,Yes,4,4,3,17,5,2018-06-22,,2023-06-22,No
+PILOT-0103,31,Male,Research & Development,Manager,3,93690,Travel_Rarely,8,Medical,Married,No,2,4,1,9,9,2014-01-21,,2023-01-21,No
+PILOT-0104,36,Female,Research & Development,Healthcare Representative,5,119732,Travel_Rarely,15,Technical Degree,Divorced,No,4,1,2,5,0,2023-02-04,,2023-02-04,No
+PILOT-0105,37,Male,Human Resources,Human Resources,1,46953,Travel_Frequently,11,Marketing,Divorced,No,3,1,3,16,9,2014-03-01,,2023-03-01,No
+PILOT-0106,53,Male,Research & Development,Research Scientist,3,107970,Non-Travel,27,Human Resources,Married,No,2,2,1,16,8,2015-04-20,,2023-04-20,No
+PILOT-0107,53,Female,Research & Development,Healthcare Representative,2,58180,Travel_Rarely,4,Life Sciences,Single,No,3,1,3,28,2,2021-05-23,,2023-05-23,No
+PILOT-0108,42,Female,Sales,Sales Executive,1,60343,Travel_Frequently,28,Technical Degree,Divorced,Yes,2,2,4,19,8,2015-06-06,,2023-06-06,No
+PILOT-0109,27,Male,Sales,Sales Executive,1,45714,Travel_Rarely,16,Medical,Married,No,2,2,4,7,4,2019-01-17,,2023-01-17,No
+PILOT-0110,44,Male,Sales,Sales Executive,4,119939,Non-Travel,3,Human Resources,Married,Yes,2,1,3,24,1,2022-02-12,,2023-02-12,No
+PILOT-0111,59,Male,Sales,Sales Representative,3,87752,Non-Travel,17,Life Sciences,Divorced,Yes,3,1,3,32,10,2013-03-03,,2023-03-03,No
+PILOT-0112,51,Female,Sales,Sales Representative,1,65924,Travel_Rarely,29,Life Sciences,Divorced,No,1,4,2,28,9,2014-04-25,,2023-04-25,No
+PILOT-0113,27,Female,Research & Development,Healthcare Representative,3,85231,Travel_Rarely,18,Marketing,Divorced,No,3,2,3,2,2,2021-05-21,,2023-05-21,No
+PILOT-0114,47,Female,Research & Development,Manager,3,116988,Travel_Rarely,22,Human Resources,Divorced,No,3,1,2,27,12,2011-06-06,,2023-06-06,No
+PILOT-0115,26,Male,Research & Development,Laboratory Technician,1,48616,Travel_Rarely,16,Human Resources,Divorced,No,2,2,2,6,5,2018-01-05,,2023-01-05,No
+PILOT-0116,23,Male,Sales,Sales Representative,1,45424,Travel_Rarely,12,Marketing,Divorced,No,3,3,3,1,0,2023-02-20,,2023-02-20,No
+PILOT-0117,53,Female,Research & Development,Research Scientist,4,139174,Travel_Frequently,21,Marketing,Married,No,1,2,3,17,14,2009-03-14,,2023-03-14,No
+PILOT-0118,52,Male,Sales,Sales Representative,2,64283,Travel_Rarely,22,Human Resources,Divorced,No,4,3,3,3,1,2022-04-03,,2023-04-03,No
+PILOT-0119,43,Female,Research & Development,Healthcare Representative,5,148833,Travel_Rarely,21,Medical,Divorced,Yes,4,1,2,6,0,2023-05-04,,2023-05-04,No
+PILOT-0120,39,Female,Sales,Sales Representative,2,70207,Travel_Rarely,6,Human Resources,Divorced,Yes,3,3,4,4,0,2023-06-12,,2023-06-12,No
+PILOT-0121,23,Female,Sales,Sales Representative,2,60946,Non-Travel,16,Human Resources,Divorced,Yes,1,4,2,2,1,2022-01-08,2023-01-08,2023-01-08,Yes
+PILOT-0122,25,Male,Sales,Sales Representative,3,98374,Travel_Rarely,3,Human Resources,Divorced,No,3,2,3,1,0,2023-02-14,2023-02-14,2023-02-14,Yes
+PILOT-0123,49,Female,Sales,Sales Representative,1,54820,Travel_Frequently,10,Technical Degree,Married,No,3,3,3,26,14,2009-03-23,2023-03-23,2023-03-23,Yes
+PILOT-0124,37,Male,Research & Development,Manager,4,105961,Travel_Rarely,12,Life Sciences,Married,No,3,2,4,18,3,2020-04-16,,2023-04-16,No
+PILOT-0125,56,Female,Human Resources,Human Resources,1,60772,Travel_Frequently,22,Human Resources,Married,Yes,1,1,2,9,9,2014-05-13,,2023-05-13,No
+PILOT-0126,22,Female,Research & Development,Research Scientist,2,64108,Travel_Rarely,14,Technical Degree,Single,No,2,4,3,2,1,2022-06-08,,2023-06-08,No
+PILOT-0127,26,Male,Sales,Sales Executive,2,65671,Travel_Rarely,2,Technical Degree,Divorced,No,2,4,3,3,3,2020-01-03,,2023-01-03,No
+PILOT-0128,22,Female,Sales,Sales Representative,1,42371,Travel_Rarely,20,Medical,Divorced,No,2,3,2,3,3,2020-02-23,,2023-02-23,No
+PILOT-0129,30,Male,Sales,Sales Executive,1,44709,Non-Travel,27,Medical,Single,No,1,2,3,7,0,2023-03-22,,2023-03-22,No
+PILOT-0130,56,Female,Sales,Sales Representative,4,122622,Travel_Rarely,4,Technical Degree,Married,Yes,4,1,3,21,16,2007-04-23,,2023-04-23,No
+PILOT-0131,50,Male,Sales,Sales Executive,2,87013,Travel_Rarely,3,Medical,Single,No,1,3,1,27,11,2012-05-03,2023-05-03,2023-05-03,Yes
+PILOT-0132,46,Male,Research & Development,Laboratory Technician,2,67195,Travel_Rarely,6,Medical,Divorced,Yes,4,4,3,11,2,2021-06-12,,2023-06-12,No
+PILOT-0133,22,Male,Sales,Sales Representative,3,77906,Travel_Rarely,10,Technical Degree,Single,No,4,3,3,4,0,2023-01-14,2023-01-14,2023-01-14,Yes
+PILOT-0134,35,Male,Sales,Sales Executive,2,71566,Travel_Rarely,15,Human Resources,Married,No,3,4,4,12,6,2017-02-25,,2023-02-25,No
+PILOT-0135,40,Male,Sales,Sales Representative,1,34149,Travel_Rarely,17,Human Resources,Married,Yes,4,2,3,3,1,2022-03-01,,2023-03-01,No
+PILOT-0136,57,Male,Research & Development,Manager,1,58396,Travel_Rarely,29,Life Sciences,Divorced,No,1,3,3,17,7,2016-04-03,,2023-04-03,No
+PILOT-0137,42,Male,Sales,Sales Representative,1,68523,Travel_Rarely,16,Life Sciences,Single,No,2,1,2,21,17,2006-05-12,,2023-05-12,No
+PILOT-0138,26,Male,Research & Development,Manager,1,39565,Non-Travel,11,Technical Degree,Single,Yes,1,3,3,6,1,2022-06-21,,2023-06-21,No
+PILOT-0139,47,Male,Sales,Sales Executive,4,119662,Travel_Rarely,14,Medical,Divorced,No,2,2,1,4,3,2020-01-19,,2023-01-19,No
+PILOT-0140,35,Female,Research & Development,Healthcare Representative,1,59096,Travel_Rarely,13,Marketing,Single,No,1,4,3,15,8,2015-02-04,,2023-02-04,No
+PILOT-0141,57,Male,Sales,Sales Representative,1,46387,Travel_Frequently,4,Technical Degree,Single,No,1,1,3,18,6,2017-03-19,,2023-03-19,No
+PILOT-0142,41,Male,Research & Development,Healthcare Representative,3,115602,Travel_Rarely,26,Human Resources,Single,No,3,3,3,22,16,2007-04-18,2023-04-18,2023-04-18,Yes
+PILOT-0143,44,Male,Sales,Sales Representative,3,109256,Travel_Rarely,26,Life Sciences,Single,No,4,2,3,26,10,2013-05-03,,2023-05-03,No
+PILOT-0144,49,Male,Research & Development,Manager,5,159431,Travel_Rarely,22,Marketing,Single,No,1,1,3,18,14,2009-06-07,,2023-06-07,No
+PILOT-0145,44,Male,Research & Development,Research Scientist,2,55090,Travel_Rarely,27,Medical,Married,No,3,2,2,17,1,2022-01-24,2023-01-24,2023-01-24,Yes
+PILOT-0146,41,Female,Sales,Sales Executive,3,95046,Travel_Rarely,6,Medical,Divorced,No,2,4,3,12,3,2020-02-11,,2023-02-11,No
+PILOT-0147,30,Male,Sales,Sales Representative,1,56719,Travel_Rarely,27,Human Resources,Single,No,3,1,3,6,6,2017-03-25,,2023-03-25,No
+PILOT-0148,27,Male,Sales,Sales Executive,1,45516,Travel_Rarely,16,Medical,Divorced,No,2,2,3,4,3,2020-04-28,2023-04-28,2023-04-28,Yes
+PILOT-0149,35,Female,Research & Development,Healthcare Representative,3,73999,Travel_Frequently,9,Marketing,Married,No,2,4,2,2,2,2021-05-26,,2023-05-26,No
+PILOT-0150,26,Male,Research & Development,Manager,2,52853,Travel_Rarely,26,Technical Degree,Divorced,Yes,1,4,4,2,1,2022-06-07,,2023-06-07,No
+PILOT-0151,37,Male,Sales,Sales Executive,4,97309,Travel_Frequently,9,Medical,Divorced,No,4,3,3,8,4,2019-01-01,,2023-01-01,No
+PILOT-0152,42,Male,Sales,Sales Executive,4,127204,Travel_Rarely,21,Technical Degree,Married,No,2,2,3,19,17,2006-02-14,,2023-02-14,No
+PILOT-0153,29,Male,Sales,Sales Executive,5,110852,Travel_Frequently,28,Medical,Married,Yes,2,3,3,5,1,2022-03-05,,2023-03-05,No
+PILOT-0154,56,Male,Sales,Sales Executive,2,64567,Travel_Frequently,20,Technical Degree,Married,Yes,3,3,3,8,0,2023-04-04,,2023-04-04,No
+PILOT-0155,46,Female,Research & Development,Healthcare Representative,2,79264,Travel_Rarely,8,Medical,Married,No,2,1,3,17,11,2012-05-06,,2023-05-06,No
+PILOT-0156,30,Female,Sales,Sales Representative,3,81402,Non-Travel,10,Technical Degree,Single,Yes,4,2,3,2,2,2021-06-14,2023-06-14,2023-06-14,Yes
+PILOT-0157,40,Male,Sales,Sales Representative,4,112920,Non-Travel,19,Life Sciences,Divorced,No,1,2,3,5,1,2022-01-22,,2023-01-22,No
+PILOT-0158,33,Male,Human Resources,Human Resources,3,109874,Travel_Rarely,5,Medical,Single,No,3,3,4,9,7,2016-02-22,,2023-02-22,No
+PILOT-0159,50,Male,Sales,Sales Representative,1,33743,Travel_Rarely,27,Marketing,Married,No,3,2,3,9,0,2023-03-27,,2023-03-27,No
+PILOT-0160,37,Female,Sales,Sales Representative,4,117759,Travel_Rarely,29,Technical Degree,Divorced,Yes,1,3,3,12,5,2018-04-20,2023-04-20,2023-04-20,Yes
+PILOT-0161,58,Male,Sales,Sales Executive,1,51057,Non-Travel,24,Medical,Divorced,No,4,1,2,24,3,2020-05-18,,2023-05-18,No
+PILOT-0162,22,Male,Sales,Sales Representative,3,92650,Travel_Rarely,16,Medical,Divorced,No,1,4,3,3,1,2022-06-04,,2023-06-04,No
+PILOT-0163,36,Male,Sales,Sales Executive,1,51037,Travel_Frequently,14,Technical Degree,Divorced,No,4,3,2,15,12,2011-01-12,,2023-01-12,No
+PILOT-0164,48,Male,Sales,Sales Executive,4,106660,Non-Travel,19,Technical Degree,Married,Yes,4,2,2,5,4,2019-02-14,,2023-02-14,No
+PILOT-0165,34,Female,Sales,Sales Representative,1,39702,Travel_Frequently,11,Medical,Married,No,2,2,3,1,0,2023-03-08,,2023-03-08,No
+PILOT-0166,51,Female,Human Resources,Human Resources,2,72785,Travel_Frequently,5,Life Sciences,Single,Yes,4,4,3,21,4,2019-04-20,2023-04-20,2023-04-20,Yes
+PILOT-0167,26,Male,Research & Development,Healthcare Representative,1,39499,Travel_Rarely,3,Marketing,Single,Yes,1,2,3,1,1,2022-05-19,,2023-05-19,No
+PILOT-0168,46,Male,Sales,Sales Executive,2,84001,Travel_Rarely,20,Medical,Single,No,1,1,3,12,11,2012-06-17,,2023-06-17,No
+PILOT-0169,26,Female,Research & Development,Healthcare Representative,4,122364,Travel_Rarely,23,Life Sciences,Single,No,3,4,3,6,2,2021-01-19,2023-01-19,2023-01-19,Yes
+PILOT-0170,22,Female,Human Resources,Manager,2,56622,Travel_Frequently,1,Medical,Married,No,4,1,3,2,2,2021-02-15,,2023-02-15,No
+PILOT-0171,59,Male,Sales,Sales Representative,2,88543,Travel_Rarely,23,Technical Degree,Divorced,Yes,1,2,3,32,10,2013-03-23,,2023-03-23,No
+PILOT-0172,35,Male,Sales,Sales Representative,2,54486,Travel_Rarely,9,Technical Degree,Divorced,No,2,4,3,11,0,2023-04-10,,2023-04-10,No
+PILOT-0173,27,Female,Sales,Sales Representative,3,88994,Travel_Frequently,12,Medical,Divorced,No,4,3,3,3,3,2020-05-09,,2023-05-09,No
+PILOT-0174,27,Male,Research & Development,Laboratory Technician,4,107895,Non-Travel,28,Medical,Divorced,No,2,3,1,6,3,2020-06-01,,2023-06-01,No
+PILOT-0175,34,Male,Research & Development,Manager,1,68378,Travel_Rarely,17,Medical,Married,No,1,1,4,15,14,2009-01-02,,2023-01-02,No
+PILOT-0176,30,Male,Sales,Sales Executive,2,75483,Travel_Rarely,27,Life Sciences,Single,No,1,1,3,12,2,2021-02-19,2023-02-19,2023-02-19,Yes
+PILOT-0177,43,Female,Research & Development,Laboratory Technician,5,121207,Non-Travel,23,Marketing,Divorced,No,3,4,3,4,2,2021-03-01,,2023-03-01,No
+PILOT-0178,35,Female,Sales,Sales Executive,3,110099,Travel_Rarely,26,Human Resources,Divorced,No,1,2,3,14,9,2014-04-27,,2023-04-27,No
+PILOT-0179,50,Male,Sales,Sales Representative,5,161728,Non-Travel,4,Marketing,Divorced,No,1,1,3,20,14,2009-05-09,,2023-05-09,No
+PILOT-0180,29,Female,Sales,Sales Representative,5,153102,Travel_Rarely,27,Technical Degree,Single,No,2,2,2,7,5,2018-06-10,,2023-06-10,No
+PILOT-0181,28,Male,Sales,Sales Representative,1,38786,Non-Travel,29,Human Resources,Divorced,No,2,2,2,4,3,2020-01-17,,2023-01-17,No
+PILOT-0182,51,Male,Sales,Sales Executive,1,43863,Travel_Rarely,10,Human Resources,Divorced,No,3,4,2,12,1,2022-02-03,,2023-02-03,No
+PILOT-0183,35,Female,Human Resources,Manager,2,55567,Travel_Rarely,1,Human Resources,Married,Yes,3,1,1,10,3,2020-03-18,2023-03-18,2023-03-18,Yes
+PILOT-0184,47,Female,Sales,Sales Representative,5,164007,Travel_Rarely,1,Medical,Married,No,2,1,2,18,6,2017-04-02,,2023-04-02,No
+PILOT-0185,52,Female,Research & Development,Manager,3,73755,Travel_Rarely,29,Technical Degree,Divorced,No,4,2,3,17,1,2022-05-23,2023-05-23,2023-05-23,Yes
+PILOT-0186,39,Female,Research & Development,Research Scientist,3,100472,Travel_Frequently,27,Life Sciences,Divorced,No,1,3,2,13,2,2021-06-07,,2023-06-07,No
+PILOT-0187,35,Female,Research & Development,Healthcare Representative,2,57382,Travel_Rarely,14,Marketing,Married,Yes,1,2,2,4,3,2020-01-07,,2023-01-07,No
+PILOT-0188,54,Male,Research & Development,Manager,1,46338,Travel_Rarely,13,Human Resources,Single,No,4,2,2,10,8,2015-02-01,,2023-02-01,No
+PILOT-0189,54,Female,Sales,Sales Executive,5,154349,Travel_Rarely,5,Marketing,Divorced,No,3,1,3,13,13,2010-03-22,,2023-03-22,No
+PILOT-0190,42,Male,Research & Development,Healthcare Representative,2,103756,Travel_Frequently,17,Marketing,Married,Yes,4,3,3,19,17,2006-04-03,,2023-04-03,No
+PILOT-0191,41,Male,Sales,Sales Representative,1,47696,Travel_Rarely,28,Life Sciences,Divorced,No,1,3,2,2,2,2021-05-17,,2023-05-17,No
+PILOT-0192,30,Male,Sales,Sales Executive,2,71983,Travel_Frequently,13,Marketing,Married,No,2,4,1,8,5,2018-06-27,,2023-06-27,No
+PILOT-0193,57,Male,Research & Development,Research Scientist,1,58802,Travel_Rarely,28,Technical Degree,Single,No,2,2,3,30,10,2013-01-04,,2023-01-04,No
+PILOT-0194,54,Female,Research & Development,Manager,1,56476,Travel_Rarely,19,Marketing,Divorced,Yes,4,4,2,28,13,2010-02-06,,2023-02-06,No
+PILOT-0195,57,Female,Sales,Sales Executive,1,68037,Travel_Rarely,4,Life Sciences,Divorced,No,4,1,2,34,12,2011-03-18,,2023-03-18,No
+PILOT-0196,59,Female,Research & Development,Healthcare Representative,1,55196,Travel_Rarely,12,Medical,Divorced,No,1,4,3,20,6,2017-04-25,,2023-04-25,No
+PILOT-0197,24,Female,Research & Development,Manager,2,63685,Travel_Rarely,19,Medical,Single,No,4,3,3,2,2,2021-05-16,,2023-05-16,No
+PILOT-0198,49,Female,Human Resources,Human Resources,2,102140,Travel_Rarely,25,Life Sciences,Divorced,No,1,4,3,24,14,2009-06-23,,2023-06-23,No
+PILOT-0199,34,Female,Sales,Sales Executive,3,103925,Travel_Rarely,28,Technical Degree,Divorced,No,3,1,3,8,6,2017-01-27,,2023-01-27,No
+PILOT-0200,43,Male,Sales,Sales Representative,3,136851,Travel_Rarely,26,Life Sciences,Married,No,1,2,4,23,17,2006-02-13,,2023-02-13,No
+PILOT-0201,42,Female,Sales,Sales Representative,1,43461,Travel_Rarely,7,Medical,Divorced,No,2,4,2,18,4,2019-03-21,,2023-03-21,No
+PILOT-0202,37,Female,Sales,Sales Representative,4,111988,Travel_Rarely,10,Marketing,Single,No,2,2,3,10,2,2021-04-14,,2023-04-14,No
+PILOT-0203,33,Male,Sales,Sales Executive,1,48727,Travel_Rarely,24,Human Resources,Married,Yes,2,4,3,6,4,2019-05-06,,2023-05-06,No
+PILOT-0204,25,Female,Sales,Sales Executive,2,65604,Travel_Rarely,20,Medical,Divorced,No,2,3,3,7,3,2020-06-26,,2023-06-26,No
+PILOT-0205,33,Male,Sales,Sales Representative,2,58807,Non-Travel,29,Life Sciences,Single,Yes,4,2,3,4,0,2023-01-07,,2023-01-07,No
+PILOT-0206,43,Male,Research & Development,Manager,2,61971,Travel_Frequently,20,Marketing,Divorced,Yes,2,3,4,11,3,2020-02-18,,2023-02-18,No
+PILOT-0207,26,Female,Research & Development,Research Scientist,2,54641,Travel_Frequently,1,Marketing,Married,No,4,4,4,3,1,2022-03-10,2023-03-10,2023-03-10,Yes
+PILOT-0208,55,Female,Research & Development,Laboratory Technician,2,75731,Travel_Rarely,25,Medical,Single,No,1,1,3,20,4,2019-04-10,,2023-04-10,No
+PILOT-0209,48,Male,Sales,Sales Representative,1,45058,Non-Travel,9,Human Resources,Divorced,No,1,3,3,12,7,2016-05-17,,2023-05-17,No
+PILOT-0210,50,Female,Sales,Sales Executive,3,87113,Travel_Rarely,26,Medical,Single,No,1,3,4,10,2,2021-06-08,,2023-06-08,No
+PILOT-0211,56,Male,Sales,Sales Executive,3,137854,Travel_Frequently,3,Technical Degree,Married,Yes,3,2,3,36,17,2006-01-14,,2023-01-14,No
+PILOT-0212,39,Female,Sales,Sales Executive,2,76124,Travel_Frequently,5,Life Sciences,Single,No,2,3,2,2,2,2021-02-01,,2023-02-01,No
+PILOT-0213,48,Female,Research & Development,Laboratory Technician,2,73686,Travel_Rarely,8,Human Resources,Single,No,2,1,3,25,1,2022-03-26,,2023-03-26,No
+PILOT-0214,34,Male,Research & Development,Manager,1,40534,Travel_Rarely,5,Human Resources,Divorced,Yes,4,3,3,7,3,2020-04-25,,2023-04-25,No
+PILOT-0215,35,Male,Human Resources,Manager,2,84525,Travel_Rarely,11,Technical Degree,Divorced,No,1,2,3,16,14,2009-05-08,,2023-05-08,No
+PILOT-0216,48,Male,Human Resources,Manager,5,167386,Travel_Frequently,21,Human Resources,Single,No,3,3,3,12,8,2015-06-22,2023-06-22,2023-06-22,Yes
+PILOT-0217,47,Female,Sales,Sales Executive,2,58786,Travel_Rarely,17,Marketing,Divorced,Yes,2,3,3,7,3,2020-01-23,,2023-01-23,No
+PILOT-0218,42,Male,Research & Development,Laboratory Technician,1,41152,Travel_Rarely,13,Human Resources,Divorced,No,2,2,3,5,0,2023-02-05,2023-02-05,2023-02-05,Yes
+PILOT-0219,50,Male,Sales,Sales Representative,3,110313,Non-Travel,7,Life Sciences,Married,No,1,2,3,17,12,2011-03-03,,2023-03-03,No
+PILOT-0220,26,Male,Sales,Sales Executive,4,103601,Travel_Rarely,10,Life Sciences,Married,No,3,2,2,7,4,2019-04-09,,2023-04-09,No
+PILOT-0221,31,Male,Research & Development,Research Scientist,1,33802,Travel_Rarely,2,Technical Degree,Divorced,No,3,4,3,3,0,2023-05-26,,2023-05-26,No
+PILOT-0222,40,Male,Research & Development,Research Scientist,2,71666,Non-Travel,23,Technical Degree,Divorced,No,1,1,3,15,8,2015-06-17,,2023-06-17,No
+PILOT-0223,26,Female,Sales,Sales Executive,2,70134,Travel_Rarely,17,Technical Degree,Married,Yes,4,1,3,4,4,2019-01-19,2023-01-19,2023-01-19,Yes
+PILOT-0224,32,Male,Sales,Sales Executive,1,48177,Travel_Frequently,7,Marketing,Married,No,2,3,3,10,5,2018-02-20,,2023-02-20,No
+PILOT-0225,35,Female,Human Resources,Human Resources,3,77991,Travel_Rarely,20,Human Resources,Married,No,2,2,3,1,1,2022-03-04,,2023-03-04,No
+PILOT-0226,43,Male,Sales,Sales Executive,3,124467,Travel_Frequently,28,Human Resources,Married,No,2,3,2,22,16,2007-04-14,,2023-04-14,No
+PILOT-0227,49,Female,Sales,Sales Executive,3,135837,Travel_Rarely,6,Human Resources,Single,No,3,1,4,27,17,2006-05-18,,2023-05-18,No
+PILOT-0228,49,Female,Research & Development,Research Scientist,2,96915,Travel_Rarely,26,Human Resources,Married,No,1,3,3,17,12,2011-06-22,,2023-06-22,No
+PILOT-0229,47,Female,Sales,Sales Representative,4,95824,Travel_Frequently,8,Life Sciences,Single,Yes,2,2,3,22,0,2023-01-22,,2023-01-22,No
+PILOT-0230,53,Male,Sales,Sales Representative,1,38264,Travel_Frequently,7,Technical Degree,Single,No,1,4,3,13,4,2019-02-06,2023-02-06,2023-02-06,Yes
+PILOT-0231,32,Male,Sales,Sales Representative,5,141957,Non-Travel,1,Medical,Married,No,2,1,3,1,0,2023-03-18,,2023-03-18,No
+PILOT-0232,51,Male,Sales,Sales Executive,1,44493,Travel_Rarely,11,Human Resources,Single,No,2,3,3,22,3,2020-04-25,,2023-04-25,No
+PILOT-0233,42,Female,Sales,Sales Representative,5,126936,Travel_Frequently,13,Human Resources,Married,Yes,4,4,2,8,1,2022-05-17,,2023-05-17,No
+PILOT-0234,39,Male,Human Resources,Human Resources,1,47829,Non-Travel,23,Technical Degree,Single,No,2,1,3,9,1,2022-06-22,,2023-06-22,No
+PILOT-0235,35,Male,Research & Development,Healthcare Representative,1,70885,Travel_Frequently,12,Technical Degree,Single,Yes,3,3,3,17,16,2007-01-12,,2023-01-12,No
+PILOT-0236,49,Male,Research & Development,Healthcare Representative,4,107107,Travel_Rarely,9,Technical Degree,Divorced,No,3,2,3,3,3,2020-02-01,,2023-02-01,No
+PILOT-0237,24,Female,Sales,Sales Executive,4,115628,Travel_Rarely,24,Marketing,Married,Yes,3,1,2,3,3,2020-03-02,,2023-03-02,No
+PILOT-0238,54,Male,Sales,Sales Executive,2,64810,Travel_Frequently,18,Technical Degree,Married,No,3,1,2,22,2,2021-04-21,,2023-04-21,No
+PILOT-0239,32,Female,Sales,Sales Representative,2,61952,Travel_Rarely,24,Human Resources,Single,No,4,1,3,2,2,2021-05-12,,2023-05-12,No
+PILOT-0240,49,Male,Sales,Sales Representative,2,54454,Non-Travel,3,Technical Degree,Married,Yes,3,2,2,24,0,2023-06-17,2023-06-17,2023-06-17,Yes
+PILOT-0241,27,Female,Research & Development,Laboratory Technician,3,109462,Travel_Frequently,2,Technical Degree,Divorced,Yes,1,4,3,9,8,2015-01-09,,2023-01-09,No
+PILOT-0242,59,Female,Research & Development,Research Scientist,3,95882,Travel_Frequently,24,Medical,Divorced,Yes,2,1,1,2,2,2021-02-14,2023-02-14,2023-02-14,Yes
+PILOT-0243,41,Female,Research & Development,Laboratory Technician,1,60919,Travel_Frequently,12,Life Sciences,Married,No,3,2,3,8,8,2015-03-03,,2023-03-03,No
+PILOT-0244,41,Female,Sales,Sales Representative,2,78860,Travel_Frequently,22,Medical,Married,No,4,2,4,16,16,2007-04-04,,2023-04-04,No
+PILOT-0245,50,Male,Sales,Sales Representative,3,121438,Travel_Rarely,19,Life Sciences,Single,No,3,1,3,24,11,2012-05-12,2023-05-12,2023-05-12,Yes
+PILOT-0246,58,Male,Human Resources,Manager,2,82038,Travel_Frequently,3,Life Sciences,Divorced,Yes,4,4,3,6,5,2018-06-27,,2023-06-27,No
+PILOT-0247,34,Female,Human Resources,Human Resources,2,93399,Travel_Rarely,15,Technical Degree,Single,No,2,1,3,10,10,2013-01-17,,2023-01-17,No
+PILOT-0248,41,Female,Sales,Sales Executive,4,101038,Travel_Frequently,28,Technical Degree,Divorced,No,4,4,3,15,3,2020-02-12,,2023-02-12,No
+PILOT-0249,56,Male,Sales,Sales Executive,1,53805,Travel_Frequently,29,Medical,Divorced,Yes,3,4,2,18,7,2016-03-19,,2023-03-19,No
+PILOT-0250,27,Female,Sales,Sales Executive,1,39609,Travel_Rarely,24,Human Resources,Married,No,2,2,3,2,1,2022-04-08,,2023-04-08,No
+PILOT-0251,35,Female,Sales,Sales Representative,3,95050,Travel_Frequently,24,Technical Degree,Single,No,4,1,4,2,0,2023-05-02,2023-05-02,2023-05-02,Yes
+PILOT-0252,27,Female,Sales,Sales Representative,1,57833,Travel_Rarely,23,Life Sciences,Divorced,Yes,1,1,3,9,9,2014-06-01,,2023-06-01,No
+PILOT-0253,37,Male,Sales,Sales Executive,5,125769,Travel_Rarely,7,Life Sciences,Single,No,1,2,3,4,4,2019-01-15,,2023-01-15,No
+PILOT-0254,50,Female,Sales,Sales Executive,2,72911,Non-Travel,8,Human Resources,Single,No,2,1,1,22,1,2022-02-21,,2023-02-21,No
+PILOT-0255,26,Female,Sales,Sales Executive,2,55084,Travel_Rarely,15,Human Resources,Single,No,2,2,3,5,0,2023-03-20,,2023-03-20,No
+PILOT-0256,51,Female,Research & Development,Healthcare Representative,1,45468,Travel_Frequently,2,Human Resources,Single,Yes,3,1,2,20,1,2022-04-06,,2023-04-06,No
+PILOT-0257,33,Female,Human Resources,Human Resources,1,40564,Travel_Frequently,12,Marketing,Divorced,No,1,1,1,7,3,2020-05-19,,2023-05-19,No
+PILOT-0258,57,Female,Research & Development,Healthcare Representative,2,78461,Travel_Rarely,13,Marketing,Divorced,No,1,3,3,32,11,2012-06-24,,2023-06-24,No
+PILOT-0259,32,Male,Sales,Sales Executive,5,171591,Travel_Rarely,20,Technical Degree,Married,No,4,4,3,8,8,2015-01-08,,2023-01-08,No
+PILOT-0260,37,Male,Sales,Sales Executive,1,38110,Travel_Frequently,8,Marketing,Single,No,3,1,4,9,1,2022-02-25,,2023-02-25,No
+PILOT-0261,54,Female,Research & Development,Manager,1,39753,Travel_Frequently,21,Human Resources,Single,No,3,2,2,9,4,2019-03-28,,2023-03-28,No
+PILOT-0262,34,Male,Sales,Sales Representative,3,95359,Travel_Rarely,8,Human Resources,Divorced,No,1,1,3,5,2,2021-04-14,,2023-04-14,No
+PILOT-0263,42,Male,Sales,Sales Representative,3,87941,Travel_Rarely,22,Medical,Divorced,Yes,3,4,3,6,0,2023-05-15,,2023-05-15,No
+PILOT-0264,59,Male,Research & Development,Manager,1,40979,Travel_Frequently,28,Human Resources,Single,Yes,1,1,2,7,5,2018-06-12,,2023-06-12,No
+PILOT-0265,53,Female,Research & Development,Research Scientist,5,145549,Non-Travel,2,Technical Degree,Divorced,Yes,4,1,3,15,1,2022-01-02,,2023-01-02,No
+PILOT-0266,39,Male,Sales,Sales Representative,1,57560,Travel_Rarely,20,Life Sciences,Divorced,No,3,4,1,7,7,2016-02-04,,2023-02-04,No
+PILOT-0267,58,Male,Sales,Sales Representative,3,100427,Travel_Rarely,1,Life Sciences,Married,Yes,1,4,2,13,5,2018-03-17,,2023-03-17,No
+PILOT-0268,28,Male,Sales,Sales Executive,1,39181,Travel_Rarely,7,Life Sciences,Single,No,4,2,3,3,2,2021-04-25,,2023-04-25,No
+PILOT-0269,22,Female,Research & Development,Healthcare Representative,2,64144,Travel_Rarely,19,Life Sciences,Single,Yes,2,2,3,2,0,2023-05-07,,2023-05-07,No
+PILOT-0270,39,Female,Research & Development,Healthcare Representative,1,53687,Travel_Rarely,1,Medical,Single,Yes,3,1,3,10,5,2018-06-22,,2023-06-22,No
+PILOT-0271,27,Female,Sales,Sales Executive,2,73765,Travel_Frequently,22,Marketing,Married,Yes,3,1,4,7,7,2016-01-28,,2023-01-28,No
+PILOT-0272,59,Male,Sales,Sales Representative,2,91017,Travel_Rarely,21,Life Sciences,Single,No,1,2,2,19,16,2007-02-20,,2023-02-20,No
+PILOT-0273,47,Female,Human Resources,Manager,1,36660,Travel_Rarely,1,Human Resources,Divorced,No,4,3,3,28,3,2020-03-04,,2023-03-04,No
+PILOT-0274,32,Female,Sales,Sales Executive,1,51602,Travel_Rarely,24,Human Resources,Married,No,1,3,4,14,4,2019-04-13,2023-04-13,2023-04-13,Yes
+PILOT-0275,33,Female,Sales,Sales Executive,2,60821,Travel_Rarely,4,Technical Degree,Divorced,No,1,4,3,7,4,2019-05-02,,2023-05-02,No
+PILOT-0276,52,Male,Sales,Sales Representative,3,110797,Travel_Rarely,22,Human Resources,Married,No,1,2,3,18,15,2008-06-16,,2023-06-16,No
+PILOT-0277,34,Female,Sales,Sales Representative,5,116221,Travel_Rarely,25,Medical,Divorced,Yes,3,4,2,3,0,2023-01-01,,2023-01-01,No
+PILOT-0278,33,Male,Sales,Sales Representative,2,69817,Non-Travel,1,Human Resources,Single,No,2,3,3,1,1,2022-02-15,,2023-02-15,No
+PILOT-0279,36,Female,Sales,Sales Representative,5,142552,Travel_Rarely,16,Marketing,Divorced,No,3,2,3,7,1,2022-03-28,2023-03-28,2023-03-28,Yes
+PILOT-0280,34,Female,Sales,Sales Executive,3,86668,Travel_Rarely,13,Marketing,Divorced,No,1,1,1,3,0,2023-04-26,,2023-04-26,No
+PILOT-0281,31,Female,Research & Development,Healthcare Representative,4,91099,Travel_Rarely,15,Technical Degree,Single,Yes,1,4,2,4,0,2023-05-11,,2023-05-11,No
+PILOT-0282,25,Female,Research & Development,Healthcare Representative,3,86810,Travel_Rarely,19,Human Resources,Married,Yes,4,4,2,5,5,2018-06-21,,2023-06-21,No
+PILOT-0283,23,Female,Research & Development,Manager,3,83935,Travel_Rarely,28,Human Resources,Divorced,No,3,4,3,2,2,2021-01-07,,2023-01-07,No
+PILOT-0284,50,Female,Sales,Sales Executive,2,78344,Non-Travel,20,Marketing,Divorced,No,3,3,3,13,5,2018-02-13,,2023-02-13,No
+PILOT-0285,42,Female,Sales,Sales Representative,3,87155,Travel_Rarely,1,Marketing,Single,No,3,1,2,19,9,2014-03-12,,2023-03-12,No
+PILOT-0286,49,Female,Research & Development,Laboratory Technician,1,48229,Travel_Rarely,21,Human Resources,Married,No,4,2,3,30,9,2014-04-08,,2023-04-08,No
+PILOT-0287,39,Male,Research & Development,Laboratory Technician,3,85326,Travel_Rarely,7,Medical,Divorced,No,3,3,3,6,0,2023-05-02,,2023-05-02,No
+PILOT-0288,29,Female,Research & Development,Healthcare Representative,3,90838,Travel_Rarely,1,Technical Degree,Divorced,No,1,1,3,3,0,2023-06-24,,2023-06-24,No
+PILOT-0289,57,Male,Sales,Sales Representative,5,164985,Travel_Rarely,11,Technical Degree,Divorced,No,1,1,3,32,6,2017-01-26,2023-01-26,2023-01-26,Yes
+PILOT-0290,26,Male,Sales,Sales Executive,5,129641,Travel_Rarely,17,Life Sciences,Divorced,No,2,3,3,8,7,2016-02-13,2023-02-13,2023-02-13,Yes
+PILOT-0291,56,Female,Human Resources,Manager,2,64534,Travel_Rarely,18,Medical,Divorced,No,3,1,3,5,0,2023-03-25,2023-03-25,2023-03-25,Yes
+PILOT-0292,26,Female,Research & Development,Manager,1,46601,Travel_Rarely,27,Life Sciences,Married,No,3,3,3,7,1,2022-04-23,,2023-04-23,No
+PILOT-0293,44,Female,Sales,Sales Representative,1,45368,Travel_Rarely,13,Medical,Single,Yes,2,2,3,4,0,2023-05-28,,2023-05-28,No
+PILOT-0294,39,Female,Sales,Sales Executive,2,67753,Travel_Rarely,5,Human Resources,Single,No,3,2,3,20,10,2013-06-26,,2023-06-26,No
+PILOT-0295,27,Male,Sales,Sales Representative,3,82190,Non-Travel,6,Life Sciences,Single,No,1,3,2,2,0,2023-01-06,,2023-01-06,No
+PILOT-0296,25,Female,Research & Development,Healthcare Representative,5,148922,Non-Travel,10,Human Resources,Single,No,4,2,2,1,0,2023-02-26,,2023-02-26,No
+PILOT-0297,43,Female,Sales,Sales Representative,3,114569,Travel_Rarely,18,Life Sciences,Single,No,1,1,1,19,7,2016-03-22,,2023-03-22,No
+PILOT-0298,31,Female,Sales,Sales Executive,3,76501,Travel_Frequently,3,Human Resources,Married,No,1,4,2,2,0,2023-04-04,,2023-04-04,No
+PILOT-0299,22,Female,Research & Development,Healthcare Representative,2,60020,Travel_Rarely,18,Human Resources,Divorced,No,1,2,2,3,3,2020-05-26,,2023-05-26,No
+PILOT-0300,35,Female,Research & Development,Manager,3,85297,Non-Travel,14,Technical Degree,Divorced,No,4,1,3,6,0,2023-06-24,,2023-06-24,No

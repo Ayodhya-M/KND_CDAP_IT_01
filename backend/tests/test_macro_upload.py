@@ -25,6 +25,7 @@ class FakeSupabaseClient:
 
 @pytest.fixture
 def client(monkeypatch):
+    monkeypatch.setattr("app.routers.macro.find_existing_upload", lambda *args: None)
     fake = FakeSupabaseClient()
     monkeypatch.setattr("app.routers.macro.get_supabase_client", lambda: fake)
     return TestClient(app), fake
@@ -32,6 +33,16 @@ def client(monkeypatch):
 
 def sample_row():
     return {"Date": "2023-03-01", "Year": "2023", "Month": "3", "Inflation_Rate_Percent": "50.3", "CPI_Index": "108.59", "Unemployment_Rate_Percent": "4.8", "Policy_Interest_Rate_Percent": "16.5", "USD_LKR_Exchange_Rate": "355", "GDP_Growth_Rate_Percent": "-10.0"}
+
+
+def test_duplicate_upload_reuses_existing_dataset(client, monkeypatch):
+    test_client, fake = client
+    monkeypatch.setattr('app.routers.macro.find_existing_upload', lambda *args: 'existing-macro')
+    response = post_csv(test_client, sample_csv(), 'renamed.csv')
+    assert response.status_code == 200
+    assert response.json()['duplicate_upload'] is True
+    assert response.json()['upload_id'] == 'existing-macro'
+    assert fake.calls == []
 
 
 def sample_csv(rows=None, columns=None):

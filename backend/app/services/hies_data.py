@@ -8,13 +8,18 @@ from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 
-from app.services.eesi import calculate
+from app.services.eesi import calculate, FORMULAS
 
 PRIVATE_ROOT = Path(__file__).resolve().parents[3] / 'data' / 'private'
 DATABASE = PRIVATE_ROOT / 'hies2019_app.sqlite3'
 PREPARED = PRIVATE_ROOT / 'hies2019_100' / 'eesi_inputs_100_clean.csv'
 BOUNDS = {'inflation': (0.4, 6.2), 'cpi': (126.4, 135.0), 'unemployment': (4.5, 5.1)}
 VERSION = 'hies2019-pp1-inputs-v1'
+
+
+def calculate_scenario(salary, inflation, cpi, unemployment, reference_salary=50000):
+    return calculate(salary, inflation, cpi, unemployment, reference_salary,
+                     bounds=BOUNDS, version=VERSION)
 FIELDS = {
     'salary': ('WagesMonthlyReported', True),
     'extra_pay': ('ExtraEmploymentPayMonthlyReported', False),
@@ -98,11 +103,17 @@ def get_dataset():
             records = [json.loads(row[0]) for row in connection.execute('SELECT payload FROM hies_records ORDER BY sample_id')]
             metadata = connection.execute('SELECT imported_at FROM hies_import WHERE id = 1').fetchone()
             imported_at = metadata[0] if metadata else None
+    for record in records:
+        result = calculate_scenario(record['salary'], record['inflation'], record['cpi'], record['unemployment'])
+        record.update(scores=result['scores'], breakdown=result)
     return {
         'record_count': len(records), 'storage': 'private_local', 'imported_at': imported_at,
         'prepared_available': PREPARED.is_file(), 'records': records,
         'complete_income_count': sum(r['total_income'] is not None for r in records),
         'debt_payment_count': sum(r['household_debt_payments'] is not None for r in records),
         'formula_version': VERSION,
+        'metadata': {'formulas': FORMULAS, 'bounds': BOUNDS, 'reference_salary': 50000,
+                     'reference_period': 'December 2018-December 2019',
+                     'cpi_base': 'NCPI 2013=100', 'score_scale': '0-100 exploratory index'},
         'note': '100-person HIES 2019 sample, separate from organizational HR. Candidate scores use wages and economic indicators only. Expenses and debt are household-level. Missing values are not zero.',
     }

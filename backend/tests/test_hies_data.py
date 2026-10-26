@@ -70,3 +70,36 @@ def test_invalid_import_preserves_previous_sample(local_store, failure):
     write_sample(rows)
     assert local_store.post('/api/v1/eesi/hies/import-prepared').status_code == 422
     assert local_store.get('/api/v1/eesi/hies').json()['record_count'] == 100
+
+
+def test_breakdown_and_scenario_use_same_historical_profile(local_store):
+    write_sample(synthetic_rows())
+    data = local_store.post('/api/v1/eesi/hies/import-prepared').json()
+    record = data['records'][0]
+    payload = {key: record[key] for key in ('salary', 'inflation', 'cpi', 'unemployment')}
+    response = local_store.post('/api/v1/eesi/hies/scenario', json=payload)
+    assert response.status_code == 200
+    result = response.json()
+    assert result['scores'] == record['scores']
+    assert result['version'] == hies_data.VERSION
+    for name, score in result['scores'].items():
+        assert sum(record['breakdown']['contributions'][name].values()) == pytest.approx(score)
+    higher_salary = local_store.post('/api/v1/eesi/hies/scenario', json={**payload, 'salary': 100000}).json()
+    assert higher_salary['scores']['economic'] == result['scores']['economic']
+    assert higher_salary['scores']['additive'] < result['scores']['additive']
+    assert local_store.get('/api/v1/eesi/hies').json()['records'][0]['salary'] == 50000
+
+
+@pytest.mark.parametrize('changes', [{'salary': 0}, {'cpi': -1}, {'unemployment': 101}])
+def test_invalid_hies_scenario_inputs(local_store, changes):
+    payload = {'salary': 50000, 'inflation': 2.4, 'cpi': 126.7, 'unemployment': 4.7, **changes}
+    assert local_store.post('/api/v1/eesi/hies/scenario', json=payload).status_code == 422
+
+
+def test_out_of_reference_scenario_exposes_clipping(local_store):
+    response = local_store.post('/api/v1/eesi/hies/scenario', json={
+        'salary': 50000, 'inflation': 30, 'cpi': 126.7, 'unemployment': 4.7})
+    result = response.json()
+    assert response.status_code == 200
+    assert result['components']['inflation'] == 1
+    assert any('inflation' in warning for warning in result['warnings'])

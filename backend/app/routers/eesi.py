@@ -5,7 +5,7 @@ from app.services.eesi import calculate, metadata, pilot_preview
 from app.services.eesi_real import REAL_BOUNDS, REAL_VERSION, load_real_summary
 from typing import Literal
 import sqlite3
-from app.services.hies_data import get_dataset, import_prepared
+from app.services.hies_data import get_dataset, import_prepared, calculate_scenario
 
 router = APIRouter(prefix="/eesi", tags=["EESI proof of concept"])
 
@@ -37,6 +37,19 @@ class ScenarioRequest(BaseModel):
     unemployment: float = Field(ge=0, le=100, allow_inf_nan=False)
     reference_salary: float = Field(default=50000, gt=0, allow_inf_nan=False)
     reference_profile: Literal["pilot", "lfs2024"] = "pilot"
+
+
+class HiesScenarioRequest(BaseModel):
+    salary: float = Field(gt=0, allow_inf_nan=False)
+    inflation: float = Field(allow_inf_nan=False)
+    cpi: float = Field(gt=0, allow_inf_nan=False)
+    unemployment: float = Field(ge=0, le=100, allow_inf_nan=False)
+    reference_salary: float = Field(default=50000, gt=0, allow_inf_nan=False)
+
+
+@router.post('/hies/scenario')
+def hies_scenario(payload: HiesScenarioRequest):
+    return calculate_scenario(**payload.model_dump())
 
 
 @router.get("/metadata")

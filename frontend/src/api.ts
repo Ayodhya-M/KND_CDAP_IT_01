@@ -1,14 +1,29 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1'
 
+export type HiesCalculation = {
+  scores: Record<string, number>; components: Record<string, number>
+  contributions: Record<string, Record<string, number>>; warnings: string[]; version: string
+}
+export type HiesScenario = { salary: number; inflation: number; cpi: number; unemployment: number; reference_salary: number }
 export type HiesRecord = {
   sample_id: string; survey_month: string; economic_month: string
   salary: number; extra_pay: number | null; bonus_monthly: number | null
   household_expenditure: number; household_debt_payments: number | null
   scores: Record<string, number>
+  total_income: number | null; household_food: number; household_nonfood: number
+  outstanding_debt_known: number | null; quality_flags: string[]
+  inflation: number; cpi: number; unemployment: number; breakdown: HiesCalculation
 }
 export type HiesDataset = {
   record_count: number; prepared_available: boolean; imported_at: string | null
   records: HiesRecord[]; complete_income_count: number; debt_payment_count: number; note: string
+  metadata: { formulas: { id: string; name: string; expression: string; rationale: string }[]; bounds: Record<string, number[]>; reference_salary: number; reference_period: string; cpi_base: string }
+}
+export async function calculateHiesScenario(payload: HiesScenario): Promise<HiesCalculation> {
+  const response = await fetch(`${API_BASE_URL}/eesi/hies/scenario`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+  const body = await response.json()
+  if (!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : 'Enter valid scenario values.')
+  return body as HiesCalculation
 }
 export async function getHiesDataset(importPrepared = false): Promise<HiesDataset> {
   const response = await fetch(`${API_BASE_URL}/eesi/hies${importPrepared ? '/import-prepared' : ''}`, { method: importPrepared ? 'POST' : 'GET' })
@@ -33,6 +48,8 @@ export type HrUploadError = {
 }
 
 export type HrUploadSummary = {
+  duplicate_upload?: boolean
+  message?: string
   status: 'success' | 'validation_failed'
   file_name: string
   total_records?: number
@@ -46,6 +63,8 @@ export type HrUploadSummary = {
 }
 
 export type MacroUploadSummary = {
+  duplicate_upload?: boolean
+  message?: string
   status: 'success' | 'validation_failed'
   file_name: string
   total_records?: number
@@ -227,13 +246,14 @@ export async function uploadMacroeconomicDataset(file: File): Promise<MacroUploa
 }
 
 export async function getMappingUploadChoices(): Promise<{
+  unique_employee_count: number
   hr_uploads: MappingUploadChoice[]
   economic_uploads: MappingUploadChoice[]
 }> {
   const response = await fetch(`${API_BASE_URL}/temporal-mapping/uploads`)
   const body = await response.json().catch(() => ({})) as ApiErrorBody
   if (!response.ok) throw new UploadRequestError(body)
-  return body as unknown as { hr_uploads: MappingUploadChoice[]; economic_uploads: MappingUploadChoice[] }
+  return body as unknown as { hr_uploads: MappingUploadChoice[]; economic_uploads: MappingUploadChoice[]; unique_employee_count: number }
 }
 
 export async function createTemporalMappingPreview(hrUploadId: string, economicUploadId: string): Promise<TemporalMappingPreview> {
