@@ -375,6 +375,12 @@ export type Module3Prediction = {
   interpretation: string
 }
 
+export type Module3FeatureRecord = { Age: number; MonthlyIncome: number; OverTime: string; JobSatisfaction: number; JobLevel: number; YearsAtCompany: number; Department: string; EESI: number }
+export type Module3PilotRecord = { employee_id: string; month: string; record: Module3FeatureRecord }
+export function getModule3PilotRecords(): Promise<{ records: Module3PilotRecord[]; formula_id: string }> {
+  return module3Request('pilot-records')
+}
+
 export type Module3Evaluation = {
   metrics: Record<string, number | null>
   confusion_matrix: number[][]
