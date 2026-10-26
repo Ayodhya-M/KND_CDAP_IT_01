@@ -52,7 +52,7 @@ def export_contract() -> dict[str, object]:
 
 def build_pilot_export(formula_id: str, employee_count: int = 100) -> list[dict[str, str | float | int]]:
     if employee_count not in (100, 300):
-        raise ValueError('Select a supported 100- or 300-person synthetic pilot.')
+        raise ValueError('Choose the 100 or 300 employee synthetic pilot.')
     if formula_id not in SUPPORTED_FORMULA_IDS:
         supported = ", ".join(sorted(SUPPORTED_FORMULA_IDS))
         raise ValueError(f"Unsupported formula_id '{formula_id}'. Choose one of: {supported}.")
