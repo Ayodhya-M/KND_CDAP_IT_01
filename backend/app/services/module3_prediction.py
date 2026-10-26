@@ -45,6 +45,8 @@ def get_model_status() -> dict[str, Any]:
         "classes": metadata.get("classes", []),
         "feature_columns": metadata.get("feature_columns", []),
         "eesi_integration": metadata.get("eesi_integration", {}),
+        'source_rows': metadata.get('source_rows'),
+        'split': metadata.get('split'),
         "message": "Local synthetic-pilot model available. Outputs are technical evidence only.",
     }
 

@@ -37,7 +37,7 @@ export function WhatIfSimulator({ analysis, uploadId }: Props) {
     }
     setLoading(true); setError(''); setResult(null)
     try {
-      setResult(await simulateRetentionScenario(analysis.employee_id, changes, uploadId))
+      setResult(await simulateRetentionScenario(analysis.employee_id, changes, uploadId, analysis.metadata.data_mode === 'synthetic_demo_integration'))
     } catch (requestError) {
       setError(requestError instanceof RetentionRequestError ? requestError.message : 'The scenario could not be evaluated.')
     } finally {
@@ -47,7 +47,7 @@ export function WhatIfSimulator({ analysis, uploadId }: Props) {
 
   return <section className="retention-section what-if-section" aria-labelledby="what-if-heading">
     <div className="section-heading"><div><p className="eyebrow">Exploratory decision support</p><h2 id="what-if-heading">Illustrative What-if Simulator</h2></div><span className="prototype-chip">Not a validated forecast</span></div>
-    <p className="muted">Adjust supported values to see how the prototype recommendation rules respond. Employee records and turnover probability are not changed.</p>
+    <p className="muted">{analysis.metadata.data_mode === 'synthetic_demo_integration' ? 'Compare temporary model inputs with recalculated EESI and synthetic-model probabilities. Employee records remain unchanged; this is not a forecast.' : 'Adjust supported values to see how the prototype recommendation rules respond. Employee records and turnover probability are not changed.'}</p>
     <div className="scenario-setup">
       <div className="current-scenario">
         <div className="scenario-column-heading"><span>Current employee context</span><small>Read-only Module 1 values</small></div>
@@ -56,10 +56,10 @@ export function WhatIfSimulator({ analysis, uploadId }: Props) {
       <div className="proposed-scenario">
         <div className="scenario-column-heading"><span>Proposed scenario</span><small>Temporary values; never saved</small></div>
     <div className="scenario-form">
-      <label>Salary<input type="number" min="1" value={salary} onChange={(event) => setSalary(event.target.value)} /></label>
-      <label>Overtime<select value={overtime} onChange={(event) => setOvertime(event.target.value)}><option value="">Unavailable</option><option value="true">Yes</option><option value="false">No</option></select></label>
-      <label>Job satisfaction<select value={jobSatisfaction} onChange={(event) => setJobSatisfaction(event.target.value)}><option value="">Unavailable</option>{[1, 2, 3, 4].map((value) => <option key={value}>{value}</option>)}</select></label>
-      <label>Work-life balance<select value={workLifeBalance} onChange={(event) => setWorkLifeBalance(event.target.value)}><option value="">Unavailable</option>{[1, 2, 3, 4].map((value) => <option key={value}>{value}</option>)}</select></label>
+      <label>Salary<input disabled={loading} type="number" min="1" value={salary} onChange={(event) => { setSalary(event.target.value); setResult(null); setError('') } } /></label>
+      <label>Overtime<select disabled={loading} value={overtime} onChange={(event) => { setOvertime(event.target.value); setResult(null); setError('') } }><option value="">Unavailable</option><option value="true">Yes</option><option value="false">No</option></select></label>
+      <label>Job satisfaction<select disabled={loading} value={jobSatisfaction} onChange={(event) => { setJobSatisfaction(event.target.value); setResult(null); setError('') } }><option value="">Unavailable</option>{[1, 2, 3, 4].map((value) => <option key={value}>{value}</option>)}</select></label>
+      <label>Work-life balance<select disabled={loading} value={workLifeBalance} onChange={(event) => { setWorkLifeBalance(event.target.value); setResult(null); setError('') } }><option value="">Unavailable</option>{[1, 2, 3, 4].map((value) => <option key={value}>{value}</option>)}</select></label>
     </div>
     <button className="primary-button" type="button" disabled={loading} onClick={() => void runScenario()}>{loading ? 'Comparing…' : 'Compare Scenario'}</button>
     {error && <p className="scenario-error" role="alert">{error}</p>}
@@ -67,7 +67,7 @@ export function WhatIfSimulator({ analysis, uploadId }: Props) {
     </div>
     {result && <div className="scenario-results">
       <div className="scenario-warning"><strong>{result.label}</strong><p>{result.disclaimer}</p></div>
-      <div className="probability-comparison"><div><span>Current mock risk</span><strong>{Math.round(result.original_turnover_probability * 100)}%</strong></div><div><span>Scenario mock risk</span><strong>{Math.round(result.simulated_turnover_probability * 100)}%</strong></div><p>Difference: {result.probability_difference.toFixed(0)} percentage points (held constant by design)</p></div>
+      <div className="probability-comparison"><div><span>{analysis.metadata.data_mode === 'synthetic_demo_integration' ? 'Current model probability' : 'Current mock risk'}</span><strong>{Math.round(result.original_turnover_probability * 100)}%</strong></div><div><span>{analysis.metadata.data_mode === 'synthetic_demo_integration' ? 'Scenario model probability' : 'Scenario mock risk'}</span><strong>{Math.round(result.simulated_turnover_probability * 100)}%</strong></div><p>Difference: {result.probability_difference.toFixed(2)} percentage points {analysis.metadata.data_mode !== 'synthetic_demo_integration' && '(held constant by design)'}</p></div>
       <div className="comparison-grid">
         <RecommendationSummary title="Before" recommendations={result.original_recommendations} />
         <RecommendationSummary title="After illustrative rule check" recommendations={result.simulated_recommendations} />

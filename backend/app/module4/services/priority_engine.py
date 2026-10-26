@@ -30,10 +30,13 @@ class PriorityEngine:
         factor_contribution: float,
         economic_pressure_level: str,
         intervention_relevance: float,
+        economic_pressure_score: float | None = None,
     ) -> PriorityResult:
         risk = self._unit(turnover_probability)
         contribution = self._unit(abs(factor_contribution))
         pressure = PROTOTYPE_PRESSURE_SCORES.get(economic_pressure_level.strip().lower(), 0.0)
+        if economic_pressure_score is not None:
+            pressure = self._unit(economic_pressure_score)
         relevance = self._unit(intervention_relevance)
         raw_score = (
             risk * self.weights.turnover_risk

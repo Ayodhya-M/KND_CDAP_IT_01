@@ -24,7 +24,7 @@ function formatFeatureValue(value: unknown) {
   return String(value)
 }
 
-export function RiskFactorsList({ factors }: { factors: Module4RiskFactor[] }) {
+export function RiskFactorsList({ factors, demo = false }: { factors: Module4RiskFactor[]; demo?: boolean }) {
   return <section className="retention-section" aria-labelledby="risk-factors-heading">
     <div className="section-heading">
       <div><p className="eyebrow">Prediction explanation</p><h2 id="risk-factors-heading">Important Risk Factors</h2></div>
@@ -35,7 +35,7 @@ export function RiskFactorsList({ factors }: { factors: Module4RiskFactor[] }) {
       : <div className="risk-factor-list">{factors.map((factor, index) => <article className="risk-factor-row" key={`${factor.feature_name}-${index}`}>
         <span className="factor-rank" aria-hidden="true">{index + 1}</span>
         <div><strong>{formatFeatureName(factor.feature_name)}</strong><small>Current value: {formatFeatureValue(factor.feature_value)}</small></div>
-        <div className="factor-contribution"><span>Model Contribution</span><strong>{factor.contribution.toFixed(2)}</strong></div>
+        <div className="factor-contribution"><span>{demo ? 'Input sensitivity (pp)' : 'Model Contribution'}</span><strong>{(factor.contribution * (demo ? 100 : 1)).toFixed(2)}</strong></div>
       </article>)}</div>}
   </section>
 }
