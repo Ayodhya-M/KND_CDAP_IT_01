@@ -18,6 +18,7 @@ export function Module4Dashboard() {
   const [uploadId, setUploadId] = useState('')
   const [uploadsLoading, setUploadsLoading] = useState(true)
   const [uploadsError, setUploadsError] = useState('')
+  const [demo, setDemo] = useState(true)
 
   const loadUploads = async () => {
     setUploadsLoading(true)
@@ -25,7 +26,7 @@ export function Module4Dashboard() {
     try {
       const response = await getMappingUploadChoices()
       setUploads(response.hr_uploads)
-      setUploadId((current) => response.hr_uploads.some((upload) => upload.id === current) ? current : '')
+      setUploadId((current) => response.hr_uploads.some((upload) => upload.id === current) ? current : response.hr_uploads.find(upload => upload.record_count === 300)?.id ?? '')
     } catch {
       setUploads([])
       setUploadId('')
@@ -53,7 +54,7 @@ export function Module4Dashboard() {
 
     setLoading(true)
     try {
-      setResult(await getRetentionRecommendations(normalizedId, uploadId))
+      setResult(await getRetentionRecommendations(normalizedId, uploadId, demo))
       setEmployeeId(normalizedId)
     } catch (error) {
       setRequestError(error instanceof RetentionRequestError
@@ -71,18 +72,20 @@ export function Module4Dashboard() {
       <div><p className="eyebrow">Module 4 · Decision intelligence</p><h1>Retention Strategies</h1><p className="muted">Personalized, explainable retention actions that support informed HR review.</p></div>
       <span className="research-badge">Research prototype</span>
     </header>
+    <label className="eesi-field">Integration mode<select disabled={loading} value={demo ? 'demo' : 'configured'} onChange={event => { setDemo(event.target.value === 'demo'); setResult(null); setRequestError('') }}><option value="demo">Connected synthetic pilot: calculated EESI and saved turnover model</option><option value="configured">Configured providers (may use mock fixtures)</option></select></label>
+    {demo && <p className="muted">Choose the 300-person synthetic HR dataset. Risk bands remain unclassified. Supported input sensitivities drive prototype suggestions; HIES household finances are separate.</p>}
 
     <section className="analysis-toolbar" aria-label="Employee analysis controls">
     <div className="module4-dataset-picker" aria-labelledby="module4-dataset-heading">
       <label id="module4-dataset-heading" htmlFor="module4-upload">HR dataset</label>
-      {uploadsLoading ? <p className="muted" role="status">Loading HR datasets…</p> : uploadsError ? <div className="dataset-load-error" role="alert"><span>{uploadsError}</span><button className="secondary-button" type="button" onClick={() => void loadUploads()}>Retry</button></div> : uploads.length === 0 ? <p className="muted">No HR dataset uploads are available. Upload an HR dataset through Module 1 first.</p> : <><select id="module4-upload" title={selectedUpload?.original_filename} value={uploadId} onChange={(event) => { setUploadId(event.target.value); setResult(null); setRequestError(''); setValidationError('') }}><option value="">Select an HR dataset</option>{uploads.map((upload) => <option key={upload.id} value={upload.id}>{upload.original_filename}</option>)}</select>{selectedUpload ? <div className="dataset-metadata" aria-live="polite"><span><strong>{selectedUpload.record_count.toLocaleString()}</strong> records</span><span>Uploaded {new Date(selectedUpload.uploaded_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</span></div> : <p className="field-help">Select the HR upload that contains the employee record.</p>}</>}
+      {uploadsLoading ? <p className="muted" role="status">Loading HR datasets…</p> : uploadsError ? <div className="dataset-load-error" role="alert"><span>{uploadsError}</span><button className="secondary-button" type="button" onClick={() => void loadUploads()}>Retry</button></div> : uploads.length === 0 ? <p className="muted">No HR dataset uploads are available. Upload an HR dataset through Module 1 first.</p> : <><select disabled={loading} id="module4-upload" title={selectedUpload?.original_filename} value={uploadId} onChange={(event) => { setUploadId(event.target.value); setResult(null); setRequestError(''); setValidationError('') }}><option value="">Select an HR dataset</option>{uploads.map((upload) => <option key={upload.id} value={upload.id}>{upload.original_filename} ? {upload.record_count} rows</option>)}</select>{selectedUpload ? <div className="dataset-metadata" aria-live="polite"><span><strong>{selectedUpload.record_count.toLocaleString()}</strong> records</span><span>Uploaded {new Date(selectedUpload.uploaded_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</span></div> : <p className="field-help">Select the HR upload that contains the employee record.</p>}</>}
     </div>
 
     <EmployeeSearch
       employeeId={employeeId}
       loading={loading}
       validationError={validationError}
-      onEmployeeIdChange={(value) => { setEmployeeId(value); setValidationError('') }}
+      onEmployeeIdChange={(value) => { setEmployeeId(value); setValidationError(''); setResult(null) }}
       onSubmit={() => void analyzeEmployee()}
     />
     </section>
@@ -110,7 +113,7 @@ export function Module4Dashboard() {
       </section>
 
       <div className="retention-workspace-grid">
-      <RiskFactorsList factors={result.important_risk_factors} />
+      <RiskFactorsList factors={result.important_risk_factors} demo={result.metadata.data_mode === 'synthetic_demo_integration'} />
       <section className="retention-section" aria-labelledby="recommendations-heading">
         <div className="section-heading"><div><p className="eyebrow">Decision support</p><h2 id="recommendations-heading">Recommended Retention Actions</h2></div><span className="item-count">{result.recommendations.length} action{result.recommendations.length === 1 ? '' : 's'}</span></div>
         {result.recommendations.length === 0

@@ -267,9 +267,12 @@ export async function createTemporalMappingPreview(hrUploadId: string, economicU
   return body as unknown as TemporalMappingPreview
 }
 
-function module4Url(employeeId: string, action: 'recommendations' | 'simulation', uploadId?: string): string {
+function module4Url(employeeId: string, action: 'recommendations' | 'simulation', uploadId?: string, demo = false): string {
   const url = `${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/${action}`
-  return uploadId ? `${url}?${new URLSearchParams({ upload_id: uploadId }).toString()}` : url
+  const params = new URLSearchParams()
+  if (uploadId) params.set('upload_id', uploadId)
+  if (demo) params.set('demo', 'true')
+  return params.size ? `${url}?${params.toString()}` : url
 }
 
 function safeErrorDetail(detail: unknown): string | undefined {
@@ -278,10 +281,10 @@ function safeErrorDetail(detail: unknown): string | undefined {
   return undefined
 }
 
-export async function getRetentionRecommendations(employeeId: string, uploadId?: string): Promise<Module4RecommendationResponse> {
+export async function getRetentionRecommendations(employeeId: string, uploadId?: string, demo = false): Promise<Module4RecommendationResponse> {
   let response: Response
   try {
-    response = await fetch(module4Url(employeeId, 'recommendations', uploadId))
+    response = await fetch(module4Url(employeeId, 'recommendations', uploadId, demo))
   } catch {
     throw new RetentionRequestError(0, 'Unable to reach the backend. Confirm that the FastAPI server is running and try again.')
   }
@@ -307,10 +310,11 @@ export async function simulateRetentionScenario(
   employeeId: string,
   changes: WhatIfChanges,
   uploadId?: string,
+  demo = false,
 ): Promise<WhatIfSimulationResponse> {
   let response: Response
   try {
-    response = await fetch(module4Url(employeeId, 'simulation', uploadId), {
+    response = await fetch(module4Url(employeeId, 'simulation', uploadId, demo), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),

@@ -21,7 +21,13 @@ MOCK_DISCLAIMER = (
 )
 
 
-def provider_disclaimer(module2_is_mock: bool, module3_is_mock: bool) -> str:
+def provider_disclaimer(module2_is_mock: bool, module3_is_mock: bool, synthetic_demo: bool = False) -> str:
+    if synthetic_demo:
+        return ('Connected synthetic pilot demonstration: EESI is calculated and probabilities come from the saved synthetic model. '
+                'Factors are positive probability differences under one-at-a-time probes (overtime off, satisfaction 4, or salary +10%), '
+                'holding other model inputs, including EESI, fixed. These are not SHAP values or causal effects. '
+                'Risk bands are unclassified. Recommendation priority uses prototype weights and continuous EESI/100, not validated thresholds. '
+                'HIES household finances are not joined to these employees.')
     if module2_is_mock and module3_is_mock:
         return MOCK_DISCLAIMER
     mocked = []
@@ -95,6 +101,7 @@ class RetentionDecisionService:
                 factor_contribution=candidate.factor_contribution,
                 economic_pressure_level=analysis.economic_pressure_level,
                 intervention_relevance=candidate.intervention_relevance,
+                economic_pressure_score=analysis.eesi_score / 100 if self.module3_provider.metadata.data_mode == 'synthetic_demo_integration' else None,
             )
             recommendations.append(PrioritizedRecommendation(
                 recommendation_id=candidate.recommendation_id,
@@ -136,6 +143,7 @@ class RetentionDecisionService:
                 disclaimer=provider_disclaimer(
                     self.module2_provider.metadata.is_mock,
                     self.module3_provider.metadata.is_mock,
+                    synthetic_demo=self.module3_provider.metadata.data_mode == 'synthetic_demo_integration',
                 ),
             ),
         )
