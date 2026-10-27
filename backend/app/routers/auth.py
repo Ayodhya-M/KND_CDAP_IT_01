@@ -4,10 +4,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr, Field
-try:
-    from supabase_auth.errors import AuthApiError
-except ImportError:  # Supabase Python client versions before the package rename.
-    from gotrue.errors import AuthApiError
+from supabase_auth.errors import AuthApiError
 
 from app.supabase_client import get_supabase_client
 

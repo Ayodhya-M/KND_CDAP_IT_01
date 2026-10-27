@@ -38,7 +38,6 @@ class FakeSupabaseClient:
 
 @pytest.fixture
 def client(monkeypatch):
-    monkeypatch.setattr("app.routers.hr.find_existing_upload", lambda *args: None)
     fake_client = FakeSupabaseClient()
     monkeypatch.setattr("app.routers.hr.get_supabase_client", lambda: fake_client)
     return TestClient(app), fake_client
@@ -154,26 +153,3 @@ def _sample_row():
         "YearsAtCompany": "4", "JoinDate": "2019-01-01", "ResignationDate": "",
         "ObservationDate": "2023-03-15", "Attrition": "No",
     }
-
-
-def test_duplicate_upload_reuses_existing_dataset(client, monkeypatch):
-    test_client, fake = client
-    monkeypatch.setattr('app.routers.hr.find_existing_upload', lambda *args: 'existing-hr')
-    response = post_csv(test_client, sample_csv(), 'renamed.csv')
-    assert response.status_code == 200
-    assert response.json()['duplicate_upload'] is True
-    assert response.json()['upload_id'] == 'existing-hr'
-    assert fake.calls == []
-
-
-def test_expanded_pilot_has_300_unique_ids_and_preserves_original():
-    from app.services.hr_upload import validate_hr_csv
-    root = Path(__file__).parents[2] / 'pilot-data'
-    original = list(csv.DictReader((root / 'module1_hr_pilot_100_employees.csv').open(encoding='utf-8-sig', newline='')))
-    path = root / 'module1_hr_pilot_300_employees.csv'
-    expanded = list(csv.DictReader(path.open(encoding='utf-8-sig', newline='')))
-    assert expanded[:100] == original
-    assert len({row['EmployeeID'] for row in expanded}) == 300
-    result = validate_hr_csv(path.read_bytes(), path.name)
-    assert result.is_valid
-    assert result.summary['total_records'] == 300

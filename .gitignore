@@ -1,11 +1,5 @@
-node_modules/
-dist/
 # Environment and secrets
 .env
-data/private/
-tmp/hies-tools/
-data/reference/eesi/*.pdf
-**/LFS-2024-25-Percent-Data-*.csv
 .env.*
 !.env.example
 
@@ -25,8 +19,3 @@ backend/**/*.py[cod]
 *.log
 .DS_Store
 Thumbs.db
-__pycache__/
-*.py[cod]
-.venv/
-artifacts/
-data/private/

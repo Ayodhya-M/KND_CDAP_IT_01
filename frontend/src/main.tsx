@@ -1,133 +1,40 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useEffect, useState } from 'react'
-import { analyseMissingValues, createTemporalMappingPreview, getCleaningUploadChoices, getMappingUploadChoices, getModule3ModelStatus, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type MacroUploadSummary, type MappingUploadChoice, type Module3ModelStatus, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError } from './api'
+import { analyseMissingValues, createTemporalMappingPreview, generateIntegratedDataset, getCleaningUploadChoices, getIntegrationMappingRuns, getMappingUploadChoices, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type IntegrationMappingRun, type IntegrationResult, type MacroUploadSummary, type MappingUploadChoice, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError } from './api'
 import './styles.css'
-import EesiView from './EesiView'
-import Module3View from './Module3View'
-import { Module4Dashboard } from './pages/Module4Dashboard'
-import { Icon, type IconName } from './components/Icon'
-import { getHiesDataset, getDatabaseStatus, type HiesDataset } from './api'
 
-type View = 'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'eesi' | 'module3' | 'module4'
-
-const viewDetails: Record<View, { section: string; title: string }> = {
-  dashboard: { section: 'Workspace', title: 'Executive overview' },
-  'hr-upload': { section: 'Data Management', title: 'HR datasets' },
-  'macro-upload': { section: 'Data Management', title: 'Economic datasets' },
-  'data-cleaning': { section: 'Data Management', title: 'Data quality' },
-  'temporal-mapping': { section: 'Data Management', title: 'Temporal mapping' },
-  eesi: { section: 'Economic Intelligence', title: 'Economic pressure analysis' },
-  module3: { section: 'Turnover Analytics', title: 'Prediction workspace' },
-  module4: { section: 'Retention Strategies', title: 'Decision support' },
-}
+const stats = [
+  ['Total Employees', '0', 'Employees will appear after HR upload.'],
+  ['HR Records Uploaded', '0', 'No HR dataset uploaded yet.'],
+  ['Economic Records Uploaded', '0', 'No economic dataset uploaded yet.'],
+  ['Integration Status', 'Not started', 'Upload both datasets to begin.'],
+]
 
 function App() {
   return <Dashboard />
 }
 
 function Dashboard() {
-  const [view, setView] = useState<View>('dashboard')
-  const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [hrUploads, setHrUploads] = useState<MappingUploadChoice[]>([])
-  const [economicUploads, setEconomicUploads] = useState<MappingUploadChoice[]>([])
-  const [modelStatus, setModelStatus] = useState<Module3ModelStatus | null>(null)
-  const [overviewError, setOverviewError] = useState('')
-  const [overviewLoading, setOverviewLoading] = useState(true)
-  const [hies, setHies] = useState<HiesDataset | null>(null)
-  const [hrAvailable, setHrAvailable] = useState(false)
-  const [uniqueEmployees, setUniqueEmployees] = useState(0)
-
-  const refreshOverview = async () => {
-    setOverviewLoading(true)
-    setOverviewError('')
-    const [uploadsResult, modelResult, hiesResult, databaseResult] = await Promise.allSettled([getMappingUploadChoices(), getModule3ModelStatus(), getHiesDataset(), getDatabaseStatus()])
-    setHrAvailable(uploadsResult.status === 'fulfilled')
-    if (uploadsResult.status === 'fulfilled') {
-      setHrUploads(uploadsResult.value.hr_uploads)
-      setUniqueEmployees(uploadsResult.value.unique_employee_count)
-      setEconomicUploads(uploadsResult.value.economic_uploads)
-    } else {
-      setHrUploads([])
-      setEconomicUploads([])
-    }
-    setModelStatus(modelResult.status === 'fulfilled' ? modelResult.value : null)
-    if (hiesResult.status === 'fulfilled') setHies(hiesResult.value)
-    else setHies(null)
-    const issues: string[] = []
-    if (databaseResult.status === 'rejected') issues.push(databaseResult.reason instanceof Error ? databaseResult.reason.message : 'HR database unavailable.')
-    else if (uploadsResult.status === 'rejected') issues.push('HR dataset inventory could not be loaded.')
-    if (hiesResult.status === 'rejected') issues.push('Local HIES data could not be loaded.')
-    if (modelResult.status === 'rejected') issues.push('Turnover model status could not be loaded.')
-    setOverviewError(issues.join(' '))
-    setOverviewLoading(false)
-  }
-
-  useEffect(() => { void refreshOverview() }, [])
+  const [view, setView] = useState<'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'integration'>('dashboard')
+  const [totalEmployees, setTotalEmployees] = useState(0)
+  const [hrUploads, setHrUploads] = useState(0)
+  const [economicUploads, setEconomicUploads] = useState(0)
 
   const handleSuccessfulUpload = (summary: HrUploadSummary) => {
-    if (summary.status === 'success') void refreshOverview()
+    setTotalEmployees(summary.valid_records ?? 0)
+    setHrUploads((uploads) => uploads + 1)
   }
 
-  const navigate = (next: View) => { setView(next); setMobileNavOpen(false) }
-  const current = viewDetails[view]
-
   return <main className="dashboard-layout">
-    <aside className={`sidebar ${mobileNavOpen ? 'open' : ''}`}>
-      <div className="app-brand">
-        <img className="app-brand-icon" src="/retention-intelligence-favicon.svg" alt="Retention Intelligence" />
-        <div><h2>Retention Intelligence</h2><p>Workforce Analytics &amp; Decision Support</p></div>
-      </div>
-      <nav aria-label="Research modules">
-        <button className={view === 'dashboard' ? 'active' : ''} onClick={() => navigate('dashboard')}><Icon name="overview" /><span>Overview</span></button>
-        <p className="nav-label">Research workspaces</p>
-        <button className={['hr-upload','macro-upload','data-cleaning','temporal-mapping'].includes(view) ? 'active' : ''} onClick={() => navigate('hr-upload')}><Icon name="database" /><span>Data Management</span></button>
-        <div className="nav-subitems">
-          <button className={view === 'macro-upload' ? 'active' : ''} onClick={() => navigate('macro-upload')}>Economic uploads</button>
-          <button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => navigate('data-cleaning')}>Data quality</button>
-          <button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => navigate('temporal-mapping')}>Temporal mapping</button>
-        </div>
-        <button className={view === 'eesi' ? 'active' : ''} onClick={() => navigate('eesi')}><Icon name="economy" /><span>Economic Intelligence</span></button>
-        <button className={view === 'module3' ? 'active' : ''} onClick={() => navigate('module3')}><Icon name="prediction" /><span>Turnover Analytics</span></button>
-        <button className={view === 'module4' ? 'active' : ''} onClick={() => navigate('module4')}><Icon name="retention" /><span>Retention Strategies</span></button>
-      </nav>
-      <div className="sidebar-footer"><span className="system-dot" aria-hidden="true" /><div><strong>Research environment</strong><small>Decision support prototype</small></div></div>
-    </aside>
+    <aside className="sidebar"><div><p className="eyebrow">KND CDAP</p><h2>Research Hub</h2></div><nav><button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>Dashboard</button><button className={view === 'hr-upload' ? 'active' : ''} onClick={() => setView('hr-upload')}>Upload HR data</button><button className={view === 'macro-upload' ? 'active' : ''} onClick={() => setView('macro-upload')}>Upload economic data</button><button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => setView('data-cleaning')}>Data cleaning</button><button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => setView('temporal-mapping')}>Temporal mapping</button><button className={view === 'integration' ? 'active' : ''} onClick={() => setView('integration')}>Data integration</button></nav></aside>
     <section className="dashboard-content">
-      <div className="topbar"><button className="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded={mobileNavOpen} onClick={() => setMobileNavOpen(value => !value)}><Icon name="menu" /></button><img className="topbar-brand-icon" src="/retention-intelligence-favicon.svg" alt="" aria-hidden="true" /><div><p className="breadcrumb">Retention Intelligence <span>/</span> {current.section}</p><h1>{current.title}</h1></div><span className="topbar-context">Research prototype</span></div>
-      <div className="page-content">
-      {view === 'dashboard' ? <OverviewDashboard uniqueEmployees={uniqueEmployees} hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} hies={hies} hrAvailable={hrAvailable} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
-      </div>
+      {view === 'dashboard' ? <><header><div><p className="eyebrow">Overview</p><h1>HR & Economic Data Integration</h1><p className="muted">Your HR attrition analysis workspace is ready.</p></div><button className="primary-button compact" onClick={() => setView('hr-upload')}>Upload dataset</button></header>
+      <div className="stats-grid">{stats.map(([label, value, detail]) => <article className="stat-card" key={label}><p>{label}</p><strong>{label === 'Total Employees' ? totalEmployees : label === 'HR Records Uploaded' ? hrUploads : label === 'Economic Records Uploaded' ? economicUploads : value}</strong><small>{detail}</small></article>)}</div>
+      <section className="next-step"><div><p className="eyebrow">Get started</p><h2>Upload your HR dataset</h2><p>Use the Module 1 pilot CSV to validate employee records and their observation period.</p></div><button className="primary-button" onClick={() => setView('hr-upload')}>Upload HR dataset</button></section>
+      <section className="activity"><h2>Workflow progress</h2><div className="progress-steps"><span className="current">1<br /><small>Upload</small></span><span>2<br /><small>Clean</small></span><span>3<br /><small>Map</small></span><span>4<br /><small>Predict</small></span></div></section></> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => setEconomicUploads((uploads) => uploads + 1)} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : <DataIntegrationView />}
     </section>
   </main>
-}
-
-function OverviewDashboard({ uniqueEmployees, hrUploads, economicUploads, modelStatus, hies, hrAvailable, loading, error, onNavigate, onRefresh }: { uniqueEmployees: number; hrUploads: MappingUploadChoice[]; economicUploads: MappingUploadChoice[]; modelStatus: Module3ModelStatus | null; hies: HiesDataset | null; hrAvailable: boolean; loading: boolean; error: string; onNavigate: (view: View) => void; onRefresh: () => void }) {
-  const hrRecords = hrUploads.reduce((total, upload) => total + upload.record_count, 0)
-  const recent = [...hrUploads.map(item => ({ ...item, type: 'HR dataset' })), ...economicUploads.map(item => ({ ...item, type: 'Economic dataset' }))].sort((a, b) => Date.parse(b.uploaded_at) - Date.parse(a.uploaded_at)).slice(0, 5)
-  const workspaces: Array<{ view: View; icon: IconName; title: string; detail: string; status: string }> = [
-    { view: 'hr-upload', icon: 'database', title: 'Data Management', detail: 'Upload, validate, clean and temporally map workforce data.', status: hrAvailable ? `${hrUploads.length + economicUploads.length} datasets` : 'Database unavailable' },
-    { view: 'eesi', icon: 'economy', title: 'Economic Intelligence', detail: 'Explore the HIES sample, economic exposure formulas and reference profiles.', status: hies?.record_count ? `${hies.record_count} HIES records` : 'Import HIES sample' },
-    { view: 'module3', icon: 'prediction', title: 'Turnover Analytics', detail: 'Review model availability and the prediction contract.', status: modelStatus?.model_available ? 'Model available' : 'Model unavailable' },
-    { view: 'module4', icon: 'retention', title: 'Retention Strategies', detail: 'Generate explainable, prioritized HR decision support.', status: 'Prototype available' },
-  ]
-  return <section className="overview-dashboard">
-    <header className="overview-brand-header"><div className="overview-brand-copy"><img className="overview-full-logo" src="/retention-intelligence-logo.png" alt="Retention Intelligence" /><p>Monitor workforce data readiness and move between the four connected research modules.</p></div><button className="secondary-button" onClick={onRefresh}>Refresh status</button></header>
-    {error && <div className="inline-alert" role="alert"><span>{error}</span><button className="text-button" onClick={onRefresh}>Retry</button></div>}
-    {loading && <div className="overview-skeleton" role="status" aria-label="Loading workspace status">{[1,2,3,4].map(item => <span key={item} />)}</div>}
-    {!loading && <>
-    <div className="executive-metrics">
-      <article><span>Unique HR employee IDs</span><strong className={hrAvailable ? '' : 'metric-text'}>{hrAvailable ? uniqueEmployees.toLocaleString() : 'Unavailable'}</strong><small>{hrAvailable ? `Across ${hrUploads.length} dataset versions (${hrRecords} stored rows). IDs are counted once across versions.` : 'Connect Supabase to load organizational HR records.'}</small></article>
-      <article><span>Supabase dataset inventory</span><strong className={hrAvailable ? '' : 'metric-text'}>{hrAvailable ? hrUploads.length + economicUploads.length : 'Unavailable'}</strong><small>{hrAvailable ? `${hrUploads.length} HR · ${economicUploads.length} economic` : 'Database inventory could not be loaded.'}</small></article>
-      <article><span>Turnover model</span><strong className="metric-text">{modelStatus?.model_available ? 'Available' : 'Unavailable'}</strong><small>{modelStatus?.message ?? 'Status has not been loaded.'}</small></article>
-      <article><span>HIES wage earners</span><strong>{hies ? hies.record_count.toLocaleString() : 'Unavailable'}</strong><small>Private local EESI sample · separate from organizational HR.</small><button className="text-button" onClick={() => onNavigate('eesi')}>View financial data</button></article>
-    </div>
-    <div className="overview-grid">
-      <section className="workspace-panel"><div className="panel-heading"><div><p className="eyebrow">Research modules</p><h3>Analysis workspaces</h3></div></div><div className="workspace-list">{workspaces.map(item => <button key={item.view} onClick={() => onNavigate(item.view)}><span className="workspace-icon"><Icon name={item.icon} /></span><span><strong>{item.title}</strong><small>{item.detail}</small></span><span className="workspace-status">{item.status}</span><Icon name="arrow" className="row-arrow" /></button>)}</div></section>
-      <section className="activity-panel"><div className="panel-heading"><div><p className="eyebrow">Data operations</p><h3>Recent dataset activity</h3></div><button className="text-button" onClick={() => onNavigate('hr-upload')}>Manage data</button></div>{recent.length ? <div className="activity-list">{recent.map(item => <div key={item.id}><span className="file-icon"><Icon name="database" /></span><span><strong>{item.original_filename}</strong><small>{item.type} · {item.record_count.toLocaleString()} records</small></span><time dateTime={item.uploaded_at}>{new Date(item.uploaded_at).toLocaleDateString()}</time></div>)}</div> : <div className="professional-empty"><Icon name="database" /><strong>{hrAvailable ? 'No Supabase datasets available' : 'Supabase activity unavailable'}</strong><p>{hrAvailable ? 'Upload HR and economic datasets to begin the integrated workflow.' : 'The local HIES sample is available separately under Economic Intelligence.'}</p><button className="primary-button" onClick={() => onNavigate('hr-upload')}>Upload a dataset</button></div>}</section>
-    </div>
-    </>}
-  </section>
 }
 
 function HrUploadView({ onSuccess }: { onSuccess: (summary: HrUploadSummary) => void }) {
@@ -165,7 +72,6 @@ function HrUploadView({ onSuccess }: { onSuccess: (summary: HrUploadSummary) => 
 function ValidationSummary({ summary }: { summary: HrUploadSummary }) {
   const missingValues = Object.entries(summary.missing_values ?? {}).filter(([, count]) => count > 0)
   return <section className={`validation-summary ${summary.status}`}><h2>{summary.status === 'success' ? 'Upload validated successfully' : 'Validation issues found'}</h2><div className="summary-grid"><span>Total Records<strong>{summary.total_records ?? 0}</strong></span><span>Valid Records<strong>{summary.valid_records ?? 0}</strong></span><span>Invalid Records<strong>{summary.invalid_records ?? 0}</strong></span><span>Duplicate Employee IDs<strong>{summary.duplicate_employee_ids ?? 0}</strong></span><span>Observation Period<strong>{summary.observation_period ? `${summary.observation_period.start} to ${summary.observation_period.end}` : '—'}</strong></span></div>
-    {summary.duplicate_upload && <p role="status">{summary.message}</p>}
     <p><strong>Missing Values:</strong> {missingValues.length ? missingValues.map(([column, count]) => `${column}: ${count}`).join(', ') : 'None'}</p>
     {!!summary.errors?.length && <ul>{summary.errors.map((item, index) => <li key={`${item.field}-${index}`}><strong>{item.field}:</strong> {item.message}{item.count ? ` (${item.count} record(s))` : ''}</li>)}</ul>}
   </section>

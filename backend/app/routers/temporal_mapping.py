@@ -24,20 +24,13 @@ def _one_upload(client: Any, upload_id: str, expected_type: str) -> dict[str, An
 
 
 @router.get("/uploads")
-def available_uploads() -> dict[str, Any]:
+def available_uploads() -> dict[str, list[dict[str, Any]]]:
     """List HR and macroeconomic uploads so one pair can be selected explicitly."""
     try:
         client = get_supabase_client()
-        hr = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "hr").execute().data
-        economic = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "economic").execute().data
-        employee_ids, offset = set(), 0
-        while True:
-            batch = client.table('employee_records').select('employee_id').order('id').range(offset, offset + 499).execute().data
-            employee_ids.update(row['employee_id'] for row in batch)
-            if len(batch) < 500:
-                break
-            offset += 500
-        return {"hr_uploads": hr, "economic_uploads": economic, 'unique_employee_count': len(employee_ids)}
+        hr = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "hr").order("uploaded_at", desc=True).execute().data
+        economic = client.table("dataset_uploads").select("id,original_filename,record_count,uploaded_at").eq("dataset_type", "economic").order("uploaded_at", desc=True).execute().data
+        return {"hr_uploads": hr, "economic_uploads": economic}
     except Exception as error:
         logger.exception("Unable to list uploads for temporal mapping")
         raise HTTPException(status_code=502, detail=f"Supabase could not load upload choices: {error}") from error

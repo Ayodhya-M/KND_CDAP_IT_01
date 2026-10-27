@@ -1,17 +1,5 @@
 # Module 1 pilot data
 
-For the progress presentation, use `module1_hr_pilot_300_employees.csv`:
-300 distinct **synthetic** employee IDs, PILOT-0001 through PILOT-0300.
-The original 100-row CSV is preserved; its rows form the first 100 rows of the
-300-row file. The remaining 200 are reproducibly generated demo data, not real
-employees or research evidence. Regenerate with `python scripts/expand_hr_pilot.py`.
-Both files share the existing January-June 2023 economic pilot.
-
-The backend reuses an existing upload when validated row content matches,
-regardless of filename or row order. Changed content is treated as a new version.
-The check-and-insert guard is serialized for the current single-process dev
-server; multiple backend workers need database-enforced uniqueness.
-
 This folder contains reproducible demo data for the HR & Macroeconomic Data Integration module.
 
 - `module1_hr_pilot_100_employees.csv`: 100 synthetic employee records.
