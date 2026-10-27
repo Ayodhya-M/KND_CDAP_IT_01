@@ -2,12 +2,15 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
+from app.module4.routers import router as module4_router
 from app.routers.auth import router as auth_router
+from app.routers.eesi import router as eesi_router
 from app.routers.data_cleaning import router as data_cleaning_router
 from app.routers.dataset_validation import router as dataset_validation_router
 from app.routers.hr import router as hr_router
 from app.routers.integration import router as integration_router
 from app.routers.macro import router as macro_router
+from app.routers.module3 import router as module3_router
 from app.routers.temporal_mapping import router as temporal_mapping_router
 from app.supabase_client import get_supabase_client
 
@@ -22,12 +25,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(auth_router, prefix=settings.api_v1_prefix)
+app.include_router(eesi_router, prefix=settings.api_v1_prefix)
 app.include_router(data_cleaning_router, prefix=settings.api_v1_prefix)
 app.include_router(dataset_validation_router, prefix=settings.api_v1_prefix)
 app.include_router(hr_router, prefix=settings.api_v1_prefix)
 app.include_router(integration_router, prefix=settings.api_v1_prefix)
 app.include_router(macro_router, prefix=settings.api_v1_prefix)
+app.include_router(module3_router, prefix=settings.api_v1_prefix)
 app.include_router(temporal_mapping_router, prefix=settings.api_v1_prefix)
+app.include_router(module4_router, prefix=settings.api_v1_prefix)
 
 
 @app.get("/health", tags=["health"])
@@ -44,6 +50,9 @@ def api_status() -> dict[str, str]:
 @app.get(f"{settings.api_v1_prefix}/supabase/status", tags=["status"])
 def supabase_status() -> dict[str, str]:
     """Confirm that server-side Supabase credentials can access the project."""
+    if ('your-project' in settings.supabase_url or
+            settings.supabase_service_role_key == 'your_supabase_service_role_key'):
+        raise HTTPException(status_code=503, detail='Supabase is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in backend/.env, then restart the backend.')
     try:
         # This is a supported server-side call. It verifies both the project URL
         # and the service-role key without creating or changing any user data.

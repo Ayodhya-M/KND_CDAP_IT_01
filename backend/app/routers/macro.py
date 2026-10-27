@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 from app.services.macro_upload import indicator_rows_for_insert, validate_macro_csv
 from app.supabase_client import get_supabase_client
+from app.services.upload_duplicates import UPLOAD_LOCK, find_existing_upload
 
 router = APIRouter(prefix="/macroeconomic", tags=["Macroeconomic dataset"])
 logger = logging.getLogger(__name__)
@@ -22,23 +23,27 @@ async def upload_macroeconomic_dataset(file: UploadFile = File(...)) -> JSONResp
     if not validation.is_valid:
         return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=validation.summary)
 
-    try:
-        client = get_supabase_client()
-        upload_response = client.table("dataset_uploads").insert({
-            "dataset_type": "economic", "original_filename": file_name,
-            "file_format": "csv", "record_count": validation.summary["total_records"],
-            "processing_status": "uploaded",
-        }).execute()
-        upload_id = upload_response.data[0]["id"]
-        client.table("economic_indicators").insert(indicator_rows_for_insert(validation.dataframe, upload_id)).execute()
-        client.table("validation_reports").insert({
-            "upload_id": upload_id, "total_records": validation.summary["total_records"],
-            "missing_value_count": sum(validation.summary["missing_values"].values()),
-            "duplicate_record_count": validation.summary["duplicate_months"],
-            "invalid_date_count": 0, "validation_status": "passed", "report_data": validation.summary,
-        }).execute()
-    except Exception as error:
-        logger.exception("Unable to store validated macroeconomic upload")
-        raise HTTPException(status_code=502, detail=f"Macroeconomic dataset validation passed, but Supabase could not store it: {error}") from error
+    with UPLOAD_LOCK:
+        try:
+            client = get_supabase_client()
+            existing_id = find_existing_upload(client, 'economic', indicator_rows_for_insert(validation.dataframe, 'pending'))
+            if existing_id:
+                return JSONResponse(status_code=200, content={**validation.summary, 'upload_id': existing_id, 'duplicate_upload': True, 'message': 'This dataset is already uploaded; the existing dataset was reused.'})
+            upload_response = client.table("dataset_uploads").insert({
+                "dataset_type": "economic", "original_filename": file_name,
+                "file_format": "csv", "record_count": validation.summary["total_records"],
+                "processing_status": "uploaded",
+            }).execute()
+            upload_id = upload_response.data[0]["id"]
+            client.table("economic_indicators").insert(indicator_rows_for_insert(validation.dataframe, upload_id)).execute()
+            client.table("validation_reports").insert({
+                "upload_id": upload_id, "total_records": validation.summary["total_records"],
+                "missing_value_count": sum(validation.summary["missing_values"].values()),
+                "duplicate_record_count": validation.summary["duplicate_months"],
+                "invalid_date_count": 0, "validation_status": "passed", "report_data": validation.summary,
+            }).execute()
+        except Exception as error:
+            logger.exception("Unable to store validated macroeconomic upload")
+            raise HTTPException(status_code=502, detail=f"Macroeconomic dataset validation passed, but Supabase could not store it: {error}") from error
 
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={**validation.summary, "upload_id": upload_id})
