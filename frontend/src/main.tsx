@@ -9,7 +9,7 @@ import { Module4Dashboard } from './pages/Module4Dashboard'
 import { Icon, type IconName } from './components/Icon'
 import { getHiesDataset, getDatabaseStatus, type HiesDataset } from './api'
 
-type View = 'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'eesi' | 'module3' | 'module4'
+type View = 'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'integration' | 'eesi' | 'module3' | 'module4'
 
 const viewDetails: Record<View, { section: string; title: string }> = {
   dashboard: { section: 'Workspace', title: 'Executive overview' },
@@ -17,6 +17,7 @@ const viewDetails: Record<View, { section: string; title: string }> = {
   'macro-upload': { section: 'Data Management', title: 'Economic datasets' },
   'data-cleaning': { section: 'Data Management', title: 'Data quality' },
   'temporal-mapping': { section: 'Data Management', title: 'Temporal mapping' },
+  integration: { section: 'Data Management', title: 'Data integration' },
   eesi: { section: 'Economic Intelligence', title: 'Economic pressure analysis' },
   module3: { section: 'Turnover Analytics', title: 'Prediction workspace' },
   module4: { section: 'Retention Strategies', title: 'Decision support' },
@@ -86,17 +87,19 @@ function Dashboard() {
           <button className={view === 'macro-upload' ? 'active' : ''} onClick={() => navigate('macro-upload')}>Economic uploads</button>
           <button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => navigate('data-cleaning')}>Data quality</button>
           <button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => navigate('temporal-mapping')}>Temporal mapping</button>
+          <button className={view === 'integration' ? 'active' : ''} onClick={() => navigate('integration')}>Data integration</button>
         </div>
         <button className={view === 'eesi' ? 'active' : ''} onClick={() => navigate('eesi')}><Icon name="economy" /><span>Economic Intelligence</span></button>
         <button className={view === 'module3' ? 'active' : ''} onClick={() => navigate('module3')}><Icon name="prediction" /><span>Turnover Analytics</span></button>
         <button className={view === 'module4' ? 'active' : ''} onClick={() => navigate('module4')}><Icon name="retention" /><span>Retention Strategies</span></button>
+     
       </nav>
       <div className="sidebar-footer"><span className="system-dot" aria-hidden="true" /><div><strong>Research environment</strong><small>Decision support prototype</small></div></div>
     </aside>
     <section className="dashboard-content">
       <div className="topbar"><button className="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded={mobileNavOpen} onClick={() => setMobileNavOpen(value => !value)}><Icon name="menu" /></button><img className="topbar-brand-icon" src="/retention-intelligence-favicon.svg" alt="" aria-hidden="true" /><div><p className="breadcrumb">Retention Intelligence <span>/</span> {current.section}</p><h1>{current.title}</h1></div><span className="topbar-context">Research prototype</span></div>
       <div className="page-content">
-      {view === 'dashboard' ? <OverviewDashboard uniqueEmployees={uniqueEmployees} hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} hies={hies} hrAvailable={hrAvailable} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
+      {view === 'dashboard' ? <OverviewDashboard uniqueEmployees={uniqueEmployees} hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} hies={hies} hrAvailable={hrAvailable} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'integration' ? <DataIntegrationView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
       </div>
     </section>
   </main>
