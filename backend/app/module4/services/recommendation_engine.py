@@ -5,6 +5,9 @@ from dataclasses import dataclass
 from app.module4.schemas.decision_support import RecommendationCandidate, RiskAnalysis
 
 
+RECOMMENDATION_RULE_VERSION = "module4-prototype-rules-v2"
+
+
 @dataclass(frozen=True)
 class RecommendationRule:
     recommendation_id: str
@@ -83,6 +86,9 @@ class RecommendationEngine:
         for factor in analysis.important_factors:
             if factor.contribution <= 0:
                 continue
+            eligibility = self._eligibility_basis(factor.feature_name, factor.feature_value)
+            if eligibility is None:
+                continue
             for rule in PROTOTYPE_RULES.get(factor.feature_name, ()):
                 recommendations.append(RecommendationCandidate(
                     recommendation_id=rule.recommendation_id,
@@ -94,5 +100,32 @@ class RecommendationEngine:
                     factor_contribution=factor.contribution,
                     intervention_relevance=rule.relevance,
                     suggested_action=rule.suggested_action,
+                    rule_version=RECOMMENDATION_RULE_VERSION,
+                    eligibility_basis=eligibility,
                 ))
         return recommendations
+
+    @staticmethod
+    def _eligibility_basis(feature_name: str, value: object) -> str | None:
+        """Reject only contradictions supported by verified field semantics."""
+        if feature_name == "overtime":
+            if value is False or (isinstance(value, str) and value.strip().lower() in {"no", "false", "0"}):
+                return None
+            return "Positive overtime factor supplied by Module 3 and current value is not explicitly No."
+        if feature_name in {"job_satisfaction", "work_life_balance"}:
+            if isinstance(value, int) and not isinstance(value, bool) and value > 2:
+                return None
+            return "Positive satisfaction-related factor supplied by Module 3; verified value is not above the documented prototype level 2 boundary."
+        if feature_name == "business_travel":
+            if isinstance(value, str) and value.strip().lower() == "non-travel":
+                return None
+            return "Positive business-travel factor supplied by Module 3 and current value is not Non-Travel."
+        if feature_name == "distance_from_home":
+            if isinstance(value, (int, float)) and not isinstance(value, bool) and value <= 0:
+                return None
+            return "Positive distance factor supplied by Module 3 and recorded distance is greater than zero or unavailable."
+        if feature_name == "salary":
+            if isinstance(value, (int, float)) and not isinstance(value, bool) and value <= 0:
+                return None
+            return "Positive salary factor supplied by Module 3; no salary threshold is inferred by Module 4."
+        return "Positive supported factor supplied by Module 3; Module 4 does not infer an additional threshold."

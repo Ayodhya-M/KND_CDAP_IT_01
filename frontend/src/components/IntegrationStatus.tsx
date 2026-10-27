@@ -19,7 +19,13 @@ export function IntegrationStatus({ metadata }: { metadata: Module4Metadata }) {
       <div><dt>Module 1</dt><dd>{isDemo ? 'Stored synthetic HR pilot' : 'Project database'}</dd></div>
       <div><dt>Module 2</dt><dd>{sourceLabel(metadata.module2_source)}</dd></div>
       <div><dt>Module 3</dt><dd>{sourceLabel(metadata.module3_source)}</dd></div>
+      <div><dt>Rule catalogue</dt><dd>{metadata.recommendation_rule_version}</dd></div>
     </dl>
     <p className="backend-disclaimer"><strong>Backend notice:</strong> {metadata.disclaimer}</p>
+    <div className="research-limitations">
+      <p><strong>Priority method:</strong> {metadata.priority_method}</p>
+      <p><strong>Sensitivity analysis:</strong> {metadata.sensitivity_notice}</p>
+      <p><strong>Limitation:</strong> Recommendation rules, eligibility boundaries, weights, and priority bands remain prototype assumptions pending literature and HR/expert validation.</p>
+    </div>
   </aside>
 }

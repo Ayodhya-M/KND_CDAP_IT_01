@@ -117,6 +117,31 @@ export type Module4Recommendation = {
   suggested_action: string
   priority_score: number
   priority_level: string
+  priority_breakdown: {
+    formula: string
+    inputs: PriorityValues
+    weights: PriorityValues
+    weighted_components: PriorityValues
+    raw_weighted_total: number
+    score: number
+  }
+  sensitivity_analysis: {
+    scenario_id: string
+    label: string
+    weights: PriorityValues
+    score: number
+    priority_level: string
+    rank: number
+  }[]
+  rule_version: string
+  traceability: string
+}
+
+export type PriorityValues = {
+  turnover_risk: number
+  factor_contribution: number
+  economic_pressure: number
+  intervention_relevance: number
 }
 
 export type Module4Metadata = {
@@ -124,6 +149,9 @@ export type Module4Metadata = {
   module2_source: string
   module3_source: string
   disclaimer: string
+  recommendation_rule_version: string
+  priority_method: string
+  sensitivity_notice: string
 }
 
 export type Module4RecommendationResponse = {
