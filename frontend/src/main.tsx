@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useEffect, useState } from 'react'
-import { analyseMissingValues, createTemporalMappingPreview, getCleaningUploadChoices, getMappingUploadChoices, getModule3ModelStatus, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type MacroUploadSummary, type MappingUploadChoice, type Module3ModelStatus, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError } from './api'
+import { analyseMissingValues, createTemporalMappingPreview, getCleaningUploadChoices, getMappingUploadChoices, getModule3ModelStatus, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type MacroUploadSummary, type MappingUploadChoice, type Module3ModelStatus, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError, generateIntegratedDataset, getIntegrationMappingRuns, IntegrationMappingRun, IntegrationResult } from './api'
 import './styles.css'
 import EesiView from './EesiView'
 import Module3View from './Module3View'
