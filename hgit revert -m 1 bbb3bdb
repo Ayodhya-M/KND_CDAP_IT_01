@@ -1,0 +1,57 @@
+[33mbbb3bdb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mHR-Macro-Data-Integration-Module[m[33m, [m[1;31morigin/HR-Macro-Data-Integration-Module[m[33m)[m Merge branch 'test---module-1' into HR-Macro-Data-Integration-Module
+[33m31a7d01[m fixed data quality section
+[33m03223e8[m[33m ([m[1;31morigin/test---module-1[m[33m, [m[1;31morigin/Master[m[33m, [m[1;32mtest---module-1[m[33m, [m[1;32mMaster[m[33m)[m Merge pull request #4 from Ayodhya-M/RR-Engine-Module
+[33m112bded[m[33m ([m[1;31morigin/RR-Engine-Module[m[33m, [m[1;32mRR-Engine-Module[m[33m)[m Resolve merge conflict with master
+[33m0f2b388[m Integrated with latest retention model
+[33meb3ebf6[m[33m ([m[1;31morigin/EESI-Module[m[33m, [m[1;32mEESI-Module[m[33m)[m Merge pull request #3 from Ayodhya-M/EESI-Module
+[33mb277e0f[m Error fix on prediction model
+[33me15c33c[m Merge branch 'Master' into EESI-Module
+[33m7d74846[m Update master
+[33m7a82931[m Merge branch 'Master' into RR-Engine-Module
+[33mb72fae3[m Removal of duplicates and eesi module re check
+[33m63eab88[m Removal of repeated data
+[33m916ed09[m New data HIES and preaparation for EESI module
+[33mbdf677b[m Backend fix
+[33m6061179[m change styles in recommendation cards
+[33me7da7eb[m change styles.css file
+[33m5eb07c3[m test backend what if simulation
+[33mdb08b89[m feat: improve research dashboard UI and module integration
+[33m0166689[m diff --cached --stat
+[33m2c2bcae[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Merge pull request #2 from Ayodhya-M/Master
+[33mdd57885[m Merge pull request #1 from ML-Turnover-Prediction-Module
+[33mc7384b2[m[33m ([m[1;31morigin/ML-Turnover-Prediction-Module[m[33m)[m docs: add backend test evidence
+[33m4f03adf[m chore: remove legacy standalone Module 3 UI
+[33md843206[m docs: add Module 3 PP1 evidence and demo guide
+[33m54b156f[m switch RR-Engine-Module
+[33m527d26f[m update: module 3 frontend
+[33m0ef3127[m merge: update RR engine with integrated proposal prototype
+[33m9d99b77[m[33m ([m[1;31morigin/feature/module4-proposal-prototype[m[33m)[m feat(module4): complete proposal evaluation prototype
+[33m1589040[m feat(module4): prepare real upstream providers
+[33ma865ec1[m[33m ([m[1;31morigin/integration-modules-1-4[m[33m, [m[1;32mintegration-modules-1-4[m[33m)[m merge: integrate Modules 1-4 codebases
+[33m4fa739b[m feat: integrate Module 3 prediction into unified frontend
+[33ma5bcf54[m feat: add tests and docs
+[33m43130f0[m feat: add versioned EESI export and prediction API
+[33mf7adabe[m feat: add main.py
+[33m06c5836[m feat: add Module 3 turnover prediction pipeline
+[33mc0f95de[m merge: gitignore and README.md
+[33m4f40b6a[m merge: integrate EESI module
+[33m0d816f9[m Added individual scoring
+[33m443917f[m Initial implementation of eesi module
+[33m68ff78e[m developing validation section
+[33m293198d[m developing data integration part
+[33mb6838ce[m feat: add employee turnover dashboard and profiles
+[33maa36c18[m feat: add shared prototype data and UI components
+[33mf396d5f[m chore: scaffold React turnover prototype
+[33m907b62a[m Implemented the Data Cleaning: Remove Missing Values feature.
+[33m9c8b031[m fix(backend): support current Supabase server-side authentication
+[33m3c1f9d0[m Integrate responsive dashboard navigation
+[33m4881446[m add retention decision support dashboard
+[33m7c56a37[m Integrate responsive dashboard navigation and styling
+[33m138bc81[m add mock providers for module 2 and module 3
+[33m5b3082f[m add integration schemas and employee repository
+[33m7e5cddc[m Merge branch 'HR-Macro-Data-Integration-Module' into RR-Engine-Module
+[33m3315d3f[m create file structure
+[33ma291df9[m developing macroeconomic data upload phase
+[33m5f5e711[m create DB
+[33m51dd1a4[m Renamed readme file
+[33m24cd75e[m Create README..M
