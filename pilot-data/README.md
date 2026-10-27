@@ -25,6 +25,8 @@ The HR dataset is synthetic. Its attribute design follows the supplied IBM emplo
 | --- | --- |
 | `EmployeeID` | `employee_records.employee_id` |
 | `MonthlyIncome` | `employee_records.salary` |
+| `AdditionalIncome` | `employee_records.additional_income` |
+| `YearsAtCompany` | Module 1 integrated output `tenure_years` |
 | `JoinDate`, `ResignationDate` | `employee_records.join_date`, `resignation_date` |
 | `Attrition` (`Yes`/`No`) | `employee_records.attrition` (`true`/`false`) |
 | `Date` | `economic_indicators.indicator_month` |

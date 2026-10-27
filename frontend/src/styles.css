@@ -40,6 +40,8 @@
 
 .cleaning-controls { display: grid; gap: 1rem; margin-top: 2rem; }.cleaning-controls label { color: #35516b; display: grid; font-size: .87rem; font-weight: 700; gap: .45rem; }.cleaning-controls select { background: #fff; border: 1px solid #d8e0e8; border-radius: .65rem; color: #18324a; max-width: 620px; padding: .82rem .9rem; width: 100%; }.cleaning-buttons { display: flex; flex-wrap: wrap; gap: .75rem; }.secondary-button { background: #fff; border: 1px solid #0d776c; border-radius: .65rem; color: #0d776c; font-weight: 750; padding: .85rem 1.1rem; }.secondary-button:disabled { cursor: wait; opacity: .65; }
 
+.integration-view { max-width: 1180px; }.integration-table-wrap { max-height: 520px; }
+
 /* 2026 unified enterprise research dashboard */
 :root {
   --navy: #183153;
