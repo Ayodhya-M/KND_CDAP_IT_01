@@ -1,0 +1,30 @@
+[33mcafe700[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mHR-Macro-Data-Integration-Module[m[33m, [m[1;31morigin/HR-Macro-Data-Integration-Module[m[33m)[m reset to prev version
+[33m51ae7bf[m Revert "Merge branch 'test---module-1' into HR-Macro-Data-Integration-Module"
+[33mbbb3bdb[m Merge branch 'test---module-1' into HR-Macro-Data-Integration-Module
+[33m31a7d01[m fixed data quality section
+[33m03223e8[m[33m ([m[1;31morigin/hr-merge[m[33m, [m[1;31morigin/Master[m[33m, [m[1;32mhr-merge[m[33m, [m[1;32mMaster[m[33m)[m Merge pull request #4 from Ayodhya-M/RR-Engine-Module
+[33m112bded[m[33m ([m[1;31morigin/RR-Engine-Module[m[33m, [m[1;32mRR-Engine-Module[m[33m)[m Resolve merge conflict with master
+[33m0f2b388[m Integrated with latest retention model
+[33meb3ebf6[m[33m ([m[1;31morigin/EESI-Module[m[33m, [m[1;32mEESI-Module[m[33m)[m Merge pull request #3 from Ayodhya-M/EESI-Module
+[33mb277e0f[m Error fix on prediction model
+[33me15c33c[m Merge branch 'Master' into EESI-Module
+[33m7d74846[m Update master
+[33m7a82931[m Merge branch 'Master' into RR-Engine-Module
+[33mb72fae3[m Removal of duplicates and eesi module re check
+[33m63eab88[m Removal of repeated data
+[33m916ed09[m New data HIES and preaparation for EESI module
+[33mbdf677b[m Backend fix
+[33m6061179[m change styles in recommendation cards
+[33me7da7eb[m change styles.css file
+[33m5eb07c3[m test backend what if simulation
+[33mdb08b89[m feat: improve research dashboard UI and module integration
+[33m0166689[m diff --cached --stat
+[33m2c2bcae[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Merge pull request #2 from Ayodhya-M/Master
+[33mdd57885[m Merge pull request #1 from ML-Turnover-Prediction-Module
+[33mc7384b2[m[33m ([m[1;31morigin/ML-Turnover-Prediction-Module[m[33m)[m docs: add backend test evidence
+[33m4f03adf[m chore: remove legacy standalone Module 3 UI
+[33md843206[m docs: add Module 3 PP1 evidence and demo guide
+[33m54b156f[m switch RR-Engine-Module
+[33m527d26f[m update: module 3 frontend
+[33m0ef3127[m merge: update RR engine with integrated proposal prototype
+[33m9d99b77[m[33m ([m[1;31morigin/feature/module4-proposal-prototype[m[33m)[m feat(module4): complete proposal evaluation prototype
