@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useEffect, useState } from 'react'
-import { analyseMissingValues, createTemporalMappingPreview, generateIntegratedDataset, getCleaningUploadChoices, getIntegrationMappingRuns, getMappingUploadChoices, getValidationIntegrationRuns, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, validateIntegratedDataset, type CleaningAnalysis, type CleaningUploadChoice, type DatasetValidationReport, type HrUploadSummary, type IntegrationMappingRun, type IntegrationResult, type MacroUploadSummary, type MappingUploadChoice, type RemoveMissingResult, type TemporalMappingPreview, type ValidationIntegrationRun, UploadRequestError } from './api'
+import { analyseMissingValues, createTemporalMappingPreview, generateIntegratedDataset, getCleaningUploadChoices, getIntegrationMappingRuns, getMappingUploadChoices, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type IntegrationMappingRun, type IntegrationResult, type MacroUploadSummary, type MappingUploadChoice, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError } from './api'
 import './styles.css'
 
 const stats = [
@@ -16,7 +16,7 @@ function App() {
 }
 
 function Dashboard() {
-  const [view, setView] = useState<'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'integration' | 'validation'>('dashboard')
+  const [view, setView] = useState<'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'integration'>('dashboard')
   const [totalEmployees, setTotalEmployees] = useState(0)
   const [hrUploads, setHrUploads] = useState(0)
   const [economicUploads, setEconomicUploads] = useState(0)
@@ -27,12 +27,12 @@ function Dashboard() {
   }
 
   return <main className="dashboard-layout">
-    <aside className="sidebar"><div><p className="eyebrow">KND CDAP</p><h2>Research Hub</h2></div><nav><button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>Dashboard</button><button className={view === 'hr-upload' ? 'active' : ''} onClick={() => setView('hr-upload')}>Upload HR data</button><button className={view === 'macro-upload' ? 'active' : ''} onClick={() => setView('macro-upload')}>Upload economic data</button><button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => setView('data-cleaning')}>Data cleaning</button><button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => setView('temporal-mapping')}>Temporal mapping</button><button className={view === 'integration' ? 'active' : ''} onClick={() => setView('integration')}>Data integration</button><button className={view === 'validation' ? 'active' : ''} onClick={() => setView('validation')}>Data validation</button><button disabled>Predictions</button></nav></aside>
+    <aside className="sidebar"><div><p className="eyebrow">KND CDAP</p><h2>Research Hub</h2></div><nav><button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>Dashboard</button><button className={view === 'hr-upload' ? 'active' : ''} onClick={() => setView('hr-upload')}>Upload HR data</button><button className={view === 'macro-upload' ? 'active' : ''} onClick={() => setView('macro-upload')}>Upload economic data</button><button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => setView('data-cleaning')}>Data cleaning</button><button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => setView('temporal-mapping')}>Temporal mapping</button><button className={view === 'integration' ? 'active' : ''} onClick={() => setView('integration')}>Data integration</button></nav></aside>
     <section className="dashboard-content">
       {view === 'dashboard' ? <><header><div><p className="eyebrow">Overview</p><h1>HR & Economic Data Integration</h1><p className="muted">Your HR attrition analysis workspace is ready.</p></div><button className="primary-button compact" onClick={() => setView('hr-upload')}>Upload dataset</button></header>
       <div className="stats-grid">{stats.map(([label, value, detail]) => <article className="stat-card" key={label}><p>{label}</p><strong>{label === 'Total Employees' ? totalEmployees : label === 'HR Records Uploaded' ? hrUploads : label === 'Economic Records Uploaded' ? economicUploads : value}</strong><small>{detail}</small></article>)}</div>
       <section className="next-step"><div><p className="eyebrow">Get started</p><h2>Upload your HR dataset</h2><p>Use the Module 1 pilot CSV to validate employee records and their observation period.</p></div><button className="primary-button" onClick={() => setView('hr-upload')}>Upload HR dataset</button></section>
-      <section className="activity"><h2>Workflow progress</h2><div className="progress-steps"><span className="current">1<br /><small>Upload</small></span><span>2<br /><small>Clean</small></span><span>3<br /><small>Map</small></span><span>4<br /><small>Predict</small></span></div></section></> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => setEconomicUploads((uploads) => uploads + 1)} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'integration' ? <DataIntegrationView /> : <DatasetValidationView />}
+      <section className="activity"><h2>Workflow progress</h2><div className="progress-steps"><span className="current">1<br /><small>Upload</small></span><span>2<br /><small>Clean</small></span><span>3<br /><small>Map</small></span><span>4<br /><small>Predict</small></span></div></section></> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => setEconomicUploads((uploads) => uploads + 1)} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : <DataIntegrationView />}
     </section>
   </main>
 }
@@ -228,43 +228,6 @@ function DataIntegrationView() {
     {loading ? <p className="muted">Loading temporal mapping runs…</p> : <><div className="cleaning-controls"><label>Temporal mapping run<select value={mappingRunId} onChange={(event) => { setMappingRunId(event.target.value); setResult(null) }}><option value="">Select a mapping run</option>{mappingRuns.map((run) => <option key={run.id} value={run.id}>{run.mapped_record_count}/{run.total_employee_records} mapped — {run.mapping_accuracy}% — {run.id.slice(0, 8)}</option>)}</select></label><div className="cleaning-buttons"><button className="primary-button" disabled={!mappingRunId || integrating} onClick={integrate}>{integrating ? 'Generating unified dataset…' : 'Generate integrated dataset'}</button></div></div></>}
     {error && <p className="upload-error" role="alert">{error}</p>}
     {result && <section className="validation-summary success"><h2>Integrated dataset created</h2><div className="summary-grid"><span>HR Records<strong>{result.total_hr_records}</strong></span><span>Unified Records<strong>{result.integrated_records}</strong></span><span>Unmatched Records<strong>{result.unmatched_records}</strong></span><span>Integration Rate<strong>{result.integration_rate}%</strong></span></div><div className="mapping-table-wrap integration-table-wrap"><table><thead><tr><th>Employee ID</th><th>Salary</th><th>Additional Income</th><th>Overtime</th><th>Tenure (Years)</th><th>Job Satisfaction</th><th>Observation Date</th><th>Economic Month</th><th>Inflation</th><th>CPI</th><th>Unemployment</th><th>Interest Rate</th><th>Exchange Rate</th><th>GDP Growth</th><th>Attrition</th></tr></thead><tbody>{result.records.map((record) => <tr key={record.employee_id}><td>{record.employee_id}</td><td>{record.salary}</td><td>{record.additional_income}</td><td>{record.overtime ? 'Yes' : 'No'}</td><td>{record.tenure_years}</td><td>{record.job_satisfaction}</td><td>{record.observation_date}</td><td>{record.economic_month}</td><td>{record.inflation_rate}</td><td>{record.cpi_index}</td><td>{record.unemployment_rate}</td><td>{record.policy_interest_rate_percent}</td><td>{record.usd_lkr_exchange_rate}</td><td>{record.gdp_growth_rate_percent}</td><td>{record.attrition ? 'Yes' : 'No'}</td></tr>)}</tbody></table></div></section>}
-  </section>
-}
-
-function DatasetValidationView() {
-  const [runs, setRuns] = useState<ValidationIntegrationRun[]>([])
-  const [runId, setRunId] = useState('')
-  const [report, setReport] = useState<DatasetValidationReport | null>(null)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [validating, setValidating] = useState(false)
-
-  useEffect(() => {
-    const loadRuns = async () => {
-      try {
-        const response = await getValidationIntegrationRuns()
-        setRuns(response.integration_runs)
-        setRunId((current) => current || response.integration_runs[0]?.id || '')
-      } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to load integrated datasets.')
-      } finally { setLoading(false) }
-    }
-    void loadRuns()
-  }, [])
-
-  const validate = async () => {
-    if (!runId) return
-    setValidating(true); setError(''); setReport(null)
-    try { setReport(await validateIntegratedDataset(runId)) }
-    catch (caughtError) { setError(caughtError instanceof Error ? caughtError.message : 'Unable to validate the integrated dataset.') }
-    finally { setValidating(false) }
-  }
-
-  const missingEntries = Object.entries(report?.missing_values ?? {})
-  return <section className="upload-view validation-view"><h1>Dataset validation</h1><p className="muted">Check the selected integrated dataset for data quality, temporal mapping completeness, and record-count consistency.</p>
-    {loading ? <p className="muted">Loading integrated datasets…</p> : <><div className="cleaning-controls"><label>Integrated dataset<select value={runId} onChange={(event) => { setRunId(event.target.value); setReport(null) }}><option value="">Select integrated dataset</option>{runs.map((run) => <option key={run.id} value={run.id}>{run.mapped_record_count}/{run.total_hr_records} integrated — {run.mapping_accuracy}% — {run.id.slice(0, 8)}</option>)}</select></label><div className="cleaning-buttons"><button className="primary-button" disabled={!runId || validating} onClick={validate}>{validating ? 'Checking dataset…' : 'Run validation'}</button></div></div></>}
-    {error && <p className="upload-error" role="alert">{error}</p>}
-    {report && <><section className={`validation-summary ${report.validation_status === 'passed' ? 'success' : 'validation_failed'}`}><h2>Overall validation: {report.validation_status === 'passed' ? 'Passed' : 'Failed'}</h2><div className="summary-grid validation-grid"><span>Total HR Records<strong>{report.total_hr_records}</strong></span><span>Economic Months<strong>{report.economic_months}</strong></span><span>Integrated Records<strong>{report.integrated_records}</strong></span><span>Missing Values<strong>{report.missing_value_count}</strong></span><span>Duplicate Records<strong>{report.duplicate_records}</strong></span><span>Invalid Values<strong>{report.invalid_value_count}</strong></span><span>Unmatched Records<strong>{report.unmatched_records}</strong></span><span>Mapping Rate<strong>{report.mapping_rate}%</strong></span><span>Integration Rate<strong>{report.integration_rate}%</strong></span></div></section><section className="validation-summary"><h2>Quality-check details</h2><p><strong>Record-count consistency:</strong> {report.record_count_consistency.is_consistent ? 'Consistent' : `Not consistent — expected ${report.record_count_consistency.expected_integrated_records} integrated records, found ${report.record_count_consistency.actual_integrated_records}.`}</p><p><strong>Missing values:</strong> {missingEntries.length ? missingEntries.map(([field, count]) => `${field}: ${count}`).join(', ') : 'None'}</p><p><strong>Invalid values:</strong> {report.invalid_values.length ? report.invalid_values.map((item) => `${item.field}: ${item.count}`).join(', ') : 'None'}</p>{report.invalid_values.length > 0 && <ul>{report.invalid_values.map((item) => <li key={item.field}><strong>{item.field}:</strong> sample employee IDs: {item.sample_employee_ids.join(', ')}</li>)}</ul>}</section></>}
   </section>
 }
 
