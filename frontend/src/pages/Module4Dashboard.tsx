@@ -1,3 +1,4 @@
+import ImportedSourceView from '../ImportedSourceView'
 import { useEffect, useState } from 'react'
 import { getMappingUploadChoices, getRetentionRecommendations, RetentionRequestError, type MappingUploadChoice, type Module4RecommendationResponse } from '../api'
 import { EmployeeSearch } from '../components/EmployeeSearch'
@@ -87,6 +88,8 @@ export function Module4Dashboard() {
       </label>
     </fieldset>
     {demo && <div className="synthetic-mode-notice" role="note"><strong>Research scope:</strong> Select the matching 300-person pilot upload. Probabilities come from the saved synthetic model, risk bands remain unclassified, and input sensitivities are not SHAP values or causal effects.</div>}
+
+    <details className="validation-summary"><summary>Use additional imported datasets</summary><ImportedSourceView stage="retention" /></details>
 
     <section className="analysis-toolbar" aria-labelledby="analysis-controls-heading">
       <div className="analysis-toolbar-heading"><span>01</span><div><p className="eyebrow">Employee analysis</p><h2 id="analysis-controls-heading">Select an employee record</h2></div></div>
