@@ -30,6 +30,7 @@ function App() {
 function Dashboard() {
   const [view, setView] = useState<View>('dashboard')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [hrUploads, setHrUploads] = useState<MappingUploadChoice[]>([])
   const [economicUploads, setEconomicUploads] = useState<MappingUploadChoice[]>([])
   const [modelStatus, setModelStatus] = useState<Module3ModelStatus | null>(null)
@@ -73,25 +74,26 @@ function Dashboard() {
   const navigate = (next: View) => { setView(next); setMobileNavOpen(false) }
   const current = viewDetails[view]
 
-  return <main className="dashboard-layout">
-    <aside className={`sidebar ${mobileNavOpen ? 'open' : ''}`}>
+  return <main className={`dashboard-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+    <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''} ${mobileNavOpen ? 'open' : ''}`}>
       <div className="app-brand">
         <img className="app-brand-icon" src="/retention-intelligence-favicon.svg" alt="Retention Intelligence" />
         <div><h2>Retention Intelligence</h2><p>Workforce Analytics &amp; Decision Support</p></div>
       </div>
+      <button className="sidebar-toggle" type="button" aria-label={sidebarCollapsed ? 'Expand sidebar navigation' : 'Collapse sidebar navigation'} aria-expanded={!sidebarCollapsed} title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'} onClick={() => setSidebarCollapsed(value => !value)}><Icon name="arrow" /></button>
       <nav aria-label="Research modules">
-        <button className={view === 'dashboard' ? 'active' : ''} onClick={() => navigate('dashboard')}><Icon name="overview" /><span>Overview</span></button>
+        <button title="Overview" aria-label="Overview" className={view === 'dashboard' ? 'active' : ''} onClick={() => navigate('dashboard')}><Icon name="overview" /><span>Overview</span></button>
         <p className="nav-label">Research workspaces</p>
-        <button className={['hr-upload','macro-upload','data-cleaning','temporal-mapping'].includes(view) ? 'active' : ''} onClick={() => navigate('hr-upload')}><Icon name="database" /><span>Data Management</span></button>
+        <button title="Data Management" aria-label="Data Management" className={`data-management-nav ${['hr-upload','macro-upload','data-cleaning','temporal-mapping','integration'].includes(view) ? 'active' : ''}`} onClick={() => navigate('hr-upload')}><Icon name="database" /><span>Data Management</span></button>
         <div className="nav-subitems">
-          <button className={view === 'macro-upload' ? 'active' : ''} onClick={() => navigate('macro-upload')}>Economic uploads</button>
-          <button className={view === 'data-cleaning' ? 'active' : ''} onClick={() => navigate('data-cleaning')}>Data quality</button>
-          <button className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => navigate('temporal-mapping')}>Temporal mapping</button>
-          <button className={view === 'integration' ? 'active' : ''} onClick={() => navigate('integration')}>Data integration</button>
+          <button aria-label="Economic uploads" className={view === 'macro-upload' ? 'active' : ''} onClick={() => navigate('macro-upload')}>Economic uploads</button>
+          <button aria-label="Data quality" className={view === 'data-cleaning' ? 'active' : ''} onClick={() => navigate('data-cleaning')}>Data quality</button>
+          <button aria-label="Temporal mapping" className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => navigate('temporal-mapping')}>Temporal mapping</button>
+          <button aria-label="Data integration" className={view === 'integration' ? 'active' : ''} onClick={() => navigate('integration')}>Data integration</button>
         </div>
-        <button className={view === 'eesi' ? 'active' : ''} onClick={() => navigate('eesi')}><Icon name="economy" /><span>Economic Intelligence</span></button>
-        <button className={view === 'module3' ? 'active' : ''} onClick={() => navigate('module3')}><Icon name="prediction" /><span>Turnover Analytics</span></button>
-        <button className={view === 'module4' ? 'active' : ''} onClick={() => navigate('module4')}><Icon name="retention" /><span>Retention Strategies</span></button>
+        <button title="Economic Intelligence" aria-label="Economic Intelligence" className={view === 'eesi' ? 'active' : ''} onClick={() => navigate('eesi')}><Icon name="economy" /><span>Economic Intelligence</span></button>
+        <button title="Turnover Analytics" aria-label="Turnover Analytics" className={view === 'module3' ? 'active' : ''} onClick={() => navigate('module3')}><Icon name="prediction" /><span>Turnover Analytics</span></button>
+        <button title="Retention Strategies" aria-label="Retention Strategies" className={view === 'module4' ? 'active' : ''} onClick={() => navigate('module4')}><Icon name="retention" /><span>Retention Strategies</span></button>
      
       </nav>
       <div className="sidebar-footer"><span className="system-dot" aria-hidden="true" /><div><strong>Research environment</strong><small>Decision support prototype</small></div></div>
