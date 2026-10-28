@@ -65,8 +65,7 @@ export default function ImportedSourceView({ stage = 'all' }: { stage?: 'all' | 
     {!!datasets.length && <div className="eesi-inputs"><label className="eesi-field">Dataset<select value={datasetId} disabled={busy} onChange={event => setDatasetId(event.target.value)}>{datasets.map(item => <option value={item.id} key={item.id}>{item.name}</option>)}</select></label><label className="eesi-field">Record<select value={recordId} disabled={busy || !records.length} onChange={event => setRecordId(event.target.value)}>{records.map(item => <option key={item.record_id} value={item.record_id}>{item.record_id}{item.month ? ` · ${item.month} scenario` : ''}</option>)}</select></label></div>}
     {dataset && <>
       <div className="summary-grid"><span>Imported records<strong>{dataset.record_count}</strong></span><span>Target<strong>{dataset.target_label}</strong></span><span>Economic context<strong>{dataset.eesi_available ? '2019 scenario months' : 'Not supplied'}</strong></span></div>
-      <div className="eesi-notice"><strong>{dataset.kind}</strong><p>{dataset.warning}</p><p>{dataset.date_note}</p></div>
-      <details><summary>Retained fields and source details</summary><p>{dataset.retained_fields.join(', ')}</p><p>Source: {dataset.source_file} · {dataset.source_rows} source rows · currency: {dataset.currency}.</p><p>These datasets are stored separately from the Supabase HR pilot and HIES.</p></details>
+      <details><summary>Retained fields and source details</summary><p>{dataset.retained_fields.join(', ')}</p><p>Source: {dataset.source_file} · {dataset.source_rows} source rows · currency: {dataset.currency}.</p><p>{dataset.kind}. {dataset.warning}</p><p>{dataset.date_note}</p><p>These datasets are stored separately from the Supabase HR pilot and HIES.</p></details>
     </>}
     {busy && <p role="status">Running the source-specific pipeline…</p>}
     {result && <>

@@ -1,5 +1,15 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1'
 
+export type FormulaDConfig = { reference_income_2013: number | null; alpha: number; reference_income_source: string; reference_income_justification: string }
+export type FormulaDResult = { real_wage: number; wage_inadequacy: number; normalized_unemployment: number; score: number }
+export type FormulaDComparison = { enabled: boolean; message: string; metadata: Record<string, unknown>; records: (FormulaDResult & { sample_id: string })[] }
+export async function requestFormulaD<T>(path: string, payload: unknown): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}/eesi/${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+  const body = await response.json()
+  if (!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : Array.isArray(body.detail) ? body.detail.map((item: { loc: string[]; msg: string }) => `${item.loc.join('.')}: ${item.msg}`).join('; ') : 'Unable to calculate Formula D.')
+  return body as T
+}
+
 export type HiesCalculation = {
   scores: Record<string, number>; components: Record<string, number>
   contributions: Record<string, Record<string, number>>; warnings: string[]; version: string

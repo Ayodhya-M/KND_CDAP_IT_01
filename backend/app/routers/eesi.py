@@ -6,8 +6,34 @@ from app.services.eesi_real import REAL_BOUNDS, REAL_VERSION, load_real_summary
 from typing import Literal
 import sqlite3
 from app.services.hies_data import get_dataset, import_prepared, calculate_scenario
+from app.services.eesi_formula_d import FormulaDConfig, FormulaDInputs, calculate_formula_d, compare_dataset
+from fastapi.responses import JSONResponse
 
 router = APIRouter(prefix="/eesi", tags=["EESI proof of concept"])
+
+
+@router.post('/formula-d/scenario')
+def formula_d_scenario(payload: FormulaDInputs):
+    try:
+        return calculate_formula_d(**payload.model_dump())
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@router.post('/hies/formula-d')
+def formula_d_comparison(payload: FormulaDConfig):
+    try:
+        return compare_dataset(get_dataset(), payload)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except (OSError, sqlite3.Error) as error:
+        raise HTTPException(status_code=503, detail='The local HIES dataset could not be read.') from error
+
+
+@router.post('/hies/formula-d/export')
+def formula_d_export(payload: FormulaDConfig):
+    return JSONResponse(formula_d_comparison(payload), headers={
+        'Content-Disposition': 'attachment; filename="hies2019-formula-d.json"'})
 
 
 @router.get('/hies')
