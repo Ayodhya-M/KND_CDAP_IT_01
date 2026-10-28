@@ -27,11 +27,11 @@ function formatFeatureValue(value: unknown) {
 export function RiskFactorsList({ factors, demo = false }: { factors: Module4RiskFactor[]; demo?: boolean }) {
   return <section className="retention-section" aria-labelledby="risk-factors-heading">
     <div className="section-heading">
-      <div><p className="eyebrow">Prediction explanation</p><h2 id="risk-factors-heading">Important Risk Factors</h2></div>
+      <div><p className="eyebrow">{demo ? 'Synthetic model diagnostics' : 'Prediction explanation'}</p><h2 id="risk-factors-heading">{demo ? 'Positive Input Sensitivities' : 'Important Risk Factors'}</h2></div>
       <span className="item-count">{factors.length} factor{factors.length === 1 ? '' : 's'}</span>
     </div>
     {factors.length === 0
-      ? <p className="section-empty">No major risk factor was supplied in the current prediction explanation.</p>
+      ? <p className="section-empty">No supported positive factor was supplied for recommendation generation. This does not mean turnover is impossible.</p>
       : <div className="risk-factor-list">{factors.map((factor, index) => <article className="risk-factor-row" key={`${factor.feature_name}-${index}`}>
         <span className="factor-rank" aria-hidden="true">{index + 1}</span>
         <div><strong>{formatFeatureName(factor.feature_name)}</strong><small>Current value: {formatFeatureValue(factor.feature_value)}</small></div>

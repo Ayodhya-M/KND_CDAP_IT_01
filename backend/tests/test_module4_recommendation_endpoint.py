@@ -112,6 +112,17 @@ def test_recommendation_endpoint_returns_mock_metadata_and_ranked_output() -> No
     assert body["metadata"]["module3_source"] == "mock"
     assert "not calculated EESI" in body["metadata"]["disclaimer"]
     assert body["recommendations"][0]["priority_score"] >= body["recommendations"][-1]["priority_score"]
+    first = body["recommendations"][0]
+    assert first["priority_breakdown"]["score"] == first["priority_score"]
+    assert first["priority_breakdown"]["weights"] == {
+        "turnover_risk": 0.35,
+        "factor_contribution": 0.30,
+        "economic_pressure": 0.20,
+        "intervention_relevance": 0.15,
+    }
+    assert len(first["sensitivity_analysis"]) == 4
+    assert first["rule_version"] == body["metadata"]["recommendation_rule_version"]
+    assert first["recommendation_id"] in first["traceability"]
     assert repository.requested_upload_id == selected_upload
 
 

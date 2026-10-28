@@ -31,3 +31,8 @@ PROTOTYPE_PRIORITY_WEIGHTS = PriorityWeights()
 PROTOTYPE_PRESSURE_SCORES = {"low": 0.25, "medium": 0.60, "high": 1.0}
 PROTOTYPE_MEDIUM_PRIORITY_THRESHOLD = 40.0
 PROTOTYPE_HIGH_PRIORITY_THRESHOLD = 70.0
+
+# Exploratory one-at-a-time perturbation used to evaluate whether rankings are
+# sensitive to small changes in the prototype weights. This is an evaluation
+# setting, not an alternative validated weighting scheme.
+PROTOTYPE_SENSITIVITY_DELTA = 0.05

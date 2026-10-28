@@ -6,7 +6,9 @@ from app.module4.routers import router as module4_router
 from app.routers.auth import router as auth_router
 from app.routers.eesi import router as eesi_router
 from app.routers.data_cleaning import router as data_cleaning_router
+from app.routers.dataset_validation import router as dataset_validation_router
 from app.routers.hr import router as hr_router
+from app.routers.integration import router as integration_router
 from app.routers.macro import router as macro_router
 from app.routers.module3 import router as module3_router
 from app.routers.temporal_mapping import router as temporal_mapping_router
@@ -25,7 +27,9 @@ app.add_middleware(
 app.include_router(auth_router, prefix=settings.api_v1_prefix)
 app.include_router(eesi_router, prefix=settings.api_v1_prefix)
 app.include_router(data_cleaning_router, prefix=settings.api_v1_prefix)
+app.include_router(dataset_validation_router, prefix=settings.api_v1_prefix)
 app.include_router(hr_router, prefix=settings.api_v1_prefix)
+app.include_router(integration_router, prefix=settings.api_v1_prefix)
 app.include_router(macro_router, prefix=settings.api_v1_prefix)
 app.include_router(module3_router, prefix=settings.api_v1_prefix)
 app.include_router(temporal_mapping_router, prefix=settings.api_v1_prefix)

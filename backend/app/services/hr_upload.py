@@ -9,7 +9,7 @@ import pandas as pd
 
 REQUIRED_COLUMNS = [
     "EmployeeID", "Age", "Gender", "Department", "JobRole", "JobLevel",
-    "MonthlyIncome", "BusinessTravel", "DistanceFromHome", "EducationField",
+    "MonthlyIncome", "AdditionalIncome", "BusinessTravel", "DistanceFromHome", "EducationField",
     "MaritalStatus", "OverTime", "JobSatisfaction", "EnvironmentSatisfaction",
     "WorkLifeBalance", "TotalWorkingYears", "YearsAtCompany", "JoinDate",
     "ObservationDate", "Attrition",
@@ -21,6 +21,7 @@ NUMERIC_RULES = {
     "Age": (14, 100),
     "JobLevel": (1, 5),
     "MonthlyIncome": (0, None),
+    "AdditionalIncome": (0, None),
     "DistanceFromHome": (0, None),
     "JobSatisfaction": (1, 4),
     "EnvironmentSatisfaction": (1, 4),
@@ -144,6 +145,7 @@ def employee_rows_for_insert(dataframe: pd.DataFrame, upload_id: str) -> list[di
             "employee_id": record["EmployeeID"],
             "age": int(record["Age"]),
             "salary": float(record["MonthlyIncome"]),
+            "additional_income": float(record["AdditionalIncome"]),
             "department": record["Department"],
             "join_date": record["JoinDate"],
             "resignation_date": record.get("ResignationDate") or None,
