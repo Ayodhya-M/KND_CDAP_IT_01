@@ -6,12 +6,13 @@ from app.module4.schemas.decision_support import (
     DevelopmentMetadata,
     EmployeeProfileSummary,
     Module4RecommendationResponse,
+    PrioritySensitivityResult,
     PrioritizedRecommendation,
 )
 from app.module4.schemas.integration import Module4AnalysisInput
 from app.module4.services.explanation_engine import ExplanationEngine
 from app.module4.services.priority_engine import PriorityEngine
-from app.module4.services.recommendation_engine import RecommendationEngine
+from app.module4.services.recommendation_engine import RECOMMENDATION_RULE_VERSION, RecommendationEngine
 from app.module4.services.risk_analyzer import RiskAnalyzer
 
 
@@ -21,7 +22,13 @@ MOCK_DISCLAIMER = (
 )
 
 
-def provider_disclaimer(module2_is_mock: bool, module3_is_mock: bool) -> str:
+def provider_disclaimer(module2_is_mock: bool, module3_is_mock: bool, synthetic_demo: bool = False) -> str:
+    if synthetic_demo:
+        return ('Connected synthetic pilot demonstration: EESI is calculated and probabilities come from the saved synthetic model. '
+                'Factors are positive probability differences under one-at-a-time probes (overtime off, satisfaction 4, or salary +10%), '
+                'holding other model inputs, including EESI, fixed. These are not SHAP values or causal effects. '
+                'Risk bands are unclassified. Recommendation priority uses prototype weights and continuous EESI/100, not validated thresholds. '
+                'HIES household finances are not joined to these employees.')
     if module2_is_mock and module3_is_mock:
         return MOCK_DISCLAIMER
     mocked = []
@@ -88,14 +95,45 @@ class RetentionDecisionService:
         candidates = self.recommendation_engine.generate(analysis)
         is_mock = self.module2_provider.metadata.is_mock or self.module3_provider.metadata.is_mock
 
-        recommendations: list[PrioritizedRecommendation] = []
+        pressure_score = (
+            analysis.eesi_score / 100
+            if self.module3_provider.metadata.data_mode == 'synthetic_demo_integration'
+            else None
+        )
+        evaluated = []
         for candidate in candidates:
             priority = self.priority_engine.score(
                 turnover_probability=analysis.turnover_probability,
                 factor_contribution=candidate.factor_contribution,
                 economic_pressure_level=analysis.economic_pressure_level,
                 intervention_relevance=candidate.intervention_relevance,
+                economic_pressure_score=pressure_score,
             )
+            sensitivity = {}
+            for scenario_id, label, weights in self.priority_engine.exploratory_weight_scenarios():
+                result = PriorityEngine(weights).score(
+                    turnover_probability=analysis.turnover_probability,
+                    factor_contribution=candidate.factor_contribution,
+                    economic_pressure_level=analysis.economic_pressure_level,
+                    intervention_relevance=candidate.intervention_relevance,
+                    economic_pressure_score=pressure_score,
+                )
+                sensitivity[scenario_id] = (label, result)
+            evaluated.append((candidate, priority, sensitivity))
+
+        scenario_ranks: dict[str, dict[str, int]] = {}
+        for scenario_id, _, _ in self.priority_engine.exploratory_weight_scenarios():
+            ordered = sorted(
+                evaluated,
+                key=lambda item: (-item[2][scenario_id][1].score, item[0].recommendation_id),
+            )
+            scenario_ranks[scenario_id] = {
+                candidate.recommendation_id: rank
+                for rank, (candidate, _, _) in enumerate(ordered, start=1)
+            }
+
+        recommendations: list[PrioritizedRecommendation] = []
+        for candidate, priority, sensitivity in evaluated:
             recommendations.append(PrioritizedRecommendation(
                 recommendation_id=candidate.recommendation_id,
                 recommendation_type=candidate.recommendation_type,
@@ -106,6 +144,23 @@ class RetentionDecisionService:
                 suggested_action=candidate.suggested_action,
                 priority_score=priority.score,
                 priority_level=priority.level,
+                priority_breakdown=priority.breakdown,
+                sensitivity_analysis=[
+                    PrioritySensitivityResult(
+                        scenario_id=scenario_id,
+                        label=label,
+                        weights=result.breakdown.weights,
+                        score=result.score,
+                        priority_level=result.level,
+                        rank=scenario_ranks[scenario_id][candidate.recommendation_id],
+                    )
+                    for scenario_id, (label, result) in sensitivity.items()
+                ],
+                rule_version=candidate.rule_version,
+                traceability=(
+                    f"Rule {candidate.recommendation_id} in {candidate.rule_version} mapped the positive "
+                    f"'{candidate.related_factor}' factor to this option. {candidate.eligibility_basis}"
+                ),
             ))
         recommendations.sort(key=lambda item: item.priority_score, reverse=True)
 
@@ -136,6 +191,13 @@ class RetentionDecisionService:
                 disclaimer=provider_disclaimer(
                     self.module2_provider.metadata.is_mock,
                     self.module3_provider.metadata.is_mock,
+                    synthetic_demo=self.module3_provider.metadata.data_mode == 'synthetic_demo_integration',
+                ),
+                recommendation_rule_version=RECOMMENDATION_RULE_VERSION,
+                priority_method="Transparent prototype weighted sum (35% risk, 30% factor contribution, 20% economic pressure, 15% relevance).",
+                sensitivity_notice=(
+                    "Exploratory one-at-a-time +0.05 weight perturbations redistribute weight proportionally "
+                    "across the other components. They assess ranking sensitivity and are not validated alternatives."
                 ),
             ),
         )

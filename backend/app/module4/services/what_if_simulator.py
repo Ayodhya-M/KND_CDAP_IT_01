@@ -34,6 +34,31 @@ class WhatIfSimulator:
         employee_data = original_input.employee.model_dump()
         employee_data.update(updates)
         simulated_employee = Module1EmployeeContext.model_validate(employee_data)
+        if self.decision_service.module3_provider.metadata.data_mode == 'synthetic_demo_integration':
+            eesi = self.decision_service.module2_provider.get_eesi_result(simulated_employee, original_input.economic_context)
+            prediction = self.decision_service.module3_provider.get_scenario_prediction(simulated_employee, eesi)
+            scenario_input = Module4AnalysisInput(employee=simulated_employee,
+                economic_context=original_input.economic_context, eesi_result=eesi, prediction_result=prediction)
+            simulated = self.decision_service.recommendations_for_analysis_input(scenario_input)
+            old_factors = {factor.feature_name for factor in original_input.prediction_result.risk_factors}
+            new_factors = {factor.feature_name for factor in prediction.risk_factors}
+            return WhatIfSimulationResponse(employee_id=employee_id,
+                original_values=self._scenario_values(original_input.employee),
+                simulated_values=self._scenario_values(simulated_employee),
+                original_turnover_probability=original.turnover_probability,
+                simulated_turnover_probability=simulated.turnover_probability,
+                probability_difference=round(100 * (simulated.turnover_probability - original.turnover_probability), 6),
+                original_recommendations=original.recommendations,
+                simulated_recommendations=simulated.recommendations,
+                removed_risk_factors=sorted(old_factors - new_factors),
+                retained_risk_factors=sorted(old_factors & new_factors),
+                assumptions=['EESI and the synthetic model are recalculated with temporary employee inputs.',
+                             'Economic context remains fixed; probability differences are percentage points.',
+                             'Work-life balance is not a feature of this saved model and cannot directly affect its prediction.',
+                             'Input sensitivities are model diagnostics, not intervention effects or SHAP values.',
+                             'No employee data or model artifacts are modified.'],
+                disclaimer='Synthetic-model scenario only; changes do not establish causality, intervention effectiveness or future resignation risk.',
+                metadata=simulated.metadata)
 
         retained: list[Module3RiskFactor] = []
         removed: list[str] = []

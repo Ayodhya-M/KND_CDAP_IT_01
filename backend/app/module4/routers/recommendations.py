@@ -13,6 +13,9 @@ from app.module4.providers.mock_module2_provider import MockModule2Provider
 from app.module4.providers.mock_module3_provider import MockModule3Provider
 from app.module4.providers.real_module2_provider import RealModule2Provider
 from app.module4.providers.real_module3_provider import RealModule3Provider
+from app.module4.providers.synthetic_demo_provider import SyntheticDemoModule3Provider
+from app.module4.providers.base import ProviderMetadata
+from app.services.module3_prediction import get_model_status
 from app.module4.repositories.employee_repository import (
     AmbiguousEmployeeError,
     EmployeeNotFoundError,
@@ -44,13 +47,21 @@ def build_module3_provider(settings: Settings):
     return MockModule3Provider()
 
 
-def get_decision_service() -> RetentionDecisionService:
+def get_decision_service(demo: bool = False) -> RetentionDecisionService:
     """Compose configured providers without silently falling back to mocks.
 
     Mock remains the safe default. Selecting a real provider with an incomplete
     research contract produces a clear 503 response from that provider.
     """
     settings = get_settings()
+    if demo:
+        model = get_model_status()
+        formula = model.get('eesi_integration', {}).get('formula_id')
+        if not model.get('model_available') or not formula:
+            raise HTTPException(status_code=503, detail='Prepare the synthetic turnover model before enabling the connected RP demo.')
+        module2 = RealModule2Provider(formula_identifier=formula, reference_profile='pilot')
+        module2.metadata = ProviderMetadata(source='module2_calculated_pilot', data_mode='synthetic_demo_integration', is_mock=False)
+        return RetentionDecisionService(EmployeeRepository(), module2, SyntheticDemoModule3Provider())
     return RetentionDecisionService(
         employee_repository=EmployeeRepository(),
         module2_provider=build_module2_provider(settings),

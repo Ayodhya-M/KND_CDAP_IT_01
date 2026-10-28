@@ -47,6 +47,8 @@ class RealModule2Provider:
             raise ProviderResultUnavailableError(
                 "Module 2 real provider is unavailable: employee has no mapped economic context"
             )
+        if employee.observation_date is not None and economic_context.indicator_month != employee.observation_date.replace(day=1):
+            raise ProviderResultUnavailableError('The mapped economic month does not match the employee observation month.')
 
         salary = self._required_positive(employee.salary, "salary")
         inflation = self._required(economic_context.inflation_rate, "inflation_rate")

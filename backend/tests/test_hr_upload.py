@@ -47,14 +47,14 @@ def client(monkeypatch):
 def sample_csv(rows=None, columns=None) -> bytes:
     columns = columns or [
         "EmployeeID", "Age", "Gender", "Department", "JobRole", "JobLevel",
-        "MonthlyIncome", "BusinessTravel", "DistanceFromHome", "EducationField",
+        "MonthlyIncome", "AdditionalIncome", "BusinessTravel", "DistanceFromHome", "EducationField",
         "MaritalStatus", "OverTime", "JobSatisfaction", "EnvironmentSatisfaction",
         "WorkLifeBalance", "TotalWorkingYears", "YearsAtCompany", "JoinDate",
         "ResignationDate", "ObservationDate", "Attrition",
     ]
     rows = rows or [{
         "EmployeeID": "EMP001", "Age": "32", "Gender": "Female", "Department": "Sales",
-        "JobRole": "Sales Executive", "JobLevel": "2", "MonthlyIncome": "50000",
+        "JobRole": "Sales Executive", "JobLevel": "2", "MonthlyIncome": "50000", "AdditionalIncome": "2500",
         "BusinessTravel": "Travel_Rarely", "DistanceFromHome": "8", "EducationField": "Marketing",
         "MaritalStatus": "Single", "OverTime": "No", "JobSatisfaction": "3",
         "EnvironmentSatisfaction": "3", "WorkLifeBalance": "3", "TotalWorkingYears": "8",
@@ -147,7 +147,7 @@ def test_empty_csv_is_rejected(client):
 def _sample_row():
     return {
         "EmployeeID": "EMP001", "Age": "32", "Gender": "Female", "Department": "Sales",
-        "JobRole": "Sales Executive", "JobLevel": "2", "MonthlyIncome": "50000",
+        "JobRole": "Sales Executive", "JobLevel": "2", "MonthlyIncome": "50000", "AdditionalIncome": "2500",
         "BusinessTravel": "Travel_Rarely", "DistanceFromHome": "8", "EducationField": "Marketing",
         "MaritalStatus": "Single", "OverTime": "No", "JobSatisfaction": "3",
         "EnvironmentSatisfaction": "3", "WorkLifeBalance": "3", "TotalWorkingYears": "8",

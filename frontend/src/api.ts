@@ -117,6 +117,31 @@ export type Module4Recommendation = {
   suggested_action: string
   priority_score: number
   priority_level: string
+  priority_breakdown: {
+    formula: string
+    inputs: PriorityValues
+    weights: PriorityValues
+    weighted_components: PriorityValues
+    raw_weighted_total: number
+    score: number
+  }
+  sensitivity_analysis: {
+    scenario_id: string
+    label: string
+    weights: PriorityValues
+    score: number
+    priority_level: string
+    rank: number
+  }[]
+  rule_version: string
+  traceability: string
+}
+
+export type PriorityValues = {
+  turnover_risk: number
+  factor_contribution: number
+  economic_pressure: number
+  intervention_relevance: number
 }
 
 export type Module4Metadata = {
@@ -124,6 +149,9 @@ export type Module4Metadata = {
   module2_source: string
   module3_source: string
   disclaimer: string
+  recommendation_rule_version: string
+  priority_method: string
+  sensitivity_notice: string
 }
 
 export type Module4RecommendationResponse = {
@@ -207,6 +235,76 @@ export type RemoveMissingResult = {
   message: string
 }
 
+export type IntegrationMappingRun = {
+  id: string
+  total_employee_records: number
+  mapped_record_count: number
+  unmapped_record_count: number
+  mapping_accuracy: number
+  created_at: string
+}
+
+export type IntegratedRecordPreview = {
+  employee_id: string
+  salary: number
+  tenure_years: number
+  additional_income: number
+  overtime: boolean
+  job_satisfaction: number
+  observation_date: string
+  economic_month: string
+  inflation_rate: number
+  cpi_index: number
+  unemployment_rate: number
+  policy_interest_rate_percent: number
+  usd_lkr_exchange_rate: number
+  gdp_growth_rate_percent: number
+  attrition: boolean
+}
+
+export type IntegrationResult = {
+  status: 'success'
+  integration_run_id: string
+  total_hr_records: number
+  integrated_records: number
+  unmatched_records: number
+  integration_rate: number
+  records: IntegratedRecordPreview[]
+}
+
+export type ValidationIntegrationRun = {
+  id: string
+  total_hr_records: number
+  mapped_record_count: number
+  mapping_accuracy: number
+  status: string
+  created_at: string
+}
+
+export type DatasetValidationReport = {
+  status: 'success'
+  integration_run_id: string
+  total_hr_records: number
+  economic_months: number
+  integrated_records: number
+  missing_values: Record<string, number>
+  missing_value_count: number
+  duplicate_records: number
+  invalid_values: { field: string; count: number; sample_employee_ids: string[] }[]
+  invalid_value_count: number
+  unmatched_records: number
+  mapping_rate: number
+  integration_rate: number
+  record_count_consistency: {
+    hr_records_equal_mapping_records: boolean
+    integrated_records_equal_mapped_records: boolean
+    expected_integrated_records: number
+    actual_integrated_records: number
+    is_consistent: boolean
+  }
+  validation_status: 'passed' | 'failed'
+}
+
 type ApiErrorBody = HrUploadSummary & { detail?: string }
 
 export class UploadRequestError extends Error {
@@ -267,9 +365,12 @@ export async function createTemporalMappingPreview(hrUploadId: string, economicU
   return body as unknown as TemporalMappingPreview
 }
 
-function module4Url(employeeId: string, action: 'recommendations' | 'simulation', uploadId?: string): string {
+function module4Url(employeeId: string, action: 'recommendations' | 'simulation', uploadId?: string, demo = false): string {
   const url = `${API_BASE_URL}/module4/employees/${encodeURIComponent(employeeId)}/${action}`
-  return uploadId ? `${url}?${new URLSearchParams({ upload_id: uploadId }).toString()}` : url
+  const params = new URLSearchParams()
+  if (uploadId) params.set('upload_id', uploadId)
+  if (demo) params.set('demo', 'true')
+  return params.size ? `${url}?${params.toString()}` : url
 }
 
 function safeErrorDetail(detail: unknown): string | undefined {
@@ -278,10 +379,10 @@ function safeErrorDetail(detail: unknown): string | undefined {
   return undefined
 }
 
-export async function getRetentionRecommendations(employeeId: string, uploadId?: string): Promise<Module4RecommendationResponse> {
+export async function getRetentionRecommendations(employeeId: string, uploadId?: string, demo = false): Promise<Module4RecommendationResponse> {
   let response: Response
   try {
-    response = await fetch(module4Url(employeeId, 'recommendations', uploadId))
+    response = await fetch(module4Url(employeeId, 'recommendations', uploadId, demo))
   } catch {
     throw new RetentionRequestError(0, 'Unable to reach the backend. Confirm that the FastAPI server is running and try again.')
   }
@@ -307,10 +408,11 @@ export async function simulateRetentionScenario(
   employeeId: string,
   changes: WhatIfChanges,
   uploadId?: string,
+  demo = false,
 ): Promise<WhatIfSimulationResponse> {
   let response: Response
   try {
-    response = await fetch(module4Url(employeeId, 'simulation', uploadId), {
+    response = await fetch(module4Url(employeeId, 'simulation', uploadId, demo), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(changes),
@@ -412,4 +514,34 @@ export function predictModule3(record: Record<string, string | number>): Promise
 
 export function getModule3Evaluation(): Promise<Module3Evaluation> {
   return module3Request<Module3Evaluation>('evaluation')
+}
+
+export async function getIntegrationMappingRuns(): Promise<{ mapping_runs: IntegrationMappingRun[] }> {
+  const response = await fetch(`${API_BASE_URL}/integration/mapping-runs`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as { mapping_runs: IntegrationMappingRun[] }
+}
+
+export async function generateIntegratedDataset(mappingRunId: string): Promise<IntegrationResult> {
+  const response = await fetch(`${API_BASE_URL}/integration/generate`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ temporal_mapping_run_id: mappingRunId }),
+  })
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as IntegrationResult
+}
+
+export async function getValidationIntegrationRuns(): Promise<{ integration_runs: ValidationIntegrationRun[] }> {
+  const response = await fetch(`${API_BASE_URL}/dataset-validation/integration-runs`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as { integration_runs: ValidationIntegrationRun[] }
+}
+
+export async function validateIntegratedDataset(integrationRunId: string): Promise<DatasetValidationReport> {
+  const response = await fetch(`${API_BASE_URL}/dataset-validation/integration/${integrationRunId}`)
+  const body = await response.json().catch(() => ({})) as ApiErrorBody
+  if (!response.ok) throw new UploadRequestError(body)
+  return body as unknown as DatasetValidationReport
 }
