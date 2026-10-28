@@ -4,14 +4,16 @@ import { useEffect, useState } from 'react'
 import { analyseMissingValues, createTemporalMappingPreview, getCleaningUploadChoices, getMappingUploadChoices, getModule3ModelStatus, removeMissingValues, uploadHrDataset, uploadMacroeconomicDataset, type CleaningAnalysis, type CleaningUploadChoice, type HrUploadSummary, type MacroUploadSummary, type MappingUploadChoice, type Module3ModelStatus, type RemoveMissingResult, type TemporalMappingPreview, UploadRequestError, generateIntegratedDataset, getIntegrationMappingRuns, IntegrationMappingRun, IntegrationResult } from './api'
 import './styles.css'
 import EesiView from './EesiView'
+import ImportedSourceView from './ImportedSourceView'
 import Module3View from './Module3View'
 import { Module4Dashboard } from './pages/Module4Dashboard'
 import { Icon, type IconName } from './components/Icon'
 import { getHiesDataset, getDatabaseStatus, type HiesDataset } from './api'
 
-type View = 'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'integration' | 'eesi' | 'module3' | 'module4'
+type View = 'source-data' | 'dashboard' | 'hr-upload' | 'macro-upload' | 'data-cleaning' | 'temporal-mapping' | 'integration' | 'eesi' | 'module3' | 'module4'
 
 const viewDetails: Record<View, { section: string; title: string }> = {
+  'source-data': { section: 'Data Management', title: 'Additional sources' },
   dashboard: { section: 'Workspace', title: 'Executive overview' },
   'hr-upload': { section: 'Data Management', title: 'HR datasets' },
   'macro-upload': { section: 'Data Management', title: 'Economic datasets' },
@@ -84,8 +86,9 @@ function Dashboard() {
       <nav aria-label="Research modules">
         <button title="Overview" aria-label="Overview" className={view === 'dashboard' ? 'active' : ''} onClick={() => navigate('dashboard')}><Icon name="overview" /><span>Overview</span></button>
         <p className="nav-label">Research workspaces</p>
-        <button title="Data Management" aria-label="Data Management" className={`data-management-nav ${['hr-upload','macro-upload','data-cleaning','temporal-mapping','integration'].includes(view) ? 'active' : ''}`} onClick={() => navigate('hr-upload')}><Icon name="database" /><span>Data Management</span></button>
+        <button title="Data Management" aria-label="Data Management" className={`data-management-nav ${['hr-upload','macro-upload','data-cleaning','temporal-mapping','integration','source-data'].includes(view) ? 'active' : ''}`} onClick={() => navigate('hr-upload')}><Icon name="database" /><span>Data Management</span></button>
         <div className="nav-subitems">
+          <button aria-label="Additional sources" className={view === 'source-data' ? 'active' : ''} onClick={() => navigate('source-data')}>Additional sources</button>
           <button aria-label="Economic uploads" className={view === 'macro-upload' ? 'active' : ''} onClick={() => navigate('macro-upload')}>Economic uploads</button>
           <button aria-label="Data quality" className={view === 'data-cleaning' ? 'active' : ''} onClick={() => navigate('data-cleaning')}>Data quality</button>
           <button aria-label="Temporal mapping" className={view === 'temporal-mapping' ? 'active' : ''} onClick={() => navigate('temporal-mapping')}>Temporal mapping</button>
@@ -101,7 +104,7 @@ function Dashboard() {
     <section className="dashboard-content">
       <div className="topbar"><button className="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded={mobileNavOpen} onClick={() => setMobileNavOpen(value => !value)}><Icon name="menu" /></button><img className="topbar-brand-icon" src="/retention-intelligence-favicon.svg" alt="" aria-hidden="true" /><div><p className="breadcrumb">Retention Intelligence <span>/</span> {current.section}</p><h1>{current.title}</h1></div><span className="topbar-context">Research prototype</span></div>
       <div className="page-content">
-      {view === 'dashboard' ? <OverviewDashboard uniqueEmployees={uniqueEmployees} hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} hies={hies} hrAvailable={hrAvailable} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'integration' ? <DataIntegrationView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
+      {view === 'dashboard' ? <OverviewDashboard uniqueEmployees={uniqueEmployees} hrUploads={hrUploads} economicUploads={economicUploads} modelStatus={modelStatus} hies={hies} hrAvailable={hrAvailable} loading={overviewLoading} error={overviewError} onNavigate={navigate} onRefresh={() => void refreshOverview()} /> : view === 'hr-upload' ? <HrUploadView onSuccess={handleSuccessfulUpload} /> : view === 'macro-upload' ? <MacroUploadView onSuccess={() => void refreshOverview()} /> : view === 'data-cleaning' ? <DataCleaningView /> : view === 'temporal-mapping' ? <TemporalMappingView /> : view === 'integration' ? <DataIntegrationView /> : view === 'source-data' ? <ImportedSourceView /> : view === 'eesi' ? <EesiView /> : view === 'module3' ? <Module3View /> : <Module4Dashboard />}
       </div>
     </section>
   </main>

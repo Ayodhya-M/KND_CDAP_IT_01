@@ -1,5 +1,6 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import { getMappingUploadChoices, getRetentionRecommendations, RetentionRequestError, type MappingUploadChoice, type Module4RecommendationResponse, type WhatIfSimulationResponse } from '../api'
+import ImportedSourceView from '../ImportedSourceView'
 import { EmployeeSearch } from '../components/EmployeeSearch'
 import { EmptyRecommendations } from '../components/EmptyRecommendations'
 import { IntegrationStatus } from '../components/IntegrationStatus'
@@ -92,6 +93,8 @@ export function Module4Dashboard() {
     </header>
 
     <div className="module4-pilot-notice" role="note"><strong>{demo ? 'Synthetic research environment.' : 'Development provider environment.'}</strong> {demo ? 'Probabilities use the saved pilot model; risk bands remain unclassified and sensitivities are not SHAP values or causal effects.' : 'Outputs use the explicitly configured providers and retain their API provenance. No automatic fallback is performed by the dashboard.'}</div>
+
+    <details className="validation-summary"><summary>Use additional imported datasets</summary><ImportedSourceView stage="retention" /></details>
 
     <section className="module4-search-strip" aria-labelledby="module4-search-heading">
       <div className="search-strip-title"><span>01</span><div><p>Employee analysis</p><h2 id="module4-search-heading">Select an employee record</h2></div></div>

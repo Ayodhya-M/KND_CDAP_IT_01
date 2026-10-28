@@ -1,3 +1,4 @@
+import ImportedSourceView from './ImportedSourceView'
 import { useEffect, useState } from 'react'
 import { getModule3PilotRecords, type Module3PilotRecord } from './api'
 import { getModule3Contract, getModule3Evaluation, getModule3ModelStatus, predictModule3, type Module3Contract, type Module3Evaluation, type Module3ModelStatus, type Module3Prediction } from './api'
@@ -63,6 +64,7 @@ export default function Module3View() {
   return <section className="module3-view">
     <p className="eyebrow">Module 3 · integrated prediction pipeline</p>
     <h1>Employee turnover prediction</h1>
+    <details className="validation-summary"><summary>Use additional imported datasets</summary><ImportedSourceView stage="prediction" /></details>
     <button className="secondary-button" disabled={loading || busy} onClick={() => void load()}>{loading ? 'Loading model…' : 'Refresh model status'}</button>
     <p className="muted">This screen consumes the selected Module 2 EESI value and a saved Module 3 model. It does not provide retention recommendations.</p>
     <div className="module3-notice"><strong>Synthetic pilot technical demonstration</strong><p>Current model artifacts were trained with synthetic pilot records. Results prove the software flow only and are not research performance findings.</p></div>
