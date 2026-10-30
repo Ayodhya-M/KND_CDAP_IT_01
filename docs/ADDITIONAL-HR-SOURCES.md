@@ -250,3 +250,16 @@ original-score section is removed. The 70/30 panel is retained under a collapsed
 names identify them as Extended B/C. Predictions continue consuming original B.
 The existing verified conceptual references and research limitations above
 apply; family grouping is not empirical validation.
+
+
+## Minimal Module 3/4 integration alignment
+
+The additional-source employee selection is remembered per dataset for the
+browser session and reused when opening Module 2, 3 or 4's additional-source
+view. A saved employee ID is checked against the selected dataset before reuse.
+Modules 3/4 show the employee, original Basic B score, formula version and
+scenario month. The existing source analysis still recalculates Basic B for
+model inputs and uses the resulting probabilities for prototype suggestions.
+Extended B/C and 70/30 remain comparison-only. No model is retrained and no
+prediction or recommendation logic is changed. The separate main pilot screens
+retain their existing model/provider formula contracts and cohort boundaries.

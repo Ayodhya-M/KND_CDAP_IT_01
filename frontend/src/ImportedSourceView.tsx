@@ -33,13 +33,15 @@ export default function ImportedSourceView({ stage = 'all' }: { stage?: 'all' | 
     getSourceRecords(datasetId).then(response => {
       if (!active) return
       setRecords(response.records)
-      setRecordId(response.records[0]?.record_id ?? '')
+      const savedRecord = sessionStorage.getItem(`additional-source-record:${datasetId}`)
+      setRecordId(response.records.find(item => item.record_id === savedRecord)?.record_id ?? response.records[0]?.record_id ?? '')
     }).catch(caught => { if (active) setError(caught instanceof Error ? caught.message : 'Unable to load records.') })
     return () => { active = false }
   }, [datasetId])
   useEffect(() => {
     setScenario(null); setResult(null)
     if (!datasetId || !recordId) return
+    sessionStorage.setItem(`additional-source-record:${datasetId}`, recordId)
     const version = ++requestId.current
     setBusy(true); setError('')
     analyseSource(datasetId, recordId).then(value => { if (version === requestId.current) setResult(value) })
@@ -71,6 +73,7 @@ export default function ImportedSourceView({ stage = 'all' }: { stage?: 'all' | 
     </>}
     {busy && <p role="status">Running the source-specific pipeline…</p>}
     {result && <>
+      {(stage === 'prediction' || stage === 'retention') && result.eesi && <section className="validation-summary"><h2>EESI pipeline input</h2><div className="summary-grid"><span>Employee<strong>{result.record_id}</strong></span><span>Basic B used for prediction<strong>{result.eesi.scores.additive.toFixed(2)} / 100</strong></span></div><p className="muted">Module 2 Basic B ? Module 3 intention prediction ? Module 4 prototype options. Extended B/C and the earlier 70/30 adjustment are comparison-only.</p><details><summary>Calculation version</summary><p>{result.eesi.version} ? Scenario month: {String(result.inputs.Survey_Month)}</p></details></section>}
       {(stage === 'all' || stage === 'eesi') && <ExtendedEesiPanel key={`${datasetId}:${recordId}`} result={result} />}
       {(stage === 'all' || stage === 'eesi') && result.financial_burden_adjustment && <details className="validation-summary"><summary>Earlier experiment</summary><FinancialBurdenPanel value={result.financial_burden_adjustment} /></details>}
       {(stage === 'all' || stage === 'prediction') && <section className="validation-summary"><h2>Module 3 · {result.prediction.target_label}</h2><p>Predicted class: <strong>{result.prediction.predicted_class}</strong></p><div className="summary-grid">{Object.entries(result.prediction.class_probabilities).map(([label, probability]) => <span key={label}>{label}<strong>{(probability * 100).toFixed(2)}%</strong></span>)}</div><p>Source-specific model · {result.evaluation.split.train_rows} training / {result.evaluation.split.heldout_rows} held-out records. This is a software demonstration, not validated workforce performance.</p></section>}
