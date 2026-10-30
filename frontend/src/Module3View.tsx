@@ -68,7 +68,6 @@ export default function Module3View() {
     <details className="validation-summary"><summary>Use additional imported datasets</summary><ImportedSourceView stage="prediction" /></details>
     <button className="secondary-button" disabled={loading || busy} onClick={() => void load()}>{loading ? 'Loading model…' : 'Refresh model status'}</button>
     <p className="muted">Uses the saved model's original EESI formula. Extended B/C and the 70/30 experiment are not prediction inputs.</p>
-    <div className="module3-notice"><strong>Synthetic pilot technical demonstration</strong><p>Current model artifacts were trained with synthetic pilot records. Results prove the software flow only and are not research performance findings.</p></div>
     {error && <p className="upload-error" role="alert">{error}</p>}
     {!loading && status && !status.model_available && <p className="muted">Prepare the demo with <code>backend\.venv\Scripts\python.exe scripts/prepare_module3_demo.py</code> from the project root, then refresh model status.</p>}
     <div className="module3-grid">
