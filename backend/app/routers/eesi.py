@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi import Query
 from pydantic import BaseModel, Field
 
 from app.services.eesi import calculate, metadata, pilot_preview
@@ -84,9 +85,11 @@ def get_metadata():
 
 
 @router.get("/pilot")
-def get_pilot():
+def get_pilot(size: int = Query(default=100)):
+    if size not in (100, 300):
+        raise HTTPException(status_code=422, detail='Pilot size must be 100 or 300')
     try:
-        return pilot_preview()
+        return pilot_preview(size)
     except (OSError, ValueError) as error:
         raise HTTPException(status_code=503, detail="EESI pilot data is unavailable") from error
 

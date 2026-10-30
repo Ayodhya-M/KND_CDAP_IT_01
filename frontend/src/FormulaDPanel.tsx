@@ -52,10 +52,11 @@ export default function FormulaDPanel({ selected, onEvidence }: { selected: Hies
   const baseline = comparison?.records.find(row => row.sample_id === selected?.sample_id)
   const details = (value: FormulaDResult) => <div className="summary-grid"><span>Real wage (monthly 2013 LKR)<strong>{fixed(value.real_wage)}</strong></span><span>Wage inadequacy (0â€“1)<strong>{fixed(value.wage_inadequacy)}</strong></span><span>Normalized unemployment (0â€“1)<strong>{fixed(value.normalized_unemployment)}</strong></span><span>Formula D score<strong>{fixed(value.score)} / 100</strong></span></div>
   return <section id="formula-d" className="validation-summary">
-    <h2>Formula D Â· Real-Wage Economic Exposure Index</h2>
+    <h2>D ? Real-Wage / Purchasing Power</h2>
     <p>Proposed, unvalidated research index. This is not a validated psychological financial stress scale or a turnover probability.</p>
     <code>100 Ã— [alpha Ã— wage inadequacy + (1 âˆ’ alpha) Ã— normalized unemployment]</code>
     <p>Real wage = wage Ã— 100 / NCPI (2013=100). Wage inadequacy = clip(1 âˆ’ real wage / reference income, 0, 1). HIES 2019 unemployment normalization = clip((unemployment âˆ’ 4.5) / (5.1 âˆ’ 4.5), 0, 1).</p>
+    <p>Version: real-wage-hies2019-v1. RW = 100 ? S/CPI; G = clip((Z ? RW)/Z, 0, 1). Default alpha = 0.5 gives D = 100 ? (0.5G + 0.5U). Existing alpha configuration is preserved. Purpose: compare purchasing power with a reference real income Z and combine the shortfall with unemployment.</p>
     <form onSubmit={event => { event.preventDefault(); void configure() }}><div className="eesi-inputs">
       <label className="eesi-field">Illustrative reference income (monthly 2013 purchasing-power LKR)<input type="number" step="any" min="0.000000001" value={reference} placeholder="No threshold configured" onChange={event => { invalidate(); setReference(event.target.value) }} /></label>
       <label className="eesi-field">Alpha (0â€“1)<input required type="number" min="0" max="1" step="any" value={alpha} onChange={event => { invalidate(); setAlpha(event.target.value) }} /></label>
