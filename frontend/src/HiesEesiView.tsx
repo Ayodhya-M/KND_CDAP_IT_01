@@ -1,6 +1,5 @@
 import { familyName } from './eesiFamilies'
 import { useEffect, useRef, useState } from 'react'
-import FormulaDPanel from './FormulaDPanel'
 import { calculateHiesScenario, getHiesDataset, type HiesCalculation, type HiesDataset, type HiesScenario } from './api'
 
 const labels: Record<keyof HiesScenario, string> = { salary: 'Wages (LKR / month)', inflation: 'Inflation, year on year (%)', cpi: 'NCPI (2013 = 100)', unemployment: 'Unemployment (%)', reference_salary: 'Illustrative reference salary (LKR)' }
@@ -18,7 +17,6 @@ export default function HiesEesiView() {
   const [scenarioBusy, setScenarioBusy] = useState(false)
   const [scenarioError, setScenarioError] = useState('')
   const scenarioRequest = useRef(0)
-  const [formulaDEvidence, setFormulaDEvidence] = useState<unknown>(null)
   const selected = data?.records.find(row => row.sample_id === selectedId)
   const formula = data?.metadata.formulas.find(item => item.id === formulaId)
   const load = async (importPrepared = false) => {
@@ -50,7 +48,7 @@ export default function HiesEesiView() {
   }
   const exportEvidence = () => {
     if (!data) return
-    const url = URL.createObjectURL(new Blob([JSON.stringify({ dataset: data, selected_formula: formulaId, selected_employee: selectedId, scenario, scenario_result: result, formula_d: formulaDEvidence }, null, 2)], { type: 'application/json' }))
+    const url = URL.createObjectURL(new Blob([JSON.stringify({ dataset: data, selected_formula: formulaId, selected_employee: selectedId, scenario, scenario_result: result, formula_d: { enabled: false, message: 'Formula D is temporarily hidden in this view.' } }, null, 2)], { type: 'application/json' }))
     const link = document.createElement('a'); link.href = url; link.download = 'hies2019-eesi-evidence.json'; link.click(); URL.revokeObjectURL(url)
   }
   return <section className="eesi-view">
@@ -64,8 +62,7 @@ export default function HiesEesiView() {
       <p className="muted">HIES 2019 sample ? Exploratory scores, not validated stress measurements.</p>
       {!data.record_count && <p>Import the prepared sample to begin.</p>}
       {!!data.record_count && <>
-        <div className="eesi-formulas eesi-formulas-four">{data.metadata.formulas.map(item => <button key={item.id} className={`eesi-formula ${formulaId === item.id ? 'selected' : ''}`} aria-pressed={formulaId === item.id} onClick={() => setFormulaId(item.id)}><strong>{familyName(item.id, item.name)}</strong><code>{item.expression}</code><small>Sample mean {(data.records.reduce((sum, row) => sum + row.scores[item.id], 0) / data.record_count).toFixed(2)} / 100</small></button>)}<a className="eesi-formula" href="#formula-d"><strong>D ? Real-Wage / Purchasing Power</strong><code>100 ? [alpha ? G + (1 ? alpha) ? U]</code><small>View configuration, score and sample comparison below</small></a></div>
-        <FormulaDPanel key={JSON.stringify(data.records)} selected={selected} onEvidence={setFormulaDEvidence} />
+        <div className="eesi-formulas">{data.metadata.formulas.map(item => <button key={item.id} className={`eesi-formula ${formulaId === item.id ? 'selected' : ''}`} aria-pressed={formulaId === item.id} onClick={() => setFormulaId(item.id)}><strong>{familyName(item.id, item.name)}</strong><code>{item.expression}</code><small>Sample mean {(data.records.reduce((sum, row) => sum + row.scores[item.id], 0) / data.record_count).toFixed(2)} / 100</small></button>)}</div>
         <details className="validation-summary"><summary>Formula details and normalization</summary><p><strong>Basic A/B/C calculation version:</strong> {selected?.breakdown.version}</p><p><strong>Reference:</strong> {data.metadata.reference_period} · {data.metadata.cpi_base}. Normalize each economic input with clip((value − lower) / (upper − lower), 0, 1).</p><p>{Object.entries(data.metadata.bounds).map(([key, values]) => `${key}: ${values.join(' to ')}`).join(' · ')}</p><p>Salary exposure V = reference salary / (reference salary + wages). The LKR {amount(data.metadata.reference_salary)} reference is illustrative.</p></details>
         <section className="validation-summary"><h2>Employee score breakdown</h2><label className="eesi-field">Wage earner<select value={selectedId} onChange={event => setSelectedId(event.target.value)}>{data.records.map(row => <option key={row.sample_id} value={row.sample_id}>{row.sample_id} · {row.economic_month} · LKR {amount(row.salary)}</option>)}</select></label>
           {selected && <><p className="eesi-score">{selected.scores[formulaId].toFixed(2)} <small>/ 100</small></p><p className="muted">Survey: {selected.survey_month}. Economic reference: {selected.economic_month}, using the previous-calendar-month assumption.</p>{Object.entries(selected.breakdown.contributions[formulaId]).map(([key, value]) => <div className="eesi-contribution" key={key}><span>{key.split('_').join(' ')}</span><progress max="100" value={value} aria-label={`${key} score contribution`} /><strong>{value.toFixed(2)} points</strong></div>)}</>}
