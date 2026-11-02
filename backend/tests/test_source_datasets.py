@@ -48,6 +48,8 @@ def test_workbook_source_preserves_meaning_and_omits_unneeded_fields(private_sto
     assert analysis.status_code == 200
     data = analysis.json()
     assert data['eesi'] is not None
+    assert data['financial_burden_adjustment']['available']
+    assert data['financial_burden_adjustment']['original_eesi'] == data['eesi']['scores']['additive']
     assert 'Intention_To_Leave_12_Months' not in data['inputs']
     scenario = sources.analyse(result['id'], row['record_id'], salary=500000)
     assert scenario['eesi']['scores']['additive'] < data['eesi']['scores']['additive']
@@ -55,6 +57,34 @@ def test_workbook_source_preserves_meaning_and_omits_unneeded_fields(private_sto
     duplicate = sources.import_source('sl_synthetic', workbook_rows(), 'renamed.xlsx', 'other-container-hash', 20)
     assert duplicate['reused'] is True
     assert len(sources.list_datasets()) == 1
+
+
+def test_adjustment_does_not_change_original_scores_prediction_or_scenarios(private_store, monkeypatch):
+    imported = sources.import_source('sl_synthetic', workbook_rows(), 'source.xlsx', 'test-hash', 20)
+    dataset = sources.load_dataset(imported['id'])
+    row = dataset['records'][0]
+    import module3_ml.prediction as prediction
+    actual = prediction.predict_employee
+    calls = []
+    def capture(record, path):
+        calls.append(dict(record))
+        return actual(record, path)
+    monkeypatch.setattr(prediction, 'predict_employee', capture)
+    before = copy.deepcopy(dataset)
+    baseline = sources.analyse(imported['id'], row['record_id'])
+    assert baseline['experimental_eesi']['available']
+    assert set(baseline['experimental_eesi']['scores']) == {'B2', 'C2'}
+    assert baseline['eesi'] == sources.source_eesi(row, sources.economic_reference())
+    assert calls[0]['EESI'] == baseline['eesi']['scores']['additive']
+    assert all(set(record) == set(sources.SL_FEATURES) for record in calls)
+    # Changing only the display experiment must not affect any prediction result.
+    monkeypatch.setattr(sources, 'adjustment', lambda row, scores: {'available': False})
+    without = sources.analyse(imported['id'], row['record_id'])
+    for key in ('eesi', 'prediction', 'recommendations'):
+        assert baseline[key] == without[key]
+    scenario = sources.analyse(imported['id'], row['record_id'], salary=500000)
+    assert scenario['eesi']['scores']['additive'] < baseline['eesi']['scores']['additive']
+    assert sources.load_dataset(imported['id']) == before
 
 
 def test_ibm_source_cannot_be_reimported(private_store):

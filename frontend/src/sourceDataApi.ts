@@ -6,8 +6,18 @@ export type SourceDataset = {
   split: { train_rows: number; heldout_rows: number }
 }
 export type SourceAnalysis = {
+  financial_burden_adjustment?: {
+    available: boolean; reason: string | null; original_eesi: number | null
+    total_monthly_income: number | null; household_expenses: number | null; debt_repayments: number | null
+    financial_commitments: number | null; burden_percentage: number | null
+    burden_raw: number | null; burden_capped: number | null; debt_service_ratio: number | null
+    adjusted_eesi: number | null; difference: number | null; survey_month: string | null
+    disclaimer: string; assumption: string
+    comparisons: Record<string, { original: number; adjusted: number; difference: number }>
+  } | null
   dataset: SourceDataset; record_id: string; inputs: Record<string, number | string>
-  eesi: { scores: Record<string, number>; version: string; warnings: string[] } | null
+  experimental_eesi?: { available: boolean; reason: string | null; scores: Record<string, number>; differences: Record<string, number>; contributions: Record<string, Record<string, number>> } | null
+  eesi: { scores: Record<string, number>; inputs: Record<string, number>; components: Record<string, number>; contributions: Record<string, Record<string, number>>; version: string; warnings: string[] } | null
   prediction: { predicted_class: string; class_probabilities: Record<string, number>; target_label: string }
   recommendations: { title: string; sensitivity_pp: number; note: string }[]
   evaluation: { split: { train_rows: number; heldout_rows: number }; metrics: Record<string, number | null> }

@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from app.services.eesi import calculate
+from app.services.financial_burden import adjustment, extended_formulas
 from app.services.hies_data import BOUNDS as HISTORICAL_BOUNDS
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -223,9 +224,13 @@ def analyse(dataset_id, record_id, salary=None):
     actions.sort(key=lambda action: action['sensitivity_pp'], reverse=True)
     with (model_path / 'evaluation_report.json').open(encoding='utf-8') as stream:
         report = json.load(stream)
+    eesi = source_eesi(row, reference) if reference else None
+    financial = adjustment(row, eesi['scores']) if eesi and dataset['profile'] == 'sl_synthetic' else None
     return {'dataset': dataset_summary(dataset), 'record_id': record_id,
         'inputs': {key: value for key, value in row.items() if key not in (config['target'], 'record_id', 'EESI')},
-        'eesi': source_eesi(row, reference) if reference else None,
+        'eesi': eesi,
+        'financial_burden_adjustment': financial,
+        'experimental_eesi': extended_formulas(eesi, financial) if financial else None,
         'prediction': {**prediction, 'target_label': config['target_label']},
         'recommendations': actions, 'evaluation': {'split': report['dataset_split'], 'metrics': report['metrics']},
         'scenario': salary is not None, 'saved_records_unchanged': True,

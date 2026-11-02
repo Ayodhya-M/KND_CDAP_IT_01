@@ -22,6 +22,7 @@ export function IntegrationStatus({ metadata }: { metadata: Module4Metadata }) {
       : isMock
         ? 'Module 1 employee data comes from the project database. Module 2 and Module 3 currently supply deterministic development fixtures.'
         : 'The dashboard is displaying results returned by the configured module providers.'}</p>
+    <p className="muted">Uses original EESI provider results. Extended B/C and the earlier 70/30 experiment do not change this analysis.</p>
     <dl className="source-list">
       <div><dt>Module 1</dt><dd>{isDemo ? 'Supabase · stored synthetic pilot record' : 'Supabase project database'}</dd></div>
       <div><dt>Module 2</dt><dd>{sourceLabel(metadata.module2_source)}</dd></div>

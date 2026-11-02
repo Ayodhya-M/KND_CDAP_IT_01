@@ -63,6 +63,23 @@ def test_pilot_covers_all_employees_without_outcome_inputs():
     assert all("attrition" not in row["inputs"] for row in result["rows"])
 
 
+def test_both_pilot_views_keep_original_scores_without_inventing_finances():
+    small = pilot_preview()
+    large = pilot_preview(300)
+    assert len(large['rows']) == 300
+    assert not large['rejected']
+    assert small == pilot_preview(100)
+    for row in small['rows'] + large['rows']:
+        assert set(row['scores']) == {'economic', 'additive', 'interaction'}
+        assert 'financial_burden' not in row['components']
+        inputs = row['inputs']
+        assert calculate(**inputs)['scores'] == row['scores']
+    client = TestClient(app)
+    assert len(client.get('/api/v1/eesi/pilot').json()['rows']) == 100
+    assert len(client.get('/api/v1/eesi/pilot?size=300').json()['rows']) == 300
+    assert client.get('/api/v1/eesi/pilot?size=200').status_code == 422
+
+
 def test_api_works_without_supabase(monkeypatch):
     def forbidden():
         raise AssertionError("EESI must not access Supabase")
