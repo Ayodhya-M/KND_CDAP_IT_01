@@ -5,7 +5,7 @@ from typing import Any
 
 REQUIRED_FIELDS = {
     "hr": [
-        "employee_id", "age", "salary", "department", "join_date",
+        "employee_id", "age", "salary", "additional_income", "department", "join_date",
         "observation_date", "attrition", "gender", "job_role", "job_level",
         "business_travel", "distance_from_home", "education_field",
         "marital_status", "overtime", "job_satisfaction",

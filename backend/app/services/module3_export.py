@@ -50,14 +50,16 @@ def export_contract() -> dict[str, object]:
     }
 
 
-def build_pilot_export(formula_id: str) -> list[dict[str, str | float | int]]:
+def build_pilot_export(formula_id: str, employee_count: int = 100) -> list[dict[str, str | float | int]]:
+    if employee_count not in (100, 300):
+        raise ValueError('Choose the 100 or 300 employee synthetic pilot.')
     if formula_id not in SUPPORTED_FORMULA_IDS:
         supported = ", ".join(sorted(SUPPORTED_FORMULA_IDS))
         raise ValueError(f"Unsupported formula_id '{formula_id}'. Choose one of: {supported}.")
 
     with (PILOT_ROOT / "module1_sri_lanka_macro_pilot_6_months.csv").open(encoding="utf-8-sig", newline="") as stream:
         macro_by_month = {row["Date"][:7]: row for row in csv.DictReader(stream)}
-    with (PILOT_ROOT / "module1_hr_pilot_100_employees.csv").open(encoding="utf-8-sig", newline="") as stream:
+    with (PILOT_ROOT / f"module1_hr_pilot_{employee_count}_employees.csv").open(encoding="utf-8-sig", newline="") as stream:
         employees = list(csv.DictReader(stream))
 
     rows = []

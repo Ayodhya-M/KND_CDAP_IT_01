@@ -11,7 +11,7 @@ def test_data_cleaning_router_is_registered():
 
 def test_hr_missing_value_analysis_and_safe_row_removal():
     complete = {
-        "employee_id": "EMP001", "age": 30, "salary": 50000, "department": "Sales",
+        "employee_id": "EMP001", "age": 30, "salary": 50000, "additional_income": 0, "department": "Sales",
         "join_date": "2020-01-01", "observation_date": "2023-03-01", "attrition": False,
         "gender": "Female", "job_role": "Sales Executive", "job_level": 2,
         "business_travel": "Travel_Rarely", "distance_from_home": 5,

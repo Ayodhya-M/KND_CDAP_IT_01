@@ -1,12 +1,13 @@
 import logging
-from pathlib import Path
 from typing import Any
+from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 
-from app.services.data_cleaning import copy_row_for_clean_upload, missing_value_summary, rows_without_required_missing_values
+from app.services.data_cleaning import missing_value_summary, rows_without_required_missing_values
 from app.supabase_client import get_supabase_client
+from app.system_actor import require_research_system_actor
 
 router = APIRouter(prefix="/data-cleaning", tags=["Data cleaning"])
 logger = logging.getLogger(__name__)
@@ -27,9 +28,13 @@ def _load_upload_and_rows(client: Any, upload_id: str) -> tuple[dict[str, Any], 
     return upload, rows, table_name
 
 
-def _record_run(client: Any, upload_id: str, action_type: str, before: int, after: int, details: dict[str, Any]) -> str:
+def _record_run(
+    client: Any, upload_id: str, initiated_by: str, action_type: str,
+    before: int, after: int, details: dict[str, Any],
+) -> str:
     response = client.table("data_cleaning_runs").insert({
         "upload_id": upload_id,
+        "initiated_by": initiated_by,
         "action_type": action_type,
         "rows_before": before,
         "rows_after": after,
@@ -53,47 +58,49 @@ def available_uploads() -> dict[str, list[dict[str, Any]]]:
 
 
 @router.get("/analyse/{upload_id}")
-def analyse_missing_values(upload_id: str) -> dict[str, Any]:
+def analyse_missing_values(
+    upload_id: str,
+    actor_id: UUID = Depends(require_research_system_actor),
+) -> dict[str, Any]:
     try:
         client = get_supabase_client()
         upload, rows, _ = _load_upload_and_rows(client, upload_id)
         summary = missing_value_summary(rows, upload["dataset_type"])
-        run_id = _record_run(client, upload_id, "analyse", len(rows), len(rows), summary)
+        run_id = _record_run(client, upload_id, str(actor_id), "analyse", len(rows), len(rows), summary)
         return {"status": "success", "cleaning_run_id": run_id, "upload": upload, **summary}
     except HTTPException:
         raise
     except Exception as error:
         logger.exception("Unable to analyse missing values")
-        raise HTTPException(status_code=502, detail=f"Supabase could not analyse this dataset: {error}") from error
+        raise _cleaning_database_error(error, "analyse") from error
 
 
 @router.post("/remove-missing", status_code=status.HTTP_201_CREATED)
-def remove_missing_values(payload: CleaningRequest) -> dict[str, Any]:
+def remove_missing_values(
+    payload: CleaningRequest,
+    actor_id: UUID = Depends(require_research_system_actor),
+) -> dict[str, Any]:
     try:
         client = get_supabase_client()
-        upload, rows, table_name = _load_upload_and_rows(client, payload.upload_id)
+        upload, rows, _ = _load_upload_and_rows(client, payload.upload_id)
         summary = missing_value_summary(rows, upload["dataset_type"])
         retained_rows = rows_without_required_missing_values(rows, upload["dataset_type"])
         removed_count = len(rows) - len(retained_rows)
-        cleaned_upload_id = payload.upload_id
-
         if removed_count:
-            original_name = Path(upload["original_filename"])
-            cleaned_name = f"{original_name.stem}_cleaned{original_name.suffix or '.csv'}"
-            new_upload = client.table("dataset_uploads").insert({
-                "dataset_type": upload["dataset_type"],
-                "original_filename": cleaned_name,
-                "file_format": upload["file_format"],
-                "record_count": len(retained_rows),
-                "processing_status": "cleaned",
-            }).execute().data[0]
-            cleaned_upload_id = new_upload["id"]
-            if retained_rows:
-                copied_rows = [copy_row_for_clean_upload(row, cleaned_upload_id) for row in retained_rows]
-                client.table(table_name).insert(copied_rows).execute()
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=(
+                    "Removing rows is disabled until the multi-table cleaning operation is available "
+                    "as one transactional database function; no records were changed"
+                ),
+            )
 
+        cleaned_upload_id = payload.upload_id
         details = {**summary, "cleaned_upload_id": cleaned_upload_id}
-        run_id = _record_run(client, payload.upload_id, "remove_missing", len(rows), len(retained_rows), details)
+        run_id = _record_run(
+            client, payload.upload_id, str(actor_id), "remove_missing",
+            len(rows), len(retained_rows), details,
+        )
         return {
             "status": "success", "cleaning_run_id": run_id,
             "source_upload_id": payload.upload_id, "cleaned_upload_id": cleaned_upload_id,
@@ -105,4 +112,18 @@ def remove_missing_values(payload: CleaningRequest) -> dict[str, Any]:
         raise
     except Exception as error:
         logger.exception("Unable to remove missing values")
-        raise HTTPException(status_code=502, detail=f"Supabase could not clean this dataset: {error}") from error
+        raise _cleaning_database_error(error, "clean") from error
+
+
+def _cleaning_database_error(error: Exception, operation: str) -> HTTPException:
+    """Translate database integrity errors without leaking server details."""
+    code = getattr(error, "code", None)
+    if code in {"23502", "23503", "23505", "23514"}:
+        return HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"The database rejected the {operation} audit record because an integrity constraint was not satisfied",
+        )
+    return HTTPException(
+        status_code=status.HTTP_502_BAD_GATEWAY,
+        detail=f"The data store could not complete the {operation} operation",
+    )

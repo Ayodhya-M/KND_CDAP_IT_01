@@ -68,12 +68,14 @@ def metadata() -> dict[str, Any]:
     return {"version": VERSION, "formulas": FORMULAS, "bounds": BOUNDS, "reference_salary": 50000, "reference_period": "2023-01 to 2023-06", "normalization": "clip((x - lower) / (upper - lower), 0, 1)", "salary_exposure": "V = reference salary / (reference salary + employee salary)", "validation_status": "Exploratory prototype; no empirical accuracy established", "limitations": ["Pilot reference ranges are not clinical or population thresholds.", "CPI and inflation may overlap; indicator ablation is still required.", "Positive unemployment direction is an assumed insecurity channel, not a turnover claim.", "Salary is not disposable household income; debt, dependents and expenses are absent.", "No formula has been selected as the final EESI."]}
 
 
-def pilot_preview() -> dict[str, Any]:
+def pilot_preview(size: int = 100) -> dict[str, Any]:
+    if size not in (100, 300):
+        raise ValueError('Pilot size must be 100 or 300')
     root = Path(__file__).resolve().parents[3] / "pilot-data"
     with (root / "module1_sri_lanka_macro_pilot_6_months.csv").open(encoding="utf-8-sig", newline="") as stream:
         months = list(csv.DictReader(stream))
     indicators = {row["Date"][:7]: row for row in months}
-    with (root / "module1_hr_pilot_100_employees.csv").open(encoding="utf-8-sig", newline="") as stream:
+    with (root / f"module1_hr_pilot_{size}_employees.csv").open(encoding="utf-8-sig", newline="") as stream:
         employees = list(csv.DictReader(stream))
     rows, rejected = [], []
     for row in employees:
@@ -87,4 +89,4 @@ def pilot_preview() -> dict[str, Any]:
         except (KeyError, ValueError) as error:
             rejected.append({"employee_id": row.get("EmployeeID", "unknown"), "reason": str(error)})
     summary = {formula["id"]: {"mean": mean(row["scores"][formula["id"]] for row in rows), "min": min(row["scores"][formula["id"]] for row in rows), "max": max(row["scores"][formula["id"]] for row in rows)} for formula in FORMULAS} if rows else {}
-    return {"metadata": metadata(), "rows": rows, "rejected": rejected, "summary": summary, "months": months, "data_note": "100 synthetic HR records; supplied economic pilot values have not been independently verified."}
+    return {"metadata": metadata(), "rows": rows, "rejected": rejected, "summary": summary, "months": months, "data_note": f"{size} synthetic HR records; supplied economic pilot values have not been independently verified."}

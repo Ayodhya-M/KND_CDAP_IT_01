@@ -4,8 +4,9 @@ from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 
-from app.services.module3_export import export_contract, pilot_export_csv
+from app.services.module3_export import export_contract, pilot_export_csv, build_pilot_export, FEATURE_COLUMNS
 from app.services.module3_prediction import get_model_status, load_evaluation_report, predict_saved_model
+from app.services.eesi import VERSION as EESI_VERSION
 
 
 router = APIRouter(prefix="/module3", tags=["Module 3 integration"])
@@ -13,6 +14,21 @@ router = APIRouter(prefix="/module3", tags=["Module 3 integration"])
 
 class PredictionRequest(BaseModel):
     record: dict[str, Any]
+
+
+@router.get('/pilot-records')
+def pilot_prediction_records():
+    status = get_model_status()
+    formula = status.get('eesi_integration', {}).get('formula_id')
+    if not status.get('model_available') or not formula:
+        raise HTTPException(status_code=503, detail='Prepare the synthetic demo model with scripts/prepare_module3_demo.py first.')
+    if (status.get('source_rows') != 300 or status.get('feature_columns') != FEATURE_COLUMNS or
+            status['eesi_integration'].get('formula_version') != EESI_VERSION):
+        raise HTTPException(status_code=503, detail='This saved model does not match the 300-person pilot and EESI contract. Use matching custom inputs or prepare the demo model.')
+    rows = build_pilot_export(formula, employee_count=300)
+    return {'dataset_kind': 'synthetic_pilot_only', 'formula_id': formula,
+            'records': [{'employee_id': row['EmployeeID'], 'month': row['ObservationMonth'],
+                         'record': {field: row[field] for field in FEATURE_COLUMNS}} for row in rows]}
 
 
 @router.get("/integration-contract")
